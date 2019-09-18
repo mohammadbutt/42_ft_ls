@@ -21,11 +21,12 @@ Allowed BSD System Calls:  write(2), stat(2), lstat(2), listxattr(2), getxattr(2
    
 #### Optional/Bonus Flags:
 1. `-u`
- - Use time of last access.
+   - Use time of last access (not modified, or printed).
 2. `-f`
-
+   - Output is not sorted. Turns on `-a` option/flag.
 3. `-g`
-
+   - 
 4. `-d`
-
+   - Directories are listed as plain files.
 5. `-G`
+   - Colorizes output.
