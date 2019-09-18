@@ -13,7 +13,7 @@ Allowed BSD System Calls:  write(2), stat(2), lstat(2), listxattr(2), getxattr(2
 2. `-R`
    - Recursively lists subdirectories.
 3. `-a`
-   - Include directories that begin with a dot `.`.
+   - Include directories that begin with a dot '.'.
 4. `-r`
    - Reverse the order of the sot to get reverse lexical order or the oldest entries.
 5. `-t`
