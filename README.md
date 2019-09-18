@@ -7,7 +7,7 @@ Allowed C functions: opendir(3), readdir(3), closedir(3), getpwuid(3), getgrgid(
 
 Allowed BSD System Calls:  write(2), stat(2), lstat(2), listxattr(2), getxattr(2), readlink(2)
 
-#### Mandatory flags:
+#### Mandatory Flags:
 1. `-l`
    - a total sum of all the file sizes.
 2. `-R`
@@ -18,3 +18,14 @@ Allowed BSD System Calls:  write(2), stat(2), lstat(2), listxattr(2), getxattr(2
    - Reverse the order of the sot to get reverse lexical order or the oldest entries.
 5. `-t`
    - Sort by time modified (most recently modified first).
+   
+#### Optional/Bonus Flags:
+1. `-u`
+ - Use time of last access.
+2. `-f`
+
+3. `-g`
+
+4. `-d`
+
+5. `-G`
