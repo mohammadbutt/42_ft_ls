@@ -7,12 +7,15 @@ Allowed C functions: opendir(3), readdir(3), closedir(3), getpwuid(3), getgrgid(
 
 Allowed BSD System Calls:  write(2), stat(2), lstat(2), listxattr(2), getxattr(2), readlink(2)
 
-
-New Yoork 
 #### Mandatory flags:
 1. `-l`
    - a total sum of all the file sizes.
 2. `-R`
-   - Recursively lists subdirectoriess.
-   
+   - Recursively lists subdirectories.
+3. `-a`
+   - Include directories that begin with a dot `.`.
+4. `-r`
+   - Reverse the order of the sot to get reverse lexicographical order or the oldest entries.
+5. `-t`
+   - Sort by time modified (most recently modified first) before sorting the operands by lexicogrpahical order.
    
