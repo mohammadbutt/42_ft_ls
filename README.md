@@ -24,9 +24,7 @@ Allowed BSD System Calls:  write(2), stat(2), lstat(2), listxattr(2), getxattr(2
    - Use time of last access (not modified, or printed).
 2. `-f`
    - Output is not sorted. Turns on `-a` option/flag.
-3. `-g`
-   - 
-4. `-d`
+3. `-d`
    - Directories are listed as plain files.
-5. `-G`
+4. `-G`
    - Colorizes output.
