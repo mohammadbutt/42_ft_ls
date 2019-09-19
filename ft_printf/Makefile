@@ -6,7 +6,7 @@
 #    By: mbutt <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/07 15:20:38 by mbutt             #+#    #+#              #
-#    Updated: 2019/09/13 15:37:54 by mbutt            ###   ########.fr        #
+#    Updated: 2019/09/18 20:52:35 by mbutt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,19 +60,19 @@ OBJ = *.o
 all: $(NAME)
 
 $(NAME):
-	@echo "${CYAN}Compiling Makefile.${NC}"
-	$(CC) $(CFLAGS) $(SRC) $(MINI_LIBFT)
-	ar rc $(NAME) $(OBJ)
+	@echo "${CYAN}Compiling Makefile for ft_printf...${NC}"
+	@$(CC) $(CFLAGS) $(SRC) $(MINI_LIBFT)
+	@ar rc $(NAME) $(OBJ)
 	@echo "${GREEN}Generated libftprintf.a static library succesfully.${NC}"
 
 clean:
 	rm -rf $(OBJ)
-	@echo "${ORANGE}Removed object files.${NC}"
+	@echo "${ORANGE}Removed object files for ft_printf.${NC}"
 
 fclean:
 	rm -rf $(NAME) $(OBJ)
-	@echo "${ORANGE}Removed object files.${NC}"
-	@echo "${YELLOW}Removed static library.${NC}"
+	@echo "${ORANGE}Removed object files for ft_printf.${NC}"
+	@echo "${YELLOW}Removed static library for ft_printf.${NC}"
 
 re: fclean all
 .PHONY: all clean fclean re
