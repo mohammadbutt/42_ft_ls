@@ -35,3 +35,4 @@ Allowed  System Calls:  write(2), stat(2), lstat(2), listxattr(2), getxattr(2), 
 1. [ls - Wikipedia](https://en.wikipedia.org/wiki/Ls)
 2. [ls source code](https://github.com/wertarbyte/coreutils/blob/master/src/ls.c)
 3. [Decoded ls - maizure.org](http://www.maizure.org/projects/decoded-gnu-coreutils/ls.html)
+4. [Simple ls - stackoverflow](https://stackoverflow.com/questions/3554120/open-directory-using-c)
