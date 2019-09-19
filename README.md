@@ -28,3 +28,7 @@ Allowed BSD System Calls:  write(2), stat(2), lstat(2), listxattr(2), getxattr(2
    - Directories are listed as plain files.
 4. `-G`
    - Colorizes output.
+
+# Resources and References
+1. [ls - Wikipedia](https://en.wikipedia.org/wiki/Ls)
+2. [ls source code](https://github.com/wertarbyte/coreutils/blob/master/src/ls.c)
