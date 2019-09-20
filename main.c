@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/18 21:19:28 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/20 13:24:26 by mbutt            ###   ########.fr       */
+/*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
+/*   Updated: 2019/09/20 13:25:19 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,16 @@ int main(int argc, char **argv)
 		ft_printf("[%s]\n", pDirent->d_name);
 //		ft_printf("%-15s", pDirent->d_name);
 		}
-	
+
 	closedir(pDir);
 	return(0);
 }
 */
 
-/*
+
 int main(void)
 {
 	   printf("   printf:|This is a test.|\n");
 	ft_printf("ft_printf:|This is a test.|\n");
 }
-*/
+
