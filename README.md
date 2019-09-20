@@ -2,7 +2,7 @@
 
 ls, list directory contents, is a command to list computer files in Unix and Unix-like operating systems.
 
-#### Project file: [ft_ls](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls.en.pdf)
+#### Project file: [ft_ls](https://github.com/mohammadbutt/42_ft_ls/blob/master/doc_ft_ls.en.pdf)
 Allowed C functions: opendir(3), readdir(3), closedir(3), getpwuid(3), getgrgid(3), time(3), ctime(3), malloc(3), free(3), perror(3), strerror(3), exit(3).
 
 Justifiable C functions for bonus part: tcgetattr(3).
