@@ -38,3 +38,4 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2), listxattr(2), getxa
 4. [Simple ls - stackoverflow](https://stackoverflow.com/questions/3554120/open-directory-using-c)
 5. [Members of dirent struct - Apple OS Reference](https://opensource.apple.com/source/xnu/xnu-4570.41.2/bsd/sys/dirent.h.auto.html)
 6. [Dirent and Stat usage](http://codepad.org/mocgJvtX#output)
+7. [Differentiate between a unix directory and file in C and - Stackoverflow](https://stackoverflow.com/questions/1036625/differentiate-between-a-unix-directory-and-file-in-c-and-c)
