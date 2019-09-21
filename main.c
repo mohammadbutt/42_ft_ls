@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/20 18:49:34 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/20 19:11:34 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,7 @@ void ft_exit(char c)
 
 void ft_exit_no_dir(char *str)
 {
-//	ft_printf("ls: %s: No such file or directory\n", str);
-//	exit(EXIT_SUCCESS);
+	ft_printf("ft_ls: ");
 	perror(str);
 	exit(EXIT_SUCCESS);
 }
@@ -119,17 +118,9 @@ void ls_start_parsing(t_ls *ls, int argument_count, char **str)
 		{
 			directory = opendir(str[i]);
 			if(directory == NULL)
-			{
 				ft_exit_no_dir(str[i]);
-//				perror("ls");
-//				exit(EXIT_SUCCESS);
-			}
-			//	ft_printf("Folder does not exist\n");
 			else
-			{
 				dir = readdir(directory);
-				ft_printf("Folder exists\n");
-			}
 //			printf("|%d|\n", directory);
 //			ft_exit_no_dir(str[i]);
 		}
