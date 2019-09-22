@@ -7,7 +7,7 @@ Allowed C functions: opendir(3), readdir(3), closedir(3), getpwuid(3), getgrgid(
 
 Justifiable C functions for bonus part: tcgetattr(3).
 
-Allowed  System Calls:  write(2), stat(2)(struct), lstat(2), listxattr(2), getxattr(2), readlink(2)
+Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2), getxattr(2), readlink(2)
 
 #### Mandatory Flags:
 1. `-l`
