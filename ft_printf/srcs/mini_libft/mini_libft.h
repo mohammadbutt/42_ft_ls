@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/09 15:50:24 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/12 18:47:17 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/21 20:56:30 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,5 +125,11 @@ int					ft_numlen_uint64(uint_fast64_t nbr);
 uint_fast64_t		ft_pow10(uint_fast64_t num);
 void				ft_swap(char *a, char *b);
 int					var_to_zero(int_fast64_t *a, int *b, int *c, int *d);
+
+/*
+** ---------------------------------ft_strcmp.c---------------------------------
+*/
+
+int					ft_strcmp(const char *str1, const char *str2);
 
 #endif

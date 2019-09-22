@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/20 19:11:34 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/21 21:26:29 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,13 @@ void ft_exit(char c)
 }
 
 /*
-** This function willl be modified later, to account for if the string is a
-** directory then we should be able to open the directory
+** perror will handle following errors:
+** 1. No such file or directory - Currently only works with directory. Need to
+** make it work with files.
+** 2. Permission denied.
+** If a folder has permission denied via chmod 000 folder_name or file_name,
+** then ls will not show contents of that folder. perror will print a message
+** saying ... permission denied.
 */
 
 void ft_exit_no_dir(char *str)
@@ -107,7 +112,10 @@ void ls_start_parsing(t_ls *ls, int argument_count, char **str)
 	int i;
 	int j;
 	DIR *directory;
-	struct dirent *dir;
+//	struct dirent *dir_struct;
+//	char str2[1024];
+	struct stat fileinfo;
+//	char str2[1024];
 
 	i = 1;
 	j = 0;
@@ -116,13 +124,24 @@ void ls_start_parsing(t_ls *ls, int argument_count, char **str)
 	{
 		if(str[i][j] != '-')
 		{
+
 			directory = opendir(str[i]);
-			if(directory == NULL)
-				ft_exit_no_dir(str[i]);
-			else
-				dir = readdir(directory);
-//			printf("|%d|\n", directory);
-//			ft_exit_no_dir(str[i]);
+//			ft_printf("CP1\n");
+//			dir_struct = malloc(sizeof(directory));
+//			ft_printf("CP2\n");
+//			if(dir_struct == NULL)
+//				ft_exit_no_dir(str[i]);
+
+
+			directory = opendir(str[i]);
+			stat(str[i], &fileinfo);
+			ft_printf("%s\n", str[i]);
+			return;
+
+//			if(directory == NULL)
+//				ft_exit_no_dir(str[i]);
+//			else
+//				dir_struct = readdir(directory);
 		}
 		j++;
 		while(str[i][j])
@@ -152,6 +171,37 @@ void initialize_ls_values(t_ls *ls)
 	ft_bzero(&ls->flags, sizeof(ls->flags));
 }
 
+void	single_argument(t_ls *ls)
+{
+	DIR *dir;
+
+	dir = opendir(".");
+/*
+	while(1)
+	{
+		ls->data = readdir(dir);
+		if(ls->data == NULL)
+			break;
+		ft_printf("%s\n", ls->data->d_name);
+	}
+*/
+	while((ls->data = readdir(dir)) != NULL)
+	{
+		if(ls->data->d_name[0] != '.')
+			ft_printf("%s\n", ls->data->d_name);
+	}
+}
+
+int main(int argc, char **argv)
+{
+	t_ls ls;
+	if(argc == 1)
+		single_argument(&ls);
+	else if(argv[0][1] != '\0')
+		ft_printf("Just felling in for Wall Wextra Werror flag");
+}
+
+/*
 int main(int argc, char **argv)
 {
 	t_ls	ls;
@@ -162,11 +212,11 @@ int main(int argc, char **argv)
 	if(argc > 1)
 	{
 		ls_start_parsing(&ls, argc, argv);
-		printf("flag.l|%d|\n", ls.flags.l);
-		printf("flag.a|%d|\n", ls.flags.a);
-		printf("flag.t|%d|\n", ls.flags.t);
-		printf("flag.r|%d|\n", ls.flags.r);
-		printf("flag.uppercase_r|%d|\n", ls.flags.uppercase_r);
+//		printf("flag.l|%d|\n", ls.flags.l);
+//		printf("flag.a|%d|\n", ls.flags.a);
+//		printf("flag.t|%d|\n", ls.flags.t);
+//		printf("flag.r|%d|\n", ls.flags.r);
+//		printf("flag.uppercase_r|%d|\n", ls.flags.uppercase_r);
 	}
 //	printf("argument counter:|%d|\n", argc);
 //	if(argc >= 2)
@@ -174,6 +224,7 @@ int main(int argc, char **argv)
 //	if(argv[1])
 //		ft_printf("argument vector\n");
 }
+*/
 /*
 int main(void)
 {

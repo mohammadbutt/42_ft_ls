@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/20 18:47:47 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/21 19:25:26 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -17,6 +17,7 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <sys/stat.h>
 
 /*
 ** Notes aboue headers that are included
@@ -48,6 +49,8 @@ typedef struct s_flags
 typedef struct s_ls
 {
 	t_flags flags;
+	struct	dirent	*data;
+	struct	stat	*meta;
 
 } t_ls;
 
@@ -62,6 +65,6 @@ void	ls_start_parsing(t_ls *ls, int argument_count, char **str);
 void	initialize_ls_values(t_ls *ls);
 void	ft_exit(char c);
 void	ft_exit_no_dir(char *str);
-
+void	single_argument(t_ls *ls);
 
 #endif
