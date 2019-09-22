@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/21 21:26:29 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/21 21:51:23 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,14 @@ void	single_argument(t_ls *ls)
 	while((ls->data = readdir(dir)) != NULL)
 	{
 		if(ls->data->d_name[0] != '.')
+		{
+//			ft_printf("|%d|", ls->data->d_ino);
+//			ft_printf("|%d|", ls->data->d_reclen);
+//			ft_printf("|%d|", ls->data->d_namlen);
+//			ft_printf("|%d|", ls->data->d_type);
 			ft_printf("%s\n", ls->data->d_name);
+		}
+
 	}
 }
 
