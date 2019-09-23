@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/22 19:59:36 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/23 14:19:30 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -55,7 +55,7 @@ typedef struct s_flags
 typedef struct s_ls
 {
 	t_flags flags;
-	struct	dirent	*data;
+//	struct	dirent	*data;
 	struct	stat	*meta;
 //	char			file_name[FT_PATH_MAX];
 	char 			*file_name;
@@ -74,5 +74,6 @@ void	initialize_ls_values(t_ls *ls);
 void	ft_exit(char c);
 void	ft_exit_no_dir(char *str);
 void	single_argument(t_ls *ls);
+//t_ls	*single_argument(t_ls *ls);
 
 #endif

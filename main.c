@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/22 21:08:29 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/23 14:33:30 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,39 +174,6 @@ void initialize_ls_values(t_ls *ls)
 }
 
 /*
-// Works - Taking out struct dirent from the struct to test how information
-// gets accessed.
-void	single_argument(t_ls *ls)
-{
-	DIR *dir;
-
-	dir = opendir(".");
-	while((ls->data = readdir(dir)) != NULL)
-	{
-		if(ls->data->d_name[0] != '.')
-			ft_printf("%s\n", ls->data->d_name);
-	}
-}
-*/
-
-/*
-// Works - Used dirent struct directly instead of placing it inside ls struct
-void	single_argument(t_ls *ls)
-{
-	struct dirent *data;
-	DIR *dir;
-
-	dir = opendir(".");
-	while((data = readdir(dir)) != NULL)
-	{
-		if(data->d_name[0] != '.')
-			ft_printf("%s\n", data->d_name);
-	}
-	ls->next = ls; // To silence Wall Wextra Werror Warning. Should be removed
-}
-*/
-
-/*
 ** Linked List functions just to store file and folder names when argc is 1
 ** ./ft_ls
 */
@@ -219,8 +186,6 @@ t_ls	*create(char *file_name)
 	if(new_node == NULL)
 		exit(EXIT_SUCCESS);
 
-//	new_node->file_name = file_name; // Not working so added the below ft_strcpy
-//	ft_strcpy(new_node->file_name, file_name); // Added this
 	new_node->file_name = ft_strdup(file_name);
 	new_node->next = NULL;
 	return(new_node);
@@ -239,53 +204,7 @@ t_ls *append(t_ls *head, char *file_name)
 	return(head);
 }
 
-void	single_argument(t_ls *ls)
-{
-	t_ls			*ls_pointer;
-	struct dirent	*data;
-	DIR				*dir;
 
-
-// Method 1. Not sure which one is correct
-//	ls_pointer = create(ls->file_name);
-//	ls = malloc(sizeof(ls)); // Not needed?
-
-//  Method 2. Not sure which one is correct
-	ls_pointer = malloc(sizeof(ls_pointer));
-	ls_pointer = create(ls->file_name);
-
-
-	dir = opendir(".");
-	while((data = readdir(dir)) != NULL)
-	{
-		if(data->d_name[0] != '.')
-		{
-			ft_printf("%s\n", ls->file_name);	
-			append(ls_pointer, data->d_name);
-//			ft_printf("%s\n", ls->file_name);
-//			ft_printf("%s\n", data->d_name);
-		}
-	}
-	ft_printf("\n\n");
-//	ft_printf("|%s|\n", ls->file_name);
-//	ft_printf("|%s|\n", ls->next->file_name);
-
-//	ls->next = ls; // To silence Wall Wextra Werror Warning. Should be removed
-}
-
-
-/*
-// Works, but add ing malloc to t_ls ls struct
-int main(int argc, char **argv)
-{
-	t_ls ls;
-
-	if(argc == 1)
-		single_argument(&ls);
-	else if(argv[0][1] != '\0')
-		ft_printf("Just filling in to silence Wall Wextra Werror flag");
-}
-*/
 int print_file_name(t_ls *ls)
 {
 	int i;
@@ -301,17 +220,50 @@ int print_file_name(t_ls *ls)
 	}
 	return(0);
 }
+
+void	single_argument(t_ls *ls)
+//t_ls	*single_argument(t_ls *ls)
+{
+	struct dirent	*data;
+	DIR				*dir;
+
+	dir = opendir(".");
+	while((data = readdir(dir)) != NULL)
+	{
+		if(data->d_name[0] != '.')
+		{
+			if(ls == NULL)
+				ls = create(data->d_name);
+			else
+			{
+				ls = append(ls, data->d_name);
+//				append(ls, data->d_name);
+//				ft_printf("%s\n", ls->file_name);
+			}
+		}
+	}
+	ft_printf("\n\n");
+	print_file_name(ls);
+//	return(ls);
+}
+
+
 int main(int argc, char **argv)
 {
-	t_ls ls;
+	t_ls *ls;
 
+	ls = NULL;
+	ft_bzero(&ls,sizeof(&ls));
 //	ls = malloc(sizeof(ls));
 	if(argc == 1)
-		single_argument(&ls);
+	{
+		single_argument(ls);
+//		ls = single_argument(ls);
+	}
 	else if(argv[0][1] != '\0')
 		ft_printf("Just filling in to silence Wall Wextra Werror flag\n");
 	
-	print_file_name(&ls);
+	print_file_name(ls);
 //	ft_printf("|%s|\n", ls.file_name);
 }
 
