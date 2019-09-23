@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/21 21:51:28 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/22 19:59:36 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -27,9 +27,12 @@
 
 /*
 ** Macros----------------------------------------------------------------------
+** FT_PATH_MAX is equal to 1024 because macro __DARWIN_MAXPATHLEN and PATH_MAX
+** can hold upto 1024 characters.
 */
 
 # define VALID_FLAG "latrR"
+# define FT_PATH_MAX 1024
 
 
 /*
@@ -45,13 +48,18 @@ typedef struct s_flags
 	bool uppercase_r : 1;
 }	t_flags;
 
+/*
+** PATH_MAX macros = __DARWIN_MAXPATHLEN, which is equal to 1024
+*/
 
 typedef struct s_ls
 {
 	t_flags flags;
 	struct	dirent	*data;
 	struct	stat	*meta;
-
+//	char			file_name[FT_PATH_MAX];
+	char 			*file_name;
+	struct	s_ls	*next;
 } t_ls;
 
 

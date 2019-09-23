@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/21 21:51:23 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/22 21:08:29 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int main(int argc, char **argv)
 	return(0);
 }
 */
+
+
 
 /*
 ** is_flag_valid takes a character and compares it with VALID_FLAG string,
@@ -171,41 +173,146 @@ void initialize_ls_values(t_ls *ls)
 	ft_bzero(&ls->flags, sizeof(ls->flags));
 }
 
+/*
+// Works - Taking out struct dirent from the struct to test how information
+// gets accessed.
 void	single_argument(t_ls *ls)
 {
 	DIR *dir;
 
 	dir = opendir(".");
-/*
-	while(1)
-	{
-		ls->data = readdir(dir);
-		if(ls->data == NULL)
-			break;
-		ft_printf("%s\n", ls->data->d_name);
-	}
-*/
 	while((ls->data = readdir(dir)) != NULL)
 	{
 		if(ls->data->d_name[0] != '.')
-		{
-//			ft_printf("|%d|", ls->data->d_ino);
-//			ft_printf("|%d|", ls->data->d_reclen);
-//			ft_printf("|%d|", ls->data->d_namlen);
-//			ft_printf("|%d|", ls->data->d_type);
 			ft_printf("%s\n", ls->data->d_name);
-		}
-
 	}
 }
+*/
 
+/*
+// Works - Used dirent struct directly instead of placing it inside ls struct
+void	single_argument(t_ls *ls)
+{
+	struct dirent *data;
+	DIR *dir;
+
+	dir = opendir(".");
+	while((data = readdir(dir)) != NULL)
+	{
+		if(data->d_name[0] != '.')
+			ft_printf("%s\n", data->d_name);
+	}
+	ls->next = ls; // To silence Wall Wextra Werror Warning. Should be removed
+}
+*/
+
+/*
+** Linked List functions just to store file and folder names when argc is 1
+** ./ft_ls
+*/
+
+t_ls	*create(char *file_name)
+{
+	t_ls *new_node;
+
+	new_node = malloc(sizeof(t_ls));
+	if(new_node == NULL)
+		exit(EXIT_SUCCESS);
+
+//	new_node->file_name = file_name; // Not working so added the below ft_strcpy
+//	ft_strcpy(new_node->file_name, file_name); // Added this
+	new_node->file_name = ft_strdup(file_name);
+	new_node->next = NULL;
+	return(new_node);
+}
+
+t_ls *append(t_ls *head, char *file_name)
+{
+	t_ls *cursor;
+	t_ls *new_node;
+
+	cursor = head;
+	while(cursor->next != NULL)
+		cursor = cursor->next;
+	new_node = create(file_name);
+	cursor->next = new_node;
+	return(head);
+}
+
+void	single_argument(t_ls *ls)
+{
+	t_ls			*ls_pointer;
+	struct dirent	*data;
+	DIR				*dir;
+
+
+// Method 1. Not sure which one is correct
+//	ls_pointer = create(ls->file_name);
+//	ls = malloc(sizeof(ls)); // Not needed?
+
+//  Method 2. Not sure which one is correct
+	ls_pointer = malloc(sizeof(ls_pointer));
+	ls_pointer = create(ls->file_name);
+
+
+	dir = opendir(".");
+	while((data = readdir(dir)) != NULL)
+	{
+		if(data->d_name[0] != '.')
+		{
+			ft_printf("%s\n", ls->file_name);	
+			append(ls_pointer, data->d_name);
+//			ft_printf("%s\n", ls->file_name);
+//			ft_printf("%s\n", data->d_name);
+		}
+	}
+	ft_printf("\n\n");
+//	ft_printf("|%s|\n", ls->file_name);
+//	ft_printf("|%s|\n", ls->next->file_name);
+
+//	ls->next = ls; // To silence Wall Wextra Werror Warning. Should be removed
+}
+
+
+/*
+// Works, but add ing malloc to t_ls ls struct
 int main(int argc, char **argv)
 {
 	t_ls ls;
+
 	if(argc == 1)
 		single_argument(&ls);
 	else if(argv[0][1] != '\0')
-		ft_printf("Just felling in for Wall Wextra Werror flag");
+		ft_printf("Just filling in to silence Wall Wextra Werror flag");
+}
+*/
+int print_file_name(t_ls *ls)
+{
+	int i;
+	char *str;
+	
+
+	i = 0;
+	while(ls)
+	{
+		str = ls->file_name;
+		printf("|%s|\n", str);
+		ls = ls->next;
+	}
+	return(0);
+}
+int main(int argc, char **argv)
+{
+	t_ls ls;
+
+//	ls = malloc(sizeof(ls));
+	if(argc == 1)
+		single_argument(&ls);
+	else if(argv[0][1] != '\0')
+		ft_printf("Just filling in to silence Wall Wextra Werror flag\n");
+	
+	print_file_name(&ls);
+//	ft_printf("|%s|\n", ls.file_name);
 }
 
 /*
