@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/23 14:33:30 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/23 16:22:47 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ t_ls *append(t_ls *head, char *file_name)
 }
 
 
-int print_file_name(t_ls *ls)
+void print_file_name(t_ls *ls)
 {
 	int i;
 	char *str;
@@ -218,14 +218,97 @@ int print_file_name(t_ls *ls)
 		printf("|%s|\n", str);
 		ls = ls->next;
 	}
-	return(0);
+//	return(0);
 }
+
+/*
+** Merge Sort
+*/
+
+t_ls	*sorted_merge(t_ls *a, t_ls *b)
+{
+	t_ls *result;
+
+	result = NULL;
+	if(a == NULL)
+		return(b);
+	else if(b == NULL)
+		return(a);
+	if(ft_strcmp(a->file_name, b->file_name) <= 0)
+	{
+		result = a;
+		result->next = sorted_merge(a->next, b);
+	}
+	else
+	{
+		result = b;
+		result->next = sorted_merge(a, b->next);
+	}
+	return(result);
+}
+
+void front_back_split(t_ls *source, t_ls **front_ref, t_ls **back_ref)
+{
+	t_ls *fast;
+	t_ls *slow;
+	slow = source;
+	fast = source->next;
+
+	while(fast != NULL)
+	{
+		fast = fast->next;
+		if(fast != NULL)
+		{
+			slow = slow->next;
+			fast = fast->next;
+		}
+	}
+	*front_ref = source;
+	*back_ref = slow->next;
+	slow->next = NULL;
+}
+
+void	merge_sort(t_ls **head_ref)
+{
+	t_ls *head;
+	t_ls *a;
+	t_ls *b;
+
+	head = *head_ref;
+	if(head == NULL || head->next == NULL)
+		return;
+	front_back_split(head, &a, &b);
+	merge_sort(&a);
+	merge_sort(&b);
+	*head_ref = sorted_merge(a, b);
+}
+
+/*
+** Get count function calculates how many nodes/ files and folder there are in a
+** given directory.
+*/
+
+int get_count(t_ls *ls)
+{
+	int count;
+
+	count = 0;
+	if(ls)
+		while(ls)
+		{
+			ls = ls->next;
+			count++;
+		}
+	return(count);
+}
+
 
 void	single_argument(t_ls *ls)
 //t_ls	*single_argument(t_ls *ls)
 {
 	struct dirent	*data;
 	DIR				*dir;
+	int				count;
 
 	dir = opendir(".");
 	while((data = readdir(dir)) != NULL)
@@ -243,6 +326,9 @@ void	single_argument(t_ls *ls)
 		}
 	}
 	ft_printf("\n\n");
+	merge_sort(&ls);
+	count = get_count(ls);
+	ft_printf("|%d|\n", count);
 	print_file_name(ls);
 //	return(ls);
 }
@@ -263,7 +349,7 @@ int main(int argc, char **argv)
 	else if(argv[0][1] != '\0')
 		ft_printf("Just filling in to silence Wall Wextra Werror flag\n");
 	
-	print_file_name(ls);
+//	print_file_name(ls);
 //	ft_printf("|%s|\n", ls.file_name);
 }
 

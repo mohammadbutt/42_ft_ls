@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/23 14:19:30 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/23 16:26:47 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -73,6 +73,14 @@ void	ls_start_parsing(t_ls *ls, int argument_count, char **str);
 void	initialize_ls_values(t_ls *ls);
 void	ft_exit(char c);
 void	ft_exit_no_dir(char *str);
+t_ls	*create(char *file_name);
+t_ls	*append(t_ls *head, char *file_name);
+void	print_file_name(t_ls *ls);
+t_ls	*sorted_merge(t_ls *a, t_ls *b);
+void	front_back_split(t_ls *source, t_ls **front_ref, t_ls **back_ref);
+void	merge_sort(t_ls **head_ref);
+int		get_count(t_ls *ls);
+void	print_file_name(t_ls *ls); // Will be used after the list is sorted
 void	single_argument(t_ls *ls);
 //t_ls	*single_argument(t_ls *ls);
 
