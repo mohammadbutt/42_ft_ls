@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/23 16:22:47 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/23 18:56:02 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,6 +307,7 @@ void	single_argument(t_ls *ls)
 //t_ls	*single_argument(t_ls *ls)
 {
 	struct dirent	*data;
+//	struct winsize	*win_specs;
 	DIR				*dir;
 	int				count;
 
