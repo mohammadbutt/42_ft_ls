@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/23 18:56:02 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/24 16:40:39 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int is_flag_valid(char c)
 	return(0);
 }
 
+/*
 void ls_collect_flags(t_ls *ls, char c)
 {
 	if(c == 'l')
@@ -84,6 +85,23 @@ void ls_collect_flags(t_ls *ls, char c)
 	else if(c == 'R')
 		ls->flags.uppercase_r = true;
 }
+*/
+void ls_collect_flags(t_info *info, char c)
+{
+	printf("Does it come here?1\n");
+	if(c == 'l')
+		info->flags.l = true;
+	else if(c == 'a')
+		info->flags.a = true;
+	else if(c == 't')
+		info->flags.t = true;
+	else if(c == 'r')
+		info->flags.r = true;
+	else if(c == 'R')
+		info->flags.uppercase_r = true;
+	printf("Does it come here?2\n");
+}
+
 
 void ft_exit(char c)
 {
@@ -109,7 +127,14 @@ void ft_exit_no_dir(char *str)
 	exit(EXIT_SUCCESS);
 }
 
-void ls_start_parsing(t_ls *ls, int argument_count, char **str)
+void	ft_no_dir(char *str)
+{
+	ft_printf("ft_ls: ");
+	perror(str);
+}
+
+/*
+void ls_start_parsing(t_info *info, int argument_count, char **str)
 {
 	int i;
 	int j;
@@ -158,7 +183,8 @@ void ls_start_parsing(t_ls *ls, int argument_count, char **str)
 			{
 //				ft_printf("Does it come here\n");
 //				ft_printf("Valid:|%c|\n",str[i][j]);
-				ls_collect_flags(ls, str[i][j]);
+				ls_collect_flags(info, str[i][j]);
+//				ls_collect_flags(ls, str[i][j]);
 //				printf("flag.l|%d|\n", ls->flags.l);
 			}
 			j++;
@@ -167,10 +193,95 @@ void ls_start_parsing(t_ls *ls, int argument_count, char **str)
 		i++;
 	}
 }
+*/
 
-void initialize_ls_values(t_ls *ls)
+//void	process_dir(int argument_count, char **str)
+void	process_dir(t_ls *ls, t_info *info, int arg_count, char **str)
 {
-	ft_bzero(&ls->flags, sizeof(ls->flags));
+	struct dirent	*data;
+	DIR				*dir;
+	int				i;
+	int				j;
+	int				valid_dir;
+	
+	i = 1;
+	j = 0;
+	valid_dir = 0;
+
+/*
+	while(i < arg_count)
+	{
+		dir = opendir(str[i]);
+		if(dir == NULL)
+			ft_no_dir(str[i]);
+		else if(dir != NULL)
+		{
+			ft_printf("%s:\n", str[i]);
+			single_argument(ls, str[i]);
+		}
+		i++;
+	}
+*/
+	while(i < arg_count)
+	{
+		dir = opendir(str[i]);
+		if(dir == NULL)
+			ft_no_dir(str[i]);
+		i++;
+	}
+	i = 1;
+	while(i < arg_count)
+	{
+		dir = opendir(str[i]);
+		if(dir != NULL)
+		{
+			if(valid_dir == 1)
+				ft_printf("\n");
+			ft_printf("%s:\n", str[i]);
+			single_argument(ls, str[i]);
+			valid_dir = 1;
+		}
+		i++;
+	}
+
+
+//	exit(EXIT_SUCCESS);
+}
+
+void	ls_start_parsing(t_ls *ls, t_info *info, int arg_count, char **str)
+{
+	struct dirent	*data;
+	DIR				*dir;
+	int				count;
+	int				i;
+	int				j;
+
+	i = 1;
+	j = 0;
+
+	if(str[i][j] != '-')
+		process_dir(ls, info, arg_count, str);
+/*
+	while(i < argument_count)
+	{
+		if(str[i][j] != '-') // from now on has to be a folder
+		{
+			dir = opendir(str[i]);
+			if(dir == NULL)
+				ft_exit_no_dir(str[i]);
+		}
+		i++;
+	}
+*/
+
+}
+
+
+//void initialize_ls_values(t_ls *ls)
+void	initialize_info_values(t_info *info)
+{
+//	ft_bzero(&ls->flags, sizeof(ls->flags));
+	ft_bzero(&info->flags, sizeof(info->flags));
 }
 
 /*
@@ -215,7 +326,7 @@ void print_file_name(t_ls *ls)
 	while(ls)
 	{
 		str = ls->file_name;
-		printf("|%s|\n", str);
+		printf("%s\n", str);
 		ls = ls->next;
 	}
 //	return(0);
@@ -303,15 +414,17 @@ int get_count(t_ls *ls)
 }
 
 
-void	single_argument(t_ls *ls)
+//void	single_argument(t_ls *ls)
 //t_ls	*single_argument(t_ls *ls)
+//void	single_argument(t_ls *ls)
+void	single_argument(t_ls *ls, char *dir_path_str)
 {
 	struct dirent	*data;
-//	struct winsize	*win_specs;
 	DIR				*dir;
 	int				count;
 
-	dir = opendir(".");
+//	dir = opendir(".");
+	dir = opendir(dir_path_str);
 	while((data = readdir(dir)) != NULL)
 	{
 		if(data->d_name[0] != '.')
@@ -319,8 +432,33 @@ void	single_argument(t_ls *ls)
 			if(ls == NULL)
 				ls = create(data->d_name);
 			else
-			{
 				ls = append(ls, data->d_name);
+		}
+	}
+	merge_sort(&ls);
+//	count = get_count(ls); // Will be used later when alligning columns
+	print_file_name(ls);
+//	return(ls);
+}
+
+
+/*
+void	single_argument(t_ls *ls, t_info *info)
+{
+//	struct dirent	*data;
+	DIR				*dir;
+	int				count;
+
+	dir = opendir(".");
+	while((info->data = *(readdir(dir))) != NULL)
+	{
+		if(info->data.d_name[0] != '.')
+		{
+			if(ls == NULL)
+				ls = create(info->data.d_name);
+			else
+			{
+				ls = append(ls, info->data.d_name);
 //				append(ls, data->d_name);
 //				ft_printf("%s\n", ls->file_name);
 			}
@@ -333,22 +471,30 @@ void	single_argument(t_ls *ls)
 	print_file_name(ls);
 //	return(ls);
 }
+*/
+
 
 
 int main(int argc, char **argv)
 {
-	t_ls *ls;
+	t_ls	*ls;
+	t_info	*info;
 
 	ls = NULL;
+	info = NULL;
 	ft_bzero(&ls,sizeof(&ls));
-//	ls = malloc(sizeof(ls));
 	if(argc == 1)
 	{
-		single_argument(ls);
-//		ls = single_argument(ls);
+//		single_argument(ls);
+		single_argument(ls, ".");
+		return(0);
 	}
-	else if(argv[0][1] != '\0')
-		ft_printf("Just filling in to silence Wall Wextra Werror flag\n");
+	else if(argc > 1)
+	{
+		ls_start_parsing(ls, info, argc, argv);
+	}
+//	else if(argv[0][1] != '\0')
+//		ft_printf("Just filling in to silence Wall Wextra Werror flag\n");
 	
 //	print_file_name(ls);
 //	ft_printf("|%s|\n", ls.file_name);

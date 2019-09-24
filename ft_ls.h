@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/23 18:55:46 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/24 16:40:36 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -52,15 +52,20 @@ typedef struct s_flags
 ** PATH_MAX macros = __DARWIN_MAXPATHLEN, which is equal to 1024
 */
 
+
 typedef struct s_ls
 {
-	t_flags flags;
-//	struct	dirent	*data;
-	struct	stat	*meta;
-//	char			file_name[FT_PATH_MAX];
 	char 			*file_name;
 	struct	s_ls	*next;
 } t_ls;
+
+typedef struct s_info
+{
+//	struct	dirent	data;
+//	struct	stat	*meta;
+//	struct	winsize	*ws;
+	t_flags	flags;
+}			t_info;
 
 
 /*
@@ -68,11 +73,18 @@ typedef struct s_ls
 */
 
 int		is_flag_valid(char c);
-void	ls_collect_flag(t_ls *ls, char c);
-void	ls_start_parsing(t_ls *ls, int argument_count, char **str);
-void	initialize_ls_values(t_ls *ls);
+//void	ls_collect_flag(t_ls *ls, char c);
+void	ls_collect_flags(t_info *info, char c);
+//void	ls_start_parsing(t_ls *ls, int argument_count, char **str);
+//void	process_dir(int argument_count, char **str);
+void	process_dir(t_ls *ls, t_info *info, int argument_count, char **str);
+//void	ls_start_parsing(t_info *info, int argument_count, char **str);
+void	ls_start_parsing(t_ls *ls, t_info *info, int arg_count, char **str);
+//void	initialize_ls_values(t_ls *ls);
+void	initialize_info_values(t_info *info);
 void	ft_exit(char c);
 void	ft_exit_no_dir(char *str);
+void	ft_no_dir(char *str);
 t_ls	*create(char *file_name);
 t_ls	*append(t_ls *head, char *file_name);
 void	print_file_name(t_ls *ls);
@@ -81,7 +93,10 @@ void	front_back_split(t_ls *source, t_ls **front_ref, t_ls **back_ref);
 void	merge_sort(t_ls **head_ref);
 int		get_count(t_ls *ls);
 void	print_file_name(t_ls *ls); // Will be used after the list is sorted
-void	single_argument(t_ls *ls);
+//void	single_argument(t_ls *ls, t_info *info);
+//void	single_argument(t_ls *ls);
+void	single_argument(t_ls *ls, char *dir_path_str);
+//void	single_argument(t_ls *ls, DIR *dir);
 //t_ls	*single_argument(t_ls *ls);
 
 #endif
