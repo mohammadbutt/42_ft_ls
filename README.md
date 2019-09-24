@@ -42,3 +42,4 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 6. [Dirent and Stat usage](http://codepad.org/mocgJvtX#output)
 7. [Differentiate between a unix directory and file in C - Stackoverflow](https://stackoverflow.com/questions/1036625/differentiate-between-a-unix-directory-and-file-in-c-and-c)
 8. [Singly Linked List - Hacker Earth](https://www.hackerearth.com/practice/data-structures/linked-list/singly-linked-list/tutorial/)
+9. [Members of winsize struct - ](http://www.delorie.com/djgpp/doc/libc/libc_495.html)
