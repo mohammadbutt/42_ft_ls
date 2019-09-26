@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/25 21:54:08 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/26 13:35:18 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,20 +270,16 @@ t_ls	*store_invalid_file_name(t_ls *ls,  t_info *info, char *dir_path_str)
 void print_invalid_file_name(t_ls *ls)
 {
 	int i;
-	char *str;
+	char *invalid_str;
 	
-
 	i = 0;
 	while(ls)
 	{
-//		str = ls->file_name;
-		str = ls->invalid_file_name;
-		printf("ft_ls: %s\n", str);
-//		free(str);
+		invalid_str = ls->invalid_file_name;
+		ft_printf("ft_ls: ");
+		perror(invalid_str);
 		ls = ls->next;
 	}
-//	ls = NULL;
-//	free(ls);
 }
 
 
