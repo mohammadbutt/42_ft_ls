@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/25 19:02:06 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/25 21:54:04 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -56,6 +56,8 @@ typedef struct s_ls_flag
 typedef struct s_ls
 {
 	char 			*file_name;
+	char			*invalid_file_name;
+
 	struct	s_ls	*next;
 }					t_ls;
 
@@ -96,6 +98,12 @@ void	initialize_info_values(t_info *info);
 void	ft_exit(char c);
 void	ft_exit_no_dir(char *str);
 void	ft_no_dir(char *str);
+void	delete_list(t_ls **head_ref);
+t_ls	*create_list_for_invalid(char *invalid_dir_path_str);
+t_ls	*append_list_for_invalid(t_ls *head, char *invalid_dir_path_str);
+t_ls	*sorted_merge_invalid_file_name(t_ls *a, t_ls *b);
+void	merge_sort_invalid_file_name(t_ls **head_ref);
+void	print_invalid_file_name(t_ls *ls);
 t_ls	*create(char *file_name);
 t_ls	*append(t_ls *head, char *file_name);
 void	print_file_name(t_ls *ls);

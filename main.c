@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/25 19:14:56 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/25 21:54:08 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,10 @@ void ft_exit_no_dir(char *str)
 	exit(EXIT_SUCCESS);
 }
 
-void	ft_no_dir(char *str)
+void	ft_no_dir(char *dir_path_str)
 {
 	ft_printf("ft_ls: ");
-	perror(str);
+	perror(dir_path_str);
 }
 
 /*
@@ -195,6 +195,99 @@ void ls_start_parsing(t_info *info, int argument_count, char **str)
 }
 */
 
+
+t_ls	*sorted_merge_invalid_file_name(t_ls *a, t_ls *b)
+{
+	t_ls *result;
+
+	result = NULL;
+	if(a == NULL)
+		return(b);
+	else if(b == NULL)
+		return(a);
+	if(ft_strcmp(a->invalid_file_name, b->invalid_file_name) <= 0)
+	{
+		result = a;
+		result->next = sorted_merge_invalid_file_name(a->next, b);
+	}
+	else
+	{
+		result = b;
+		result->next = sorted_merge_invalid_file_name(a, b->next);
+	}
+	return(result);
+}
+
+void	merge_sort_invalid_file_name(t_ls **head_ref)
+{
+	t_ls *head;
+	t_ls *a;
+	t_ls *b;
+
+	head = *head_ref;
+	if(head == NULL || head->next == NULL)
+		return;
+	front_back_split(head, &a, &b);
+	merge_sort_invalid_file_name(&a);
+	merge_sort_invalid_file_name(&b);
+	*head_ref = sorted_merge_invalid_file_name(a, b);
+}
+
+
+
+t_ls	*store_invalid_file_name(t_ls *ls,  t_info *info, char *dir_path_str)
+{
+//	struct dirent	*data;
+//	DIR				*dir;
+//	int				count;
+
+//	dir = opendir(dir_path_str);
+//	while((data = readdir(dir)) != NULL)
+//	{
+//		if(data->d_name[0] != '.')
+//		{
+			if(ls == NULL)
+			{
+//				printf("comes here 1\n");
+//				printf("%s\n", dir_path_str);
+				ls = create_list_for_invalid(dir_path_str);
+			}
+			else
+			{
+//				printf("comes here 2\n");
+//				printf("%s\n", dir_path_str);
+				ls = append_list_for_invalid(ls, dir_path_str);
+			}
+//		}
+//	}
+//	merge_sort(&ls);
+//	count = get_count(ls); // Will be used later when alligning columns
+//	print_file_name(ls);
+	return(ls);
+}
+
+
+void print_invalid_file_name(t_ls *ls)
+{
+	int i;
+	char *str;
+	
+
+	i = 0;
+	while(ls)
+	{
+//		str = ls->file_name;
+		str = ls->invalid_file_name;
+		printf("ft_ls: %s\n", str);
+//		free(str);
+		ls = ls->next;
+	}
+//	ls = NULL;
+//	free(ls);
+}
+
+
+
 void	process_dir(t_ls *ls, t_info *info)
 {
 	struct dirent	*data;
@@ -206,9 +299,21 @@ void	process_dir(t_ls *ls, t_info *info)
 	{
 		dir = opendir(info->argv[info->var.i]);
 		if(dir == NULL)
-			ft_no_dir(info->argv[info->var.i]);
+		{
+		//	ft_no_dir(info->argv[info->var.i]);
+			ls = store_invalid_file_name(ls, info, info->argv[info->var.i]);
+		}
 		info->var.i++;
 	}
+//	printf("Does it come here1\n");
+//	if(ls == NULL)
+//	{
+		merge_sort_invalid_file_name(&ls);
+//		printf("Does it come here2\n");	
+		print_invalid_file_name(ls);
+		delete_list(&ls);
+//		printf("Does it come here3\n");
+//	}
 	info->var.i = 1;
 	while(info->var.i < info->argc)
 	{
@@ -302,7 +407,22 @@ void	initialize_info_values(t_info *info)
 ** ./ft_ls
 */
 
-t_ls	*create(char *file_name)
+void	delete_list(t_ls **head_ref)
+{
+	t_ls *current;
+	t_ls *next;
+
+	current = *head_ref;
+	while(current != NULL)
+	{
+		next = current->next;
+		free(current);
+		current = next;
+	}
+	*head_ref = NULL;
+}
+
+t_ls	*create_list_for_invalid(char *invalid_dir_path_str)
 {
 	t_ls *new_node;
 
@@ -310,12 +430,12 @@ t_ls	*create(char *file_name)
 	if(new_node == NULL)
 		exit(EXIT_SUCCESS);
 
-	new_node->file_name = ft_strdup(file_name);
+	new_node->invalid_file_name = ft_strdup(invalid_dir_path_str);
 	new_node->next = NULL;
 	return(new_node);
 }
 
-t_ls *append(t_ls *head, char *file_name)
+t_ls *append_list_for_invalid(t_ls *head, char *invalid_dir_path_str)
 {
 	t_ls *cursor;
 	t_ls *new_node;
@@ -323,7 +443,33 @@ t_ls *append(t_ls *head, char *file_name)
 	cursor = head;
 	while(cursor->next != NULL)
 		cursor = cursor->next;
-	new_node = create(file_name);
+	new_node = create_list_for_invalid(invalid_dir_path_str);
+	cursor->next = new_node;
+	return(head);
+}
+
+t_ls	*create(char *valid_file_path_str)
+{
+	t_ls *new_node;
+
+	new_node = malloc(sizeof(t_ls));
+	if(new_node == NULL)
+		exit(EXIT_SUCCESS);
+
+	new_node->file_name = ft_strdup(valid_file_path_str);
+	new_node->next = NULL;
+	return(new_node);
+}
+
+t_ls *append(t_ls *head, char *valid_file_path_str)
+{
+	t_ls *cursor;
+	t_ls *new_node;
+
+	cursor = head;
+	while(cursor->next != NULL)
+		cursor = cursor->next;
+	new_node = create(valid_file_path_str);
 	cursor->next = new_node;
 	return(head);
 }
@@ -457,21 +603,17 @@ void	single_argument(t_ls *ls, char *dir_path_str)
 char **ft_double_strdup(int argc, char *source[])
 {
 	char **dest;
-	char temp[1024];
 	int i;
 
 	i = 0;
 	dest = malloc(sizeof (char *) * (argc + 1));
 	if (dest == NULL || source == NULL)
 		return (NULL);
-	ft_bzero(dest, sizeof(dest));
-	if (source)
+	ft_bzero(dest, argc +1);
+	while (i < argc)
 	{
-		while (i < argc)
-		{
-			dest[i] = ft_strdup(source[i]);
-			i++;
-		}
+		dest[i] = ft_strdup(source[i]);
+		i++;
 	}
 	dest[i] = NULL;
 	return (dest);
@@ -490,15 +632,14 @@ int main(int argc, char *argv[])
 // To test stored string
 	int i = 0;
 	while(i < argc)
-	{
-		printf("|%s|\n", info.arg_str[i]);
-		i++;
-	}
+		printf("|%s|\n", info->argv[i++]);
 */
+
 
 	if(argc == 1)
 		single_argument(ls, ".");
 	else if(argc > 1)
 		ls_start_parsing(ls, &info);
 	return(0);
+
 }
