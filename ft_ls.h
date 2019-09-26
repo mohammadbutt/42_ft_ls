@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/24 16:40:36 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/25 18:26:31 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -41,11 +41,11 @@
 
 typedef struct s_flags
 {
-	bool l : 1;
-	bool a : 1;
-	bool t : 1;
-	bool r : 1;
-	bool uppercase_r : 1;
+	bool l;// : 1;
+	bool a;// : 1;
+	bool t;// : 1;
+	bool r;// : 1;
+	bool uppercase_r;// : 1;
 }	t_flags;
 
 /*
@@ -59,14 +59,23 @@ typedef struct s_ls
 	struct	s_ls	*next;
 } t_ls;
 
+typedef struct	s_vari
+{
+	int			i;
+//	int			j;
+	int		valid_dir;
+}				t_vari;
+
 typedef struct s_info
 {
 //	struct	dirent	data;
 //	struct	stat	*meta;
 //	struct	winsize	*ws;
 	t_flags	flags;
+	t_vari	va;
+	int		arg_count;
+	char	**arg_str;
 }			t_info;
-
 
 /*
 ** Function Prototypes---------------------------------------------------------
@@ -76,8 +85,8 @@ int		is_flag_valid(char c);
 //void	ls_collect_flag(t_ls *ls, char c);
 void	ls_collect_flags(t_info *info, char c);
 //void	ls_start_parsing(t_ls *ls, int argument_count, char **str);
-//void	process_dir(int argument_count, char **str);
-void	process_dir(t_ls *ls, t_info *info, int argument_count, char **str);
+void	process_dir(t_ls *ls, t_info **info, int argument_count, char **str);
+//void	process_dir(t_ls *ls, t_info *info, int argument_count, char **str);
 //void	ls_start_parsing(t_info *info, int argument_count, char **str);
 void	ls_start_parsing(t_ls *ls, t_info *info, int arg_count, char **str);
 //void	initialize_ls_values(t_ls *ls);

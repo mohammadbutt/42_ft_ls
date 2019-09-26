@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 20:57:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/12 18:17:18 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/25 18:25:40 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ char	*ft_strcpy(char *dest, char *source)
 	i = 0;
 	j = 0;
 	if (source)
+	{
 		while (source[i])
 			dest[j++] = source[i++];
+	}
 	dest[j] = '\0';
 	return (dest);
 }

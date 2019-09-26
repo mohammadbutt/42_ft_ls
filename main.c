@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/24 16:40:39 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/25 18:28:54 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,38 +195,64 @@ void ls_start_parsing(t_info *info, int argument_count, char **str)
 }
 */
 
-//void	process_dir(int argument_count, char **str)
+
+//void	process_dir(t_ls *ls, t_info *info, int arg_count, char **str)
+void	process_dir(t_ls *ls, t_info **info, int arg_count, char **str)
+{
+	struct dirent	*data;
+	DIR				*dir;
+//	int				i;
+//	bool			valid_dir;
+	
+//	i = 1;
+//	valid_dir = false;
+//	printf("Does it come here1?\n");
+//	printf("|%d|\n", info->va.i);
+	(*info)->va.i = 1;
+//	printf("Does it come here2?\n");
+	(*info)->va.valid_dir = false;
+//	printf("Does it come here3?\n");
+	while((*info)->va.i < arg_count)
+	{
+		dir = opendir(str[(*info)->va.i]);
+		if(dir == NULL)
+			ft_no_dir(str[(*info)->va.i]);
+//		(dir == NULL) && (ft_no_dir(str[i]));
+		(*info)->va.i++;
+	}
+	(*info)->va.i = 1;
+	while((*info)->va.i < arg_count)
+	{
+		dir = opendir(str[(*info)->va.i]);
+		if(dir != NULL)
+		{
+			((*info)->va.valid_dir == true) && (ft_printf("\n"));
+			(arg_count > 2) && (ft_printf("%s:\n", str[(*info)->va.i]));
+			single_argument(ls, str[(*info)->va.i]);
+			(*info)->va.valid_dir = true;
+		}
+		(*info)->va.i++;
+	}
+	exit(EXIT_SUCCESS);
+}
+
+
+/*
 void	process_dir(t_ls *ls, t_info *info, int arg_count, char **str)
 {
 	struct dirent	*data;
 	DIR				*dir;
 	int				i;
-	int				j;
-	int				valid_dir;
+	bool			valid_dir;
 	
 	i = 1;
-	j = 0;
-	valid_dir = 0;
-
-/*
+	valid_dir = false;
 	while(i < arg_count)
 	{
 		dir = opendir(str[i]);
 		if(dir == NULL)
 			ft_no_dir(str[i]);
-		else if(dir != NULL)
-		{
-			ft_printf("%s:\n", str[i]);
-			single_argument(ls, str[i]);
-		}
-		i++;
-	}
-*/
-	while(i < arg_count)
-	{
-		dir = opendir(str[i]);
-		if(dir == NULL)
-			ft_no_dir(str[i]);
+//		(dir == NULL) && (ft_no_dir(str[i]));
 		i++;
 	}
 	i = 1;
@@ -235,18 +261,19 @@ void	process_dir(t_ls *ls, t_info *info, int arg_count, char **str)
 		dir = opendir(str[i]);
 		if(dir != NULL)
 		{
-			if(valid_dir == 1)
-				ft_printf("\n");
-			ft_printf("%s:\n", str[i]);
+			(valid_dir == true) && (ft_printf("\n"));
+			(arg_count > 2) && (ft_printf("%s:\n", str[i]));
 			single_argument(ls, str[i]);
-			valid_dir = 1;
+			valid_dir = true;
 		}
 		i++;
 	}
-
-
-//	exit(EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
+*/
+
+
+
 
 void	ls_start_parsing(t_ls *ls, t_info *info, int arg_count, char **str)
 {
@@ -260,7 +287,10 @@ void	ls_start_parsing(t_ls *ls, t_info *info, int arg_count, char **str)
 	j = 0;
 
 	if(str[i][j] != '-')
-		process_dir(ls, info, arg_count, str);
+	{
+		process_dir(ls, &info, arg_count, str);
+//		process_dir(ls, info, arg_count, str);
+	}
 /*
 	while(i < argument_count)
 	{
@@ -294,6 +324,7 @@ t_ls	*create(char *file_name)
 	t_ls *new_node;
 
 	new_node = malloc(sizeof(t_ls));
+//	new_node = malloc(sizeof(t_ls) + 1);
 	if(new_node == NULL)
 		exit(EXIT_SUCCESS);
 
@@ -474,62 +505,51 @@ void	single_argument(t_ls *ls, t_info *info)
 */
 
 
-
-int main(int argc, char **argv)
+char **ft_double_strdup(int argc, char *source[])
 {
-	t_ls	*ls;
-	t_info	*info;
-
-	ls = NULL;
-	info = NULL;
-	ft_bzero(&ls,sizeof(&ls));
-	if(argc == 1)
-	{
-//		single_argument(ls);
-		single_argument(ls, ".");
-		return(0);
-	}
-	else if(argc > 1)
-	{
-		ls_start_parsing(ls, info, argc, argv);
-	}
-//	else if(argv[0][1] != '\0')
-//		ft_printf("Just filling in to silence Wall Wextra Werror flag\n");
-	
-//	print_file_name(ls);
-//	ft_printf("|%s|\n", ls.file_name);
-}
-
-/*
-int main(int argc, char **argv)
-{
-	t_ls	ls;
-	int		i;
+	char **dest;
+	char temp[1024];
+	int i;
 
 	i = 0;
-	initialize_ls_values(&ls);
-	if(argc > 1)
+	dest = malloc(sizeof (char *) * (argc + 1));
+	if(dest == NULL)
+		return(NULL);
+	ft_bzero(dest, sizeof(dest));
+	if(source)
 	{
-		ls_start_parsing(&ls, argc, argv);
-//		printf("flag.l|%d|\n", ls.flags.l);
-//		printf("flag.a|%d|\n", ls.flags.a);
-//		printf("flag.t|%d|\n", ls.flags.t);
-//		printf("flag.r|%d|\n", ls.flags.r);
-//		printf("flag.uppercase_r|%d|\n", ls.flags.uppercase_r);
+		while(i < argc)
+		{
+			dest[i] = ft_strdup(source[i]);
+			i++;
+		}
 	}
-//	printf("argument counter:|%d|\n", argc);
-//	if(argc >= 2)
-//		ft_printf("argument counter\n");
-//	if(argv[1])
-//		ft_printf("argument vector\n");
+	dest[i] = NULL;
+	return(dest);
 }
-*/
-/*
-int main(void)
-{
-	char *str1 = "Test";
-	char str2 = 't';
 
-	printf("|%s|\n", strchr(str1, str2));
-}
+
+int main(int argc, char *argv[])
+{
+	t_ls	*ls;
+	t_info	info;
+
+	ls = NULL;
+	info.arg_count = argc;
+	info.arg_str = ft_double_strdup(argc, argv);
+
+/*
+// To test stored string
+	int i = 0;
+	while(i < argc)
+	{
+		printf("|%s|\n", info.arg_str[i]);
+		i++;
+	}
 */
+	if(argc == 1)
+		single_argument(ls, ".");
+	else if(argc > 1)
+		ls_start_parsing(ls, &info, argc, argv);
+	return(0);
+}
