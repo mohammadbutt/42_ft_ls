@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/26 14:56:31 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/26 15:09:53 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,32 +237,11 @@ void	merge_sort_invalid_file_name(t_ls **head_ref)
 
 t_ls	*store_invalid_file_name(t_ls *ls,  t_info *info, char *dir_path_str)
 {
-//	struct dirent	*data;
-//	DIR				*dir;
-//	int				count;
 
-//	dir = opendir(dir_path_str);
-//	while((data = readdir(dir)) != NULL)
-//	{
-//		if(data->d_name[0] != '.')
-//		{
-			if(ls == NULL)
-			{
-//				printf("comes here 1\n");
-//				printf("%s\n", dir_path_str);
-				ls = create_list_for_invalid(dir_path_str);
-			}
-			else
-			{
-//				printf("comes here 2\n");
-//				printf("%s\n", dir_path_str);
-				ls = append_list_for_invalid(ls, dir_path_str);
-			}
-//		}
-//	}
-//	merge_sort(&ls);
-//	count = get_count(ls); // Will be used later when alligning columns
-//	print_file_name(ls);
+	if(ls == NULL)
+		ls = create_list_for_invalid(dir_path_str);
+	else
+		ls = append_list_for_invalid(ls, dir_path_str);
 	return(ls);
 }
 
@@ -565,6 +544,7 @@ void	single_argument(t_ls *ls, char *dir_path_str)
 	merge_sort(&ls);
 //	count = get_count(ls); // Will be used later when alligning columns
 	print_file_name(ls);
+	delete_list(&ls);
 }
 
 /*
@@ -607,8 +587,8 @@ int main(int argc, char *argv[])
 	int i = 0;
 	while(i < argc)
 		printf("|%s|\n", info->argv[i++]);
+	return(0);
 */
-
 
 	if(argc == 1)
 		single_argument(ls, ".");
