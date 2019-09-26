@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/26 13:35:22 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/26 14:56:35 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 
 /*
-** Notes aboue headers that are included
+** Notes about headers that are included
 ** 
 ** <stdbool.h> to have access to bool data type
 */

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/26 14:21:54 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/26 14:56:31 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,21 +282,23 @@ void print_invalid_file_name(t_ls *ls)
 	}
 }
 
-
-
-void	process_dir(t_ls *ls, t_info *info)
+void process_dir_invalid(t_ls *ls, t_info *info)
 {
 	struct dirent	*data;
 	DIR				*dir;
-	
-	info->var.i = 1;
-	info->var.valid_dir = false;
-	while(info->var.i < info->argc)
+	char			**arg_str;
+	int				arg_count;
+	int 			i;
+
+	arg_str = info->argv;
+	arg_count = info->argc;
+	i = 1;
+	while(i < arg_count)
 	{
-		dir = opendir(info->argv[info->var.i]);
+		dir = opendir(arg_str[i]);
 		if(dir == NULL)
-			ls = store_invalid_file_name(ls, info, info->argv[info->var.i]);
-		info->var.i++;
+			ls = store_invalid_file_name(ls, info, arg_str[i]);
+		i++;
 	}
 	if(ls != NULL)
 	{
@@ -304,58 +306,40 @@ void	process_dir(t_ls *ls, t_info *info)
 		print_invalid_file_name(ls);
 		delete_list(&ls);
 	}
-	info->var.i = 1;
-	while(info->var.i < info->argc)
-	{
-		dir = opendir(info->argv[info->var.i]);
-		if(dir != NULL)
-		{
-			(info->var.valid_dir == true) && (ft_printf("\n"));
-			(info->argc > 2) && (ft_printf("%s:\n", info->argv[info->var.i]));
-			single_argument(ls, info->argv[info->var.i]);
-			info->var.valid_dir = true;
-		}
-		info->var.i++;
-	}
-	exit(EXIT_SUCCESS);
 }
 
-
-/*
-void	process_dir(t_ls *ls, t_info *info, int arg_count, char **str)
+void process_dir_valid(t_ls *ls, t_info *info)
 {
 	struct dirent	*data;
 	DIR				*dir;
+	char			**arg_str;
+	int				arg_count;
 	int				i;
-	bool			valid_dir;
-	
+
+	arg_str	= info->argv;
+	arg_count = info->argc;
 	i = 1;
-	valid_dir = false;
+	info->var.valid_dir = false;
 	while(i < arg_count)
 	{
-		dir = opendir(str[i]);
-		if(dir == NULL)
-			ft_no_dir(str[i]);
-//		(dir == NULL) && (ft_no_dir(str[i]));
-		i++;
-	}
-	i = 1;
-	while(i < arg_count)
-	{
-		dir = opendir(str[i]);
+		dir = opendir(arg_str[i]);
 		if(dir != NULL)
 		{
-			(valid_dir == true) && (ft_printf("\n"));
-			(arg_count > 2) && (ft_printf("%s:\n", str[i]));
-			single_argument(ls, str[i]);
-			valid_dir = true;
+			(info->var.valid_dir == true) && (ft_printf("\n"));
+			(arg_count > 2) && (ft_printf("%s:\n", arg_str[i]));
+			single_argument(ls, arg_str[i]);
+			info->var.valid_dir = true;
 		}
 		i++;
 	}
+}
+
+void	process_dir(t_ls *ls, t_info *info)
+{
+	process_dir_invalid(ls, info);
+	process_dir_valid(ls, info);
 	exit(EXIT_SUCCESS);
 }
-*/
-
 
 void	ls_start_parsing(t_ls *ls, t_info *info)
 {
