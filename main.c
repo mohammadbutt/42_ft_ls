@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/26 13:35:18 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/26 14:21:54 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,21 +295,15 @@ void	process_dir(t_ls *ls, t_info *info)
 	{
 		dir = opendir(info->argv[info->var.i]);
 		if(dir == NULL)
-		{
-		//	ft_no_dir(info->argv[info->var.i]);
 			ls = store_invalid_file_name(ls, info, info->argv[info->var.i]);
-		}
 		info->var.i++;
 	}
-//	printf("Does it come here1\n");
-//	if(ls == NULL)
-//	{
+	if(ls != NULL)
+	{
 		merge_sort_invalid_file_name(&ls);
-//		printf("Does it come here2\n");	
 		print_invalid_file_name(ls);
 		delete_list(&ls);
-//		printf("Does it come here3\n");
-//	}
+	}
 	info->var.i = 1;
 	while(info->var.i < info->argc)
 	{
