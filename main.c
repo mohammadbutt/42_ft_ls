@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/25 18:28:54 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/25 19:14:56 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,15 +90,15 @@ void ls_collect_flags(t_info *info, char c)
 {
 	printf("Does it come here?1\n");
 	if(c == 'l')
-		info->flags.l = true;
+		info->flag.l = true;
 	else if(c == 'a')
-		info->flags.a = true;
+		info->flag.a = true;
 	else if(c == 't')
-		info->flags.t = true;
+		info->flag.t = true;
 	else if(c == 'r')
-		info->flags.r = true;
+		info->flag.r = true;
 	else if(c == 'R')
-		info->flags.uppercase_r = true;
+		info->flag.uppercase_r = true;
 	printf("Does it come here?2\n");
 }
 
@@ -195,43 +195,32 @@ void ls_start_parsing(t_info *info, int argument_count, char **str)
 }
 */
 
-
-//void	process_dir(t_ls *ls, t_info *info, int arg_count, char **str)
-void	process_dir(t_ls *ls, t_info **info, int arg_count, char **str)
+void	process_dir(t_ls *ls, t_info *info)
 {
 	struct dirent	*data;
 	DIR				*dir;
-//	int				i;
-//	bool			valid_dir;
 	
-//	i = 1;
-//	valid_dir = false;
-//	printf("Does it come here1?\n");
-//	printf("|%d|\n", info->va.i);
-	(*info)->va.i = 1;
-//	printf("Does it come here2?\n");
-	(*info)->va.valid_dir = false;
-//	printf("Does it come here3?\n");
-	while((*info)->va.i < arg_count)
+	info->var.i = 1;
+	info->var.valid_dir = false;
+	while(info->var.i < info->argc)
 	{
-		dir = opendir(str[(*info)->va.i]);
+		dir = opendir(info->argv[info->var.i]);
 		if(dir == NULL)
-			ft_no_dir(str[(*info)->va.i]);
-//		(dir == NULL) && (ft_no_dir(str[i]));
-		(*info)->va.i++;
+			ft_no_dir(info->argv[info->var.i]);
+		info->var.i++;
 	}
-	(*info)->va.i = 1;
-	while((*info)->va.i < arg_count)
+	info->var.i = 1;
+	while(info->var.i < info->argc)
 	{
-		dir = opendir(str[(*info)->va.i]);
+		dir = opendir(info->argv[info->var.i]);
 		if(dir != NULL)
 		{
-			((*info)->va.valid_dir == true) && (ft_printf("\n"));
-			(arg_count > 2) && (ft_printf("%s:\n", str[(*info)->va.i]));
-			single_argument(ls, str[(*info)->va.i]);
-			(*info)->va.valid_dir = true;
+			(info->var.valid_dir == true) && (ft_printf("\n"));
+			(info->argc > 2) && (ft_printf("%s:\n", info->argv[info->var.i]));
+			single_argument(ls, info->argv[info->var.i]);
+			info->var.valid_dir = true;
 		}
-		(*info)->va.i++;
+		info->var.i++;
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -273,9 +262,7 @@ void	process_dir(t_ls *ls, t_info *info, int arg_count, char **str)
 */
 
 
-
-
-void	ls_start_parsing(t_ls *ls, t_info *info, int arg_count, char **str)
+void	ls_start_parsing(t_ls *ls, t_info *info)
 {
 	struct dirent	*data;
 	DIR				*dir;
@@ -286,10 +273,9 @@ void	ls_start_parsing(t_ls *ls, t_info *info, int arg_count, char **str)
 	i = 1;
 	j = 0;
 
-	if(str[i][j] != '-')
+	if(info->argv[i][j] != '-')
 	{
-		process_dir(ls, &info, arg_count, str);
-//		process_dir(ls, info, arg_count, str);
+		process_dir(ls, info);
 	}
 /*
 	while(i < argument_count)
@@ -306,12 +292,9 @@ void	ls_start_parsing(t_ls *ls, t_info *info, int arg_count, char **str)
 
 }
 
-
-//void initialize_ls_values(t_ls *ls)
 void	initialize_info_values(t_info *info)
 {
-//	ft_bzero(&ls->flags, sizeof(ls->flags));
-	ft_bzero(&info->flags, sizeof(info->flags));
+	ft_bzero(&info->flag, sizeof(info->flag));
 }
 
 /*
@@ -324,7 +307,6 @@ t_ls	*create(char *file_name)
 	t_ls *new_node;
 
 	new_node = malloc(sizeof(t_ls));
-//	new_node = malloc(sizeof(t_ls) + 1);
 	if(new_node == NULL)
 		exit(EXIT_SUCCESS);
 
@@ -360,7 +342,6 @@ void print_file_name(t_ls *ls)
 		printf("%s\n", str);
 		ls = ls->next;
 	}
-//	return(0);
 }
 
 /*
@@ -444,17 +425,12 @@ int get_count(t_ls *ls)
 	return(count);
 }
 
-
-//void	single_argument(t_ls *ls)
-//t_ls	*single_argument(t_ls *ls)
-//void	single_argument(t_ls *ls)
 void	single_argument(t_ls *ls, char *dir_path_str)
 {
 	struct dirent	*data;
 	DIR				*dir;
 	int				count;
 
-//	dir = opendir(".");
 	dir = opendir(dir_path_str);
 	while((data = readdir(dir)) != NULL)
 	{
@@ -469,41 +445,14 @@ void	single_argument(t_ls *ls, char *dir_path_str)
 	merge_sort(&ls);
 //	count = get_count(ls); // Will be used later when alligning columns
 	print_file_name(ls);
-//	return(ls);
 }
-
 
 /*
-void	single_argument(t_ls *ls, t_info *info)
-{
-//	struct dirent	*data;
-	DIR				*dir;
-	int				count;
-
-	dir = opendir(".");
-	while((info->data = *(readdir(dir))) != NULL)
-	{
-		if(info->data.d_name[0] != '.')
-		{
-			if(ls == NULL)
-				ls = create(info->data.d_name);
-			else
-			{
-				ls = append(ls, info->data.d_name);
-//				append(ls, data->d_name);
-//				ft_printf("%s\n", ls->file_name);
-			}
-		}
-	}
-	ft_printf("\n\n");
-	merge_sort(&ls);
-	count = get_count(ls);
-	ft_printf("|%d|\n", count);
-	print_file_name(ls);
-//	return(ls);
-}
+** **ft_double_strdup takes the number of arguments and the a 2D array to create
+** a 2 dimensional array.
+** This function is used to obtain a 2d string that will be stored in the struct
+** so fewer parameters are passed around
 */
-
 
 char **ft_double_strdup(int argc, char *source[])
 {
@@ -513,21 +462,20 @@ char **ft_double_strdup(int argc, char *source[])
 
 	i = 0;
 	dest = malloc(sizeof (char *) * (argc + 1));
-	if(dest == NULL)
-		return(NULL);
+	if (dest == NULL || source == NULL)
+		return (NULL);
 	ft_bzero(dest, sizeof(dest));
-	if(source)
+	if (source)
 	{
-		while(i < argc)
+		while (i < argc)
 		{
 			dest[i] = ft_strdup(source[i]);
 			i++;
 		}
 	}
 	dest[i] = NULL;
-	return(dest);
+	return (dest);
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -535,8 +483,8 @@ int main(int argc, char *argv[])
 	t_info	info;
 
 	ls = NULL;
-	info.arg_count = argc;
-	info.arg_str = ft_double_strdup(argc, argv);
+	info.argc = argc;
+	info.argv = ft_double_strdup(argc, argv);
 
 /*
 // To test stored string
@@ -547,9 +495,10 @@ int main(int argc, char *argv[])
 		i++;
 	}
 */
+
 	if(argc == 1)
 		single_argument(ls, ".");
 	else if(argc > 1)
-		ls_start_parsing(ls, &info, argc, argv);
+		ls_start_parsing(ls, &info);
 	return(0);
 }
