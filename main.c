@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/26 15:09:53 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/26 21:27:58 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,8 @@ void process_dir_invalid(t_ls *ls, t_info *info)
 
 	arg_str = info->argv;
 	arg_count = info->argc;
-	i = 1;
+//	i = 1;
+	i = info->var.i;
 	while(i < arg_count)
 	{
 		dir = opendir(arg_str[i]);
@@ -285,6 +286,7 @@ void process_dir_invalid(t_ls *ls, t_info *info)
 		print_invalid_file_name(ls);
 		delete_list(&ls);
 	}
+	closedir(dir);
 }
 
 void process_dir_valid(t_ls *ls, t_info *info)
@@ -297,7 +299,8 @@ void process_dir_valid(t_ls *ls, t_info *info)
 
 	arg_str	= info->argv;
 	arg_count = info->argc;
-	i = 1;
+//	i = 1;
+	i = info->var.i;
 	info->var.valid_dir = false;
 	while(i < arg_count)
 	{
@@ -311,11 +314,14 @@ void process_dir_valid(t_ls *ls, t_info *info)
 		}
 		i++;
 	}
+	closedir(dir);
 }
 
 void	process_dir(t_ls *ls, t_info *info)
 {
+	info->var.i = 1;
 	process_dir_invalid(ls, info);
+	info->var.i = 1;
 	process_dir_valid(ls, info);
 	exit(EXIT_SUCCESS);
 }
@@ -334,6 +340,16 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	if(info->argv[i][j] != '-')
 	{
 		process_dir(ls, info);
+	}
+// Above works fine.
+	else
+	{
+		printf("Does it come here?");
+		while(i < info->argc)
+		{
+			process_dir(ls, info);
+			i++;
+		}
 	}
 /*
 	while(i < argument_count)
@@ -427,7 +443,6 @@ t_ls *append(t_ls *head, char *valid_file_path_str)
 	return(head);
 }
 
-
 void print_file_name(t_ls *ls)
 {
 	int i;
@@ -438,10 +453,35 @@ void print_file_name(t_ls *ls)
 	while(ls)
 	{
 		str = ls->file_name;
-		printf("%s\n", str);
+		ft_printf("%s\n", str);
 		ls = ls->next;
 	}
 }
+
+/*
+void print_file_name(t_ls *ls)
+{
+	struct stat meta;
+	char *str;
+	int i;
+	
+	i = 0;
+	while(ls)
+	{
+		str = ls->file_name;
+		stat(str, &meta);
+		if(S_ISREG(meta.st_mode))
+			ft_printf("%s\n", str);
+		else if(S_ISDIR(meta.st_mode))
+			ft_printf(BRED"%s\n"NC, str);
+		else if(S_ISCHR(meta.st_mode))
+			ft_printf(BGREEN"%s\n"NC, str);
+		else
+			ft_printf(BWHITE"%s\n"NC, str);
+		ls = ls->next;
+	}
+}
+*/
 
 /*
 ** Merge Sort
