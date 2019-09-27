@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/26 21:27:58 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/27 13:53:10 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,13 +271,13 @@ void process_dir_invalid(t_ls *ls, t_info *info)
 
 	arg_str = info->argv;
 	arg_count = info->argc;
-//	i = 1;
 	i = info->var.i;
 	while(i < arg_count)
 	{
 		dir = opendir(arg_str[i]);
 		if(dir == NULL)
 			ls = store_invalid_file_name(ls, info, arg_str[i]);
+		(dir != NULL) && (closedir(dir));
 		i++;
 	}
 	if(ls != NULL)
@@ -286,7 +286,6 @@ void process_dir_invalid(t_ls *ls, t_info *info)
 		print_invalid_file_name(ls);
 		delete_list(&ls);
 	}
-	closedir(dir);
 }
 
 void process_dir_valid(t_ls *ls, t_info *info)
@@ -299,7 +298,6 @@ void process_dir_valid(t_ls *ls, t_info *info)
 
 	arg_str	= info->argv;
 	arg_count = info->argc;
-//	i = 1;
 	i = info->var.i;
 	info->var.valid_dir = false;
 	while(i < arg_count)
@@ -312,9 +310,9 @@ void process_dir_valid(t_ls *ls, t_info *info)
 			single_argument(ls, arg_str[i]);
 			info->var.valid_dir = true;
 		}
+		(dir != NULL) && (closedir(dir));
 		i++;
 	}
-	closedir(dir);
 }
 
 void	process_dir(t_ls *ls, t_info *info)
