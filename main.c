@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/27 16:03:26 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/27 16:16:28 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,10 +315,8 @@ void process_dir_valid(t_ls *ls, t_info *info)
 
 void	process_dir(t_ls *ls, t_info *info)
 {
-//	info->var.i = 1;
 	info->var.i = info->var.temp_i;
 	process_dir_invalid(ls, info);
-//	info->var.i = 1;
 	info->var.i = info->var.temp_i;
 	process_dir_valid(ls, info);
 	exit(EXIT_SUCCESS);
@@ -326,9 +324,9 @@ void	process_dir(t_ls *ls, t_info *info)
 
 void	ls_start_parsing(t_ls *ls, t_info *info)
 {
-	struct dirent	*data;
-	DIR				*dir;
-	int				count;
+//	struct dirent	*data;
+//	DIR				*dir;
+//	int				count;
 	int				i;
 	int				j;
 	int				strlen;
@@ -350,6 +348,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 // Above works fine.
 	else if(info->argv[i][0] == '-' && info->argv[i][1] != '\0')
 	{
+//		handle_dash_arguments(ls, info);		
 		while(i < info->argc)
 		{
 			strlen = ft_strlen(info->argv[i]);
@@ -380,6 +379,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 			process_dir(ls, info);
 			i++;
 		}
+
 	}
 
 /*
