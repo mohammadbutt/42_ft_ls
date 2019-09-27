@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/27 15:42:26 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/27 16:03:26 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,11 +315,11 @@ void process_dir_valid(t_ls *ls, t_info *info)
 
 void	process_dir(t_ls *ls, t_info *info)
 {
-	info->var.i = 1;
-//	info->var.i = info->var.temp_i;
+//	info->var.i = 1;
+	info->var.i = info->var.temp_i;
 	process_dir_invalid(ls, info);
-	info->var.i = 1;
-//	info->var.i = info->var.temp_i;
+//	info->var.i = 1;
+	info->var.i = info->var.temp_i;
 	process_dir_valid(ls, info);
 	exit(EXIT_SUCCESS);
 }
@@ -332,11 +332,13 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	int				i;
 	int				j;
 	int				strlen;
+	bool			double_break;
 
 	i = 1;
 	j = 1;
 	strlen = 0;
 	info->var.temp_i = 1;
+	double_break = false;
 	if(info->argv[i][0] != '-')
 	{
 		process_dir(ls, info);
@@ -361,15 +363,20 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 						ft_exit(info->argv[i][j]);
 				}
 				else if(info->argv[i][0] != '-')
+				{
+					double_break = true;
 					break;
+				}
 				j++;
 			}
+			if(double_break == true)
+				break;
 			j = 1;
 			i++;
 		}
 		while(i < info->argc)
 		{
-//			info->var.temp_i = i;
+			info->var.temp_i = i;
 			process_dir(ls, info);
 			i++;
 		}
