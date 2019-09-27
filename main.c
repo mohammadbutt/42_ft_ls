@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/27 13:53:10 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/27 15:42:26 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ int main(int argc, char **argv)
 ** "latrR", if the character appears then it's valid and returns 1, if the
 ** character does nor appear in VALID_FLAG, "latrR", then the character is
 ** invalid and will return 0.
-** Return Values: 1 for valid. 0 for invalid
+** Return Values: true for valid. false for invalid
 */
 
-int is_flag_valid(char c)
+bool is_flag_valid(char c)
 {
 	int i;
 
@@ -65,10 +65,10 @@ int is_flag_valid(char c)
 	while(VALID_FLAG[i])
 	{
 		if(VALID_FLAG[i] == c)
-			return(1);
+			return(true);
 		i++;
 	}
-	return(0);
+	return(false);
 }
 
 /*
@@ -88,7 +88,6 @@ void ls_collect_flags(t_ls *ls, char c)
 */
 void ls_collect_flags(t_info *info, char c)
 {
-	printf("Does it come here?1\n");
 	if(c == 'l')
 		info->flag.l = true;
 	else if(c == 'a')
@@ -99,7 +98,6 @@ void ls_collect_flags(t_info *info, char c)
 		info->flag.r = true;
 	else if(c == 'R')
 		info->flag.uppercase_r = true;
-	printf("Does it come here?2\n");
 }
 
 
@@ -318,8 +316,10 @@ void process_dir_valid(t_ls *ls, t_info *info)
 void	process_dir(t_ls *ls, t_info *info)
 {
 	info->var.i = 1;
+//	info->var.i = info->var.temp_i;
 	process_dir_invalid(ls, info);
 	info->var.i = 1;
+//	info->var.i = info->var.temp_i;
 	process_dir_valid(ls, info);
 	exit(EXIT_SUCCESS);
 }
@@ -331,24 +331,50 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	int				count;
 	int				i;
 	int				j;
+	int				strlen;
 
 	i = 1;
-	j = 0;
-
-	if(info->argv[i][j] != '-')
+	j = 1;
+	strlen = 0;
+	info->var.temp_i = 1;
+	if(info->argv[i][0] != '-')
+	{
+		process_dir(ls, info);
+	}
+	else if(info->argv[i][0] == '-' && info->argv[i][1] == '\0')
 	{
 		process_dir(ls, info);
 	}
 // Above works fine.
-	else
+	else if(info->argv[i][0] == '-' && info->argv[i][1] != '\0')
 	{
-		printf("Does it come here?");
 		while(i < info->argc)
 		{
+			strlen = ft_strlen(info->argv[i]);
+			while(j < strlen)
+			{
+				if(info->argv[i][0] == '-')
+				{
+					if(is_flag_valid(info->argv[i][j]) == true)
+						ls_collect_flags(info, info->argv[i][j]);
+					else if(is_flag_valid(info->argv[i][j]) == false)
+						ft_exit(info->argv[i][j]);
+				}
+				else if(info->argv[i][0] != '-')
+					break;
+				j++;
+			}
+			j = 1;
+			i++;
+		}
+		while(i < info->argc)
+		{
+//			info->var.temp_i = i;
 			process_dir(ls, info);
 			i++;
 		}
 	}
+
 /*
 	while(i < argument_count)
 	{
@@ -441,6 +467,7 @@ t_ls *append(t_ls *head, char *valid_file_path_str)
 	return(head);
 }
 
+/*
 void print_file_name(t_ls *ls)
 {
 	int i;
@@ -455,8 +482,9 @@ void print_file_name(t_ls *ls)
 		ls = ls->next;
 	}
 }
+*/
 
-/*
+
 void print_file_name(t_ls *ls)
 {
 	struct stat meta;
@@ -479,7 +507,7 @@ void print_file_name(t_ls *ls)
 		ls = ls->next;
 	}
 }
-*/
+
 
 /*
 ** Merge Sort

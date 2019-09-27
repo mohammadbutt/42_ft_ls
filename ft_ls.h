@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/26 21:28:12 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/27 15:40:04 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -64,6 +64,7 @@ typedef struct s_ls
 typedef struct	s_ls_var
 {
 	int			i;
+	int			temp_i;
 //	int			j;
 	bool		valid_dir;
 }				t_ls_var;
@@ -83,7 +84,8 @@ typedef struct s_info
 ** Function Prototypes---------------------------------------------------------
 */
 
-int		is_flag_valid(char c);
+//int		is_flag_valid(char c);
+bool	is_flag_valid(char c);
 //void	ls_collect_flag(t_ls *ls, char c);
 void	ls_collect_flags(t_info *info, char c);
 //void	ls_start_parsing(t_ls *ls, int argument_count, char **str);
