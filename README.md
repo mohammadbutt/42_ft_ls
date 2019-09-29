@@ -50,4 +50,4 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 15. [Merge Sort for Linked List - geeksforgeeks](https://www.geeksforgeeks.org/merge-sort-for-linked-list/)
 14. [Big O Cheatsheet - Hackerearth](https://www.hackerearth.com/practice/notes/big-o-cheatsheet-series-data-structures-and-algorithms-with-thier-complexities-1/)
 15. [Big O Cheatsheet - bigocheatsheet](https://www.bigocheatsheet.com/)
-16. [Algorithms and Data Structures - Cooervo.github.io](https://cooervo.github.io/Algorithms-DataStructures-BigONotation/index.html)
+1. [Algorithms and Data Structures - Cooervo.github.io](https://cooervo.github.io/Algorithms-DataStructures-BigONotation/index.html)
