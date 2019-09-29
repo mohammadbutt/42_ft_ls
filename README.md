@@ -43,7 +43,7 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 7. [Differentiate between a unix directory and file in C - Stackoverflow](https://stackoverflow.com/questions/1036625/differentiate-between-a-unix-directory-and-file-in-c-and-c)
 8. [Singly Linked List - Hacker Earth](https://www.hackerearth.com/practice/data-structures/linked-list/singly-linked-list/tutorial/)
 9. [Merge Sort for Linked List - geeksforgeeks](https://www.geeksforgeeks.org/merge-sort-for-linked-list/)
-10. [C program to list all files in a directory recursively - Codeforwin.ord](https://codeforwin.org/2018/03/c-program-to-list-all-files-in-a-directory-recursively.html)
+10. [C program to list all files in a directory recursively - Codeforwin.org](https://codeforwin.org/2018/03/c-program-to-list-all-files-in-a-directory-recursively.html)
 10. [Members of winsize struct - Delorie](http://www.delorie.com/djgpp/doc/libc/libc_495.html)
 11. [Members of stat struct - man7.org](http://man7.org/linux/man-pages/man2/stat.2.html)
 12. [Members of stat struct st_mode - mkssoftware](https://www.mkssoftware.com/docs/man5/struct_stat.5.asp)
