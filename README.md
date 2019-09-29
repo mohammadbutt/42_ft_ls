@@ -47,3 +47,6 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 11. [Members of stat struct st_mode - mkssoftware](https://www.mkssoftware.com/docs/man5/struct_stat.5.asp)
 12. [Recursively list directories in C on Linux - Stackoverflow](https://stackoverflow.com/questions/8436841/how-to-recursively-list-directories-in-c-on-linux)
 13. [Carnegie Mellon University - Introduction to Computer Systems - Lecture System Level I/O](https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=f107c2ce-79d5-4529-baeb-2bb495d8c11a)
+14. [Big O Cheatsheet - Hackerearth](https://www.hackerearth.com/practice/notes/big-o-cheatsheet-series-data-structures-and-algorithms-with-thier-complexities-1/)
+15. [Big O Cheatsheet - bigocheatsheet](https://www.bigocheatsheet.com/)
+16. [Algorithms and Data Structures - Cooervo.github.io](https://cooervo.github.io/Algorithms-DataStructures-BigONotation/index.html)
