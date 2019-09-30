@@ -2,3 +2,4 @@ a.out
 *.o
 no_rights
 ft_ls
+a.out.dSYM

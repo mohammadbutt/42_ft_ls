@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/27 15:40:04 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/30 14:30:43 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -55,9 +55,11 @@ typedef struct s_ls_flag
 
 typedef struct s_ls
 {
+	struct	stat	meta; // Added
 	char 			*file_name;
 	char			*invalid_file_name;
-
+	char			*dir_path; // Added
+	
 	struct	s_ls	*next;
 }					t_ls;
 
@@ -67,6 +69,7 @@ typedef struct	s_ls_var
 	int			temp_i;
 //	int			j;
 	bool		valid_dir;
+	bool		new_line;
 }				t_ls_var;
 
 typedef struct s_info
@@ -101,6 +104,19 @@ void	ft_exit(char c);
 void	ft_exit_no_dir(char *str);
 void	ft_no_dir(char *str);
 void	delete_list(t_ls **head_ref);
+
+
+// Creating for multiple arguments to handle -R flag
+void	multiple_argument(t_ls *ls, t_info *info, char *dir_path_str);
+t_ls	*create_list_for_dir(char *dir_path_str);
+t_ls	*append_list_for_dir(t_ls *head, char *dir_path_str);
+
+t_ls	*sorted_merge_dir(t_ls *a, t_ls *b);
+void	merge_sort_dir(t_ls **head_ref);
+t_ls	*store_dir(t_ls *ls, char *dir_path_str);
+// Created for multiple arguments to handle -R flag
+
+void	handle_improper_usage_of_dash(t_ls *ls, t_info *info);
 t_ls	*create_list_for_invalid(char *invalid_dir_path_str);
 t_ls	*append_list_for_invalid(t_ls *head, char *invalid_dir_path_str);
 t_ls	*sorted_merge_invalid_file_name(t_ls *a, t_ls *b);
