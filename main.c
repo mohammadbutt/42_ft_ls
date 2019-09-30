@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/30 14:30:48 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/30 14:46:03 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -443,76 +443,23 @@ void process_dir_valid(t_ls *ls, t_info *info)
 	delete_list(&temp_ls);
 }
 
-
 /*
-void process_dir_valid(t_ls *ls, t_info *info)
-{
-	t_ls			*temp_ls;
-	DIR				*dir;
-	char			**arg_str;
-	int				arg_count;
-	int				i;
-
-//	temp_ls = NULL;
-	arg_str	= info->argv;
-	arg_count = info->argc;
-	i = info->var.i;
-	while(i < arg_count)
-	{
-		dir = opendir(arg_str[i]);
-		if(dir != NULL)
-			temp_ls = store_valid_dir(temp_ls, arg_str[i]);
-		(dir != NULL) && (closedir(dir));
-		i++;
-	}
-	merge_sort_dir(&temp_ls);
-	while(temp_ls)
-	{
-		(info->var.new_line == true) && (ft_printf("\n"));
-		(arg_count > 2) && (ft_printf("%s:\n", temp_ls->dir_path));
-		if(info->flag.uppercase_r == false)
-			single_argument(ls, temp_ls->dir_path);
-		info->var.new_line = true;
-		temp_ls = temp_ls->next;
-	}
-	delete_list(&temp_ls);
-}
+** function process_dir does a lot of things and the orders is really important
+** which is why the functions is split into three parts.
+** 1. process_invalid_file is called to store names of files that do not
+** exist, to store them in a linked list, sort them in lexical order and then
+** invalid file names are printed.
+** 2. process_valid_file is then called to store names of files that are
+** actually valid, these are files they may not have a file extension and may
+** simply just be a file called file_1, or they may have a file extension,
+** such as file_1.c, file_1.o file_1.txt. As long as the file is valid, it is
+** stored in a linked list, sorted via merge sort, and then printed.
+** 3. process_dir_valid is then called to store the names of folders. Names of
+** the folders are stored in a linked list, sorted using merge sort.
+** Then names of sorted folders are passed through so the contents of each folder
+** can be printed.
 */
 
-/*
-// Works but need store directories in lexical order first.
-void process_dir_valid(t_ls *ls, t_info *info)
-{
-	struct dirent	*data;
-	DIR				*dir;
-	char			**arg_str;
-	int				arg_count;
-	int				i;
-
-	arg_str	= info->argv;
-	arg_count = info->argc;
-	i = info->var.i;
-//	info->var.valid_dir = false;
-	while(i < arg_count)
-	{
-		dir = opendir(arg_str[i]);
-		if(dir != NULL)
-		{
-//			(info->var.valid_dir == true) && (ft_printf("\n"));
-			(info->var.new_line == true) && (ft_printf("\n"));
-			(arg_count > 2) && (ft_printf("%s:\n", arg_str[i]));
-			if(info->flag.uppercase_r == false)
-				single_argument(ls, arg_str[i]);
-//			else if(info->flag.uppercase_r == true)
-//				multiple_argument(ls, info, arg_str[i]);
-//			info->var.valid_dir = true;
-			info->var.new_line = true;
-		}
-		(dir != NULL) && (closedir(dir));
-		i++;
-	}
-}
-*/
 void	process_dir(t_ls *ls, t_info *info)
 {
 	info->var.i = info->var.temp_i;
