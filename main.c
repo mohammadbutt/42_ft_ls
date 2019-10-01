@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/30 14:46:03 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/09/30 17:16:28 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -437,6 +437,8 @@ void process_dir_valid(t_ls *ls, t_info *info)
 		(info->argc > 2) && (ft_printf("%s:\n", temp_ls->dir_path));
 		if(info->flag.uppercase_r == false)
 			single_argument(ls, temp_ls->dir_path);
+		else if(info->flag.uppercase_r == true)
+			multiple_argument(ls, info, temp_ls->dir_path);
 		info->var.new_line = true;
 		temp_ls = temp_ls->next;
 	}
@@ -444,7 +446,7 @@ void process_dir_valid(t_ls *ls, t_info *info)
 }
 
 /*
-** function process_dir does a lot of things and the orders is really important
+** function process_dir does the below three things and the order matters.
 ** which is why the functions is split into three parts.
 ** 1. process_invalid_file is called to store names of files that do not
 ** exist, to store them in a linked list, sort them in lexical order and then
@@ -826,12 +828,7 @@ void	single_argument(t_ls *ls, char *dir_path_str)
 	while((data = readdir(dir)) != NULL)
 	{
 		if(data->d_name[0] != '.')
-		{
-			if(ls == NULL)
-				ls = create(data->d_name);
-			else
-				ls = append(ls, data->d_name);
-		}
+			ls = store_file_name(ls, data->d_name);
 	}
 	if(dir != NULL)
 		closedir(dir);
@@ -852,43 +849,30 @@ void	single_argument(t_ls *ls, char *dir_path_str)
 ** 2. Calls onto itself for recursion.
 **
 */
-/*
+
 void	multiple_argument(t_ls *ls, t_info *info, char *dir_path_str)
 {
-
 	struct dirent	*data;
 	DIR				*dir;
-	char			*potential_dir;
-//	struct stat		meta;
+//	int				count;
 
-//	multiple_argument(ls, info, dir_path_str);
-	single_argument(ls, dir_path_str); // single_argument gets called first
 	dir = opendir(dir_path_str);
 	while((data = readdir(dir)) != NULL)
 	{
 		if(data->d_name[0] != '.')
-		{
-			potential_dir = data->d_name;
-			stat(potential_dir, &ls->meta);
-			if(S_ISREG(ls->meta.st_mode))
-			{
-				if(ls == NULL)
-					ls = create_list_for_dir(potential_dir);
-				else
-					ls = append_list_for_dir(ls, potential_dir);
-			}
-		}
+			ls = store_file_name(ls, data->d_name);
 	}
 	if(dir != NULL)
 		closedir(dir);
 	merge_sort(&ls);
-//	multiple_argument(ls, info, ls->dir_path);
+//	count = get_count(ls); // Will be used later when alligning columns
 	print_file_name(ls);
+	multiple_argument(ls, info, dir_path_str);
+//	process_dir_valid(ls, info); //
 	delete_list(&ls);
-//	multiple_argument(ls, info, ls->dir_path);
 
 }
-*/
+
 /*
 ** **ft_double_strdup takes the number of arguments and the a 2D array to create
 ** a 2 dimensional array.
