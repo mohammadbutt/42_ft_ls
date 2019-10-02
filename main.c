@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/01 18:52:30 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/01 21:04:59 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,7 +426,7 @@ void	process_valid_file(t_ls *ls, t_info *info)
 ** -1 mean it is an invalid file.
 ** _POSIX_PATH_MAX can store upto 256 characters
 */
-int implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
+t_ls *implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
 {
 	struct dirent	*dr;
 	struct stat		meta;
@@ -434,7 +434,7 @@ int implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
 	char full_path[_POSIX_PATH_MAX];
 
 	if((dir = opendir(path)) == NULL)
-		return(0);
+		return(temp_ls);
 	while((dr = readdir(dir)) != NULL)
 	{
 		ft_strcpy(full_path, path);
@@ -444,15 +444,28 @@ int implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
 		{
 			if(dr->d_name[0] != '.')
 			{
-				ft_printf("%s\n", full_path);
-//				store_valid_dir(temp_ls, info->argv[info->var.i]);
-//				store_file_name(ls, info)
+//				ft_printf("%s\n", full_path);
+				temp_ls = store_file_name(temp_ls, full_path);
 				implement_recurssion(full_path, temp_ls, info);
+
+//				ft_printf("|%s|\n", temp_ls->file_name);
+//				temp_ls = store_file_name(temp_ls, info->argv[info->var.i]);
+
+//				merge_sort(&temp_ls);
+//				print_file_name(temp_ls);
+//				delete_list(&temp_ls);
 			}
 		}
 	}
+//	ft_printf("1:\n");
+//	ft_printf("|%s|\n", temp_ls->file_name);
+//	merge_sort(&temp_ls);
+//	printf("|%s\n", temp_ls->file_name);
+//	print_file_name(temp_ls);
+//	delete_list(&temp_ls);
+
 	closedir(dir);
-	return(0);
+	return(temp_ls);
 }
 void process_dir_valid(t_ls *ls, t_info *info)
 {
@@ -461,6 +474,7 @@ void process_dir_valid(t_ls *ls, t_info *info)
 
 	temp_ls = NULL;
 	if(info->flag.uppercase_r == false)
+	{
 		while((info->var.i < info->argc) && (info->flag.uppercase_r == false))
 		{
 			dir = opendir(info->argv[info->var.i]);
@@ -469,8 +483,18 @@ void process_dir_valid(t_ls *ls, t_info *info)
 			(dir != NULL) && (closedir(dir));
 			info->var.i++;
 		}
-	else if(info->flag.uppercase_r == true)
-		implement_recurssion(".", temp_ls, info);
+	}
+	ft_printf("l:|%d|\n", info->flag.l);
+	ft_printf("a:|%d|\n", info->flag.a);
+	ft_printf("t:|%d|\n", info->flag.t);
+	ft_printf("r:|%d|\n", info->flag.r);
+	ft_printf("R:|%d|\n", info->flag.uppercase_r);
+
+//	else if(info->flag.uppercase_r == true)
+//	{
+//		ft_printf("|%d|\n", info->argc);
+//		implement_recurssion(info->argv[info->var.i], temp_ls, info);
+//	}
 
 	merge_sort_dir(&temp_ls);
 	while(temp_ls)
@@ -587,6 +611,15 @@ void	handle_improper_usage_of_dash(t_ls *ls, t_info *info)
 		process_dir(ls, info);
 }
 
+int		flag_status(t_info *info)
+{
+	if(info->flag.l == true || info->flag.a == true || info->flag.t == true)
+		return(1);
+	else if(info->flag.r == true || info->flag.uppercase_r == true)
+		return(1);
+	return(0);
+}
+
 void	ls_start_parsing(t_ls *ls, t_info *info)
 {
 	int				i;
@@ -631,29 +664,47 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 			j = 1;
 			i++;
 		}
-		if(i == info->argc)
-			single_argument(ls, ".");
-		while(i < info->argc)
-		{
-			info->var.temp_i = i;
-			process_dir(ls, info);
-			i++;
-		}
-
-	}
-
-/*
-	while(i < argument_count)
+/*	
+	ft_printf("i:|%d|\n", i);
+	ft_printf("info->argc|%d|\n", info->argc);
+	ft_printf("l:|%d|\n", info->flag.l);
+	ft_printf("a:|%d|\n", info->flag.a);
+	ft_printf("t:|%d|\n", info->flag.t);
+	ft_printf("r:|%d|\n", info->flag.r);
+	ft_printf("R:|%d|\n", info->flag.uppercase_r);
+*/	
+		
+	if(i == info->argc && (flag_status(info) == 0))
+		single_argument(ls, ".");
+	else if(i == info->argc && info->flag.uppercase_r == true)
 	{
-		if(str[i][j] != '-') // from now on has to be a folder
-		{
-			dir = opendir(str[i]);
-			if(dir == NULL)
-				ft_exit_no_dir(str[i]);
-		}
+//		ls = implement_recurssion(".", ls, info);
+//		merge_sort_dir(&ls);
+		ls = implement_recurssion(".", ls, info);
+		merge_sort(&ls);
+		print_file_name(ls);
+	}
+/*
+	while(ls)
+	{
+		(info->var.new_line == true) && (ft_printf("\n"));
+		(info->argc > 2) && (ft_printf("%s:\n", ls->dir_path));
+		if(info->flag.uppercase_r == false)
+			single_argument(ls, ls->dir_path);
+		info->var.new_line = true;
+		ls = ls->next;
+	}
+	delete_list(&ls);
+*/
+
+	while(i < info->argc)
+	{
+		info->var.temp_i = i;
+		process_dir(ls, info);
 		i++;
 	}
-*/
+
+	}
 
 }
 
