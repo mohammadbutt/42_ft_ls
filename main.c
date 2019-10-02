@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/02 12:11:31 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/02 13:31:32 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -467,47 +467,7 @@ t_ls *implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
 	closedir(dir);
 	return(temp_ls);
 }
-void process_dir_valid(t_ls *ls, t_info *info)
-{
-	t_ls			*temp_ls;
-	DIR				*dir;
 
-	temp_ls = NULL;
-	if(info->flag.uppercase_r == false)
-	{
-		while((info->var.i < info->argc) && (info->flag.uppercase_r == false))
-		{
-			dir = opendir(info->argv[info->var.i]);
-			if (dir != NULL)
-				temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
-			(dir != NULL) && (closedir(dir));
-			info->var.i++;
-		}
-	}
-	ft_printf("l:|%d|\n", info->flag.l);
-	ft_printf("a:|%d|\n", info->flag.a);
-	ft_printf("t:|%d|\n", info->flag.t);
-	ft_printf("r:|%d|\n", info->flag.r);
-	ft_printf("R:|%d|\n", info->flag.uppercase_r);
-
-//	else if(info->flag.uppercase_r == true)
-//	{
-//		ft_printf("|%d|\n", info->argc);
-//		implement_recurssion(info->argv[info->var.i], temp_ls, info);
-//	}
-
-	merge_sort_dir(&temp_ls);
-	while(temp_ls)
-	{
-		(info->var.new_line == true) && (ft_printf("\n"));
-		(info->argc > 2) && (ft_printf("%s:\n", temp_ls->dir_path));
-		if(info->flag.uppercase_r == false)
-			single_argument(ls, temp_ls->dir_path);
-		info->var.new_line = true;
-		temp_ls = temp_ls->next;
-	}
-	delete_list(&temp_ls);
-}
 
 /*
 ** info->var.i = i
@@ -515,6 +475,43 @@ void process_dir_valid(t_ls *ls, t_info *info)
 ** info->argc = arg_count
 */
 
+t_ls	*store_dir_path_without_flag(t_ls *temp_ls, t_info *info)
+{
+	DIR * dir;
+
+	while((info->var.i < info->argc) && (info->flag.uppercase_r == false))
+	{
+		dir = opendir(info->argv[info->var.i]);
+		if (dir != NULL)
+			temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
+		(dir != NULL) && (closedir(dir));
+		info->var.i++;
+	}
+	return(temp_ls);
+}
+void get_files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
+{
+	while(temp_ls)
+	{
+		(info->var.new_line == true) && (ft_printf("\n"));
+		(info->argc > 2) && (ft_printf("%s:\n", temp_ls->dir_path));
+		if(info->flag.uppercase_r == false)
+			single_argument(ls, info, temp_ls->dir_path);
+		info->var.new_line = true;
+		temp_ls = temp_ls->next;
+	}
+}
+void process_dir_valid(t_ls *ls, t_info *info)
+{
+	t_ls			*temp_ls;
+
+	temp_ls = NULL;
+	if(flag_status(info) == false)
+		temp_ls = store_dir_path_without_flag(temp_ls, info);
+	merge_sort_dir(&temp_ls);
+	get_files_from_stored_dir_path(ls, temp_ls, info);
+	delete_list(&temp_ls);
+}
 /*
 // Adding recurssion;
 void process_dir_valid(t_ls *ls, t_info *info)
@@ -537,7 +534,7 @@ void process_dir_valid(t_ls *ls, t_info *info)
 		(info->var.new_line == true) && (ft_printf("\n"));
 		(info->argc > 2) && (ft_printf("%s:\n", temp_ls->dir_path));
 		if(info->flag.uppercase_r == false)
-			single_argument(ls, temp_ls->dir_path);
+			single_argument(ls, info, temp_ls->dir_path);
 		info->var.new_line = true;
 		temp_ls = temp_ls->next;
 	}
@@ -611,13 +608,18 @@ void	handle_improper_usage_of_dash(t_ls *ls, t_info *info)
 		process_dir(ls, info);
 }
 
-int		flag_status(t_info *info)
+/*
+** Function flag status returns 1 or true if one of the flags are active.
+** If there are no flags, then it returns false or 0.
+*/
+
+bool	flag_status(t_info *info)
 {
 	if(info->flag.l == true || info->flag.a == true || info->flag.t == true)
-		return(1);
+		return(true);
 	else if(info->flag.r == true || info->flag.uppercase_r == true)
-		return(1);
-	return(0);
+		return(true);
+	return(false);
 }
 
 void	ls_start_parsing(t_ls *ls, t_info *info)
@@ -674,12 +676,10 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	ft_printf("R:|%d|\n", info->flag.uppercase_r);
 */	
 		
-	if(i == info->argc && (flag_status(info) == 0))
-		single_argument(ls, ".");
+	if(i == info->argc && (flag_status(info) == false))
+		single_argument(ls, info, ".");
 	else if(i == info->argc && info->flag.uppercase_r == true)
 	{
-//		ls = implement_recurssion(".", ls, info);
-//		merge_sort_dir(&ls);
 		ls = implement_recurssion(".", ls, info);
 		merge_sort(&ls);
 		print_file_name(ls);
@@ -690,7 +690,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 		(info->var.new_line == true) && (ft_printf("\n"));
 		(info->argc > 2) && (ft_printf("%s:\n", ls->dir_path));
 		if(info->flag.uppercase_r == false)
-			single_argument(ls, ls->dir_path);
+			single_argument(ls, info, ls->dir_path);
 		info->var.new_line = true;
 		ls = ls->next;
 	}
@@ -947,7 +947,7 @@ int get_count(t_ls *ls)
 ** And then it will start storing names of all files and folders in a linked
 ** list, and as mentioned earlier, but ignore hidden files which begin with '.'
 */
-void	single_argument(t_ls *ls, char *dir_path_str)
+void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 {
 	struct dirent	*data;
 	DIR				*dir;
@@ -956,6 +956,8 @@ void	single_argument(t_ls *ls, char *dir_path_str)
 	dir = opendir(dir_path_str);
 	while((data = readdir(dir)) != NULL)
 	{
+//		if(info->flag.a == true)
+//			ls = store_file_name(ls, data->d_name);
 		if(data->d_name[0] != '.')
 			ls = store_file_name(ls, data->d_name);
 	}
@@ -1046,7 +1048,7 @@ int main(int argc, char *argv[])
 */
 
 	if(argc == 1)
-		single_argument(ls, ".");
+		single_argument(ls, &info, ".");
 	else if(argc > 1)
 		ls_start_parsing(ls, &info);
 	return(0);
