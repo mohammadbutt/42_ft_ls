@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/02 15:39:55 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/02 15:53:07 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -660,72 +660,37 @@ int	set_up_environment_to_collect_flags(t_info *info, int i, int j)
 	return(i);
 }
 
+void	initialize_t_info_struct_variables(t_info *info)
+{
+	ft_bzero(&info->flag, sizeof(info->flag));
+	info->var.temp_i = 1;
+	info->var.str_len = 0;
+	info->var.double_break = false;
+}
+
 void	ls_start_parsing(t_ls *ls, t_info *info)
 {
 	int				i;
 	int				j;
-	int				strlen;
-	bool			double_break;
 	char			current;
 
 	i = 1;
 	j = 1;
-	strlen = 0;
-	info->var.temp_i = 1;
-	double_break = false;
-	ft_bzero(&info->flag, sizeof(info->flag));
-	info->var.str_len = 0;
-	info->var.double_break = false;
 	current = info->argv[i][0];
+	initialize_t_info_struct_variables(info);
 	if((current != '-') || (current == '-' && info->argv[i][1] == '\0'))
 		handle_improper_usage_of_dash(ls, info);
 	else if(info->argv[i][0] == '-' && info->argv[i][1] != '\0')
 	{
-		i = set_up_environment_to_collect_flags(info, i, j);
-/*
-		while(i < info->argc)
+		i = set_up_environment_to_collect_flags(info, i, j);	
+		if(i == info->argc && (flag_status(info) == false))
+			single_argument(ls, info, ".");
+		else if(i == info->argc && info->flag.uppercase_r == true)
 		{
-			strlen = ft_strlen(info->argv[i]);
-			while(j < strlen)
-			{
-				if(info->argv[i][0] == '-')
-				{
-					if(is_flag_valid(info->argv[i][j]) == true)
-						ls_collect_flags(info, info->argv[i][j]);
-					else if(is_flag_valid(info->argv[i][j]) == false)
-						ft_exit(info->argv[i][j]);
-				}
-				else if(info->argv[i][0] != '-')
-				{
-					double_break = true;
-					break;
-				}
-				j++;
-			}
-			if(double_break == true)
-				break;
-			j = 1;
-			i++;
+			ls = implement_recurssion(".", ls, info);
+			merge_sort(&ls);
+			print_file_name(ls);
 		}
-*/
-/*	
-	ft_printf("i:|%d|\n", i);
-	ft_printf("info->argc|%d|\n", info->argc);
-	ft_printf("l:|%d|\n", info->flag.l);
-	ft_printf("a:|%d|\n", info->flag.a);
-	ft_printf("t:|%d|\n", info->flag.t);
-	ft_printf("r:|%d|\n", info->flag.r);
-	ft_printf("R:|%d|\n", info->flag.uppercase_r);
-*/	
-		
-	if(i == info->argc && (flag_status(info) == false))
-		single_argument(ls, info, ".");
-	else if(i == info->argc && info->flag.uppercase_r == true)
-	{
-		ls = implement_recurssion(".", ls, info);
-		merge_sort(&ls);
-		print_file_name(ls);
-	}
 /*
 	while(ls)
 	{
@@ -739,13 +704,12 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	delete_list(&ls);
 */
 
-	while(i < info->argc)
-	{
-		info->var.temp_i = i;
-		process_dir(ls, info);
-		i++;
-	}
-
+		while(i < info->argc)
+		{
+			info->var.temp_i = i;
+			process_dir(ls, info);
+			i++;
+		}
 	}
 
 }
