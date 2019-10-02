@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/02 13:31:32 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/02 15:39:55 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void ls_collect_flags(t_info *info, char c)
 }
 
 
-void ft_exit(char c)
+void ft_exit_illegal_option(char c)
 {
 	ft_printf("ft_ls: illegal option -- %c\n", c);
 	ft_printf("usage: ft_ls [-latrR] [file ...]\n");
@@ -601,6 +601,7 @@ void	process_dir(t_ls *ls, t_info *info)
 void	handle_improper_usage_of_dash(t_ls *ls, t_info *info)
 {
 	int i;
+	
 	i = 1;
 	if(info->argv[i][0] != '-')
 		process_dir(ls, info);
@@ -622,6 +623,43 @@ bool	flag_status(t_info *info)
 	return(false);
 }
 
+/*
+** If a flag is not valid at any point. The program will end and by giving the
+** illegal option message.
+*/
+
+void	ls_collect_flag_and_illegal_option(t_info *info, int i, int j)
+{
+	if(is_flag_valid(info->argv[i][j]) == true)
+		ls_collect_flags(info, info->argv[i][j]);
+	else if(is_flag_valid(info->argv[i][j]) == false)
+		ft_exit_illegal_option(info->argv[i][j]);
+}
+
+int	set_up_environment_to_collect_flags(t_info *info, int i, int j)
+{
+	while(i < info->argc)
+	{
+		info->var.str_len = ft_strlen(info->argv[i]);
+		while(j < info->var.str_len)
+		{
+			if(info->argv[i][0] == '-')
+				ls_collect_flag_and_illegal_option(info, i ,j);
+			else if(info->argv[i][0] != '-')
+			{
+				info->var.double_break = true;
+				break;
+			}
+			j++;
+		}
+		if(info->var.double_break == true)
+			break;
+		j = 1;
+		i++;
+	}
+	return(i);
+}
+
 void	ls_start_parsing(t_ls *ls, t_info *info)
 {
 	int				i;
@@ -635,13 +673,16 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	strlen = 0;
 	info->var.temp_i = 1;
 	double_break = false;
+	ft_bzero(&info->flag, sizeof(info->flag));
+	info->var.str_len = 0;
+	info->var.double_break = false;
 	current = info->argv[i][0];
 	if((current != '-') || (current == '-' && info->argv[i][1] == '\0'))
 		handle_improper_usage_of_dash(ls, info);
-// Above works fine.
 	else if(info->argv[i][0] == '-' && info->argv[i][1] != '\0')
 	{
-//		handle_dash_arguments(ls, info);		
+		i = set_up_environment_to_collect_flags(info, i, j);
+/*
 		while(i < info->argc)
 		{
 			strlen = ft_strlen(info->argv[i]);
@@ -666,6 +707,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 			j = 1;
 			i++;
 		}
+*/
 /*	
 	ft_printf("i:|%d|\n", i);
 	ft_printf("info->argc|%d|\n", info->argc);

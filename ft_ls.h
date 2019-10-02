@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/02 12:58:18 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/02 15:02:27 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -70,6 +70,8 @@ typedef struct	s_ls_var
 //	int			j;
 	bool		valid_dir;
 	bool		new_line;
+	bool		double_break;
+	int			str_len;
 }				t_ls_var;
 
 typedef struct s_info
