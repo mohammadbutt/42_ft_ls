@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/30 17:16:28 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/01 18:52:30 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,11 +411,88 @@ void	process_valid_file(t_ls *ls, t_info *info)
 }
 
 /*
+** 1. stat(dirent->d_name, &stat) has to be called first
+** 2. S_ISDIR(stat.st_mode) is used to idetify if a given file is directory.
+** Since the above order matters: in the below if statement stat has to appear
+** first:
+** if((stat(full_path, &meta) == 0) && (S_ISDIR(meta.st_mode) == 1))
+**
+** swapping the order of stat with S_ISDIR as shown below will not work:
+** if((S_ISDIR(meta.st_mode) == 1) && (stat(full_path, &meta) == 0))
+**
+** Return Values:
+** 1 means it is a directory.
+** 0 means it is a file.
+** -1 mean it is an invalid file.
+** _POSIX_PATH_MAX can store upto 256 characters
+*/
+int implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
+{
+	struct dirent	*dr;
+	struct stat		meta;
+	DIR *dir;
+	char full_path[_POSIX_PATH_MAX];
+
+	if((dir = opendir(path)) == NULL)
+		return(0);
+	while((dr = readdir(dir)) != NULL)
+	{
+		ft_strcpy(full_path, path);
+		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
+		ft_strcat(full_path, dr->d_name);
+		if((stat(full_path, &meta) == 0) && (S_ISDIR(meta.st_mode) == 1))
+		{
+			if(dr->d_name[0] != '.')
+			{
+				ft_printf("%s\n", full_path);
+//				store_valid_dir(temp_ls, info->argv[info->var.i]);
+//				store_file_name(ls, info)
+				implement_recurssion(full_path, temp_ls, info);
+			}
+		}
+	}
+	closedir(dir);
+	return(0);
+}
+void process_dir_valid(t_ls *ls, t_info *info)
+{
+	t_ls			*temp_ls;
+	DIR				*dir;
+
+	temp_ls = NULL;
+	if(info->flag.uppercase_r == false)
+		while((info->var.i < info->argc) && (info->flag.uppercase_r == false))
+		{
+			dir = opendir(info->argv[info->var.i]);
+			if (dir != NULL)
+				temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
+			(dir != NULL) && (closedir(dir));
+			info->var.i++;
+		}
+	else if(info->flag.uppercase_r == true)
+		implement_recurssion(".", temp_ls, info);
+
+	merge_sort_dir(&temp_ls);
+	while(temp_ls)
+	{
+		(info->var.new_line == true) && (ft_printf("\n"));
+		(info->argc > 2) && (ft_printf("%s:\n", temp_ls->dir_path));
+		if(info->flag.uppercase_r == false)
+			single_argument(ls, temp_ls->dir_path);
+		info->var.new_line = true;
+		temp_ls = temp_ls->next;
+	}
+	delete_list(&temp_ls);
+}
+
+/*
 ** info->var.i = i
 ** info->argv = arg_string
 ** info->argc = arg_count
 */
 
+/*
+// Adding recurssion;
 void process_dir_valid(t_ls *ls, t_info *info)
 {
 	t_ls			*temp_ls;
@@ -437,13 +514,14 @@ void process_dir_valid(t_ls *ls, t_info *info)
 		(info->argc > 2) && (ft_printf("%s:\n", temp_ls->dir_path));
 		if(info->flag.uppercase_r == false)
 			single_argument(ls, temp_ls->dir_path);
-		else if(info->flag.uppercase_r == true)
-			multiple_argument(ls, info, temp_ls->dir_path);
 		info->var.new_line = true;
 		temp_ls = temp_ls->next;
 	}
 	delete_list(&temp_ls);
 }
+*/
+
+
 
 /*
 ** function process_dir does the below three things and the order matters.

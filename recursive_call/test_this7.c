@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 18:53:33 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/30 21:46:00 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/01 16:40:20 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int print_dirs(const char *path, int recursive)
 
     while ((direntp = readdir(dirp)) != NULL)
     {
-		if(path[2] != '.')
-        	if((path_len + strlen(direntp->d_name) + 1) < _POSIX_PATH_MAX)
-				strcpy(full_name, path);
+//		if(path[2] != '.')
+  //      	if((path_len + strlen(direntp->d_name) + 1) < _POSIX_PATH_MAX)
+		strcpy(full_name, path);
         (full_name[path_len - 1] != '/') && (strcat(full_name, "/"));
         strcat(full_name, direntp->d_name);
         if((direntp->d_name[0] != '.') && (stat(full_name, & fstat) >= 0))
