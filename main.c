@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/02 15:53:07 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/02 18:12:15 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -445,7 +445,9 @@ t_ls *implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
 			if(dr->d_name[0] != '.')
 			{
 //				ft_printf("%s\n", full_path);
-				temp_ls = store_file_name(temp_ls, full_path);
+//
+//	temp_ls = store_file_name(temp_ls, full_path); // Use this to see stored values
+				temp_ls = store_valid_dir(temp_ls, full_path);
 				implement_recurssion(full_path, temp_ls, info);
 
 //				ft_printf("|%s|\n", temp_ls->file_name);
@@ -670,6 +672,7 @@ void	initialize_t_info_struct_variables(t_info *info)
 
 void	ls_start_parsing(t_ls *ls, t_info *info)
 {
+	t_ls			*temp_ls;
 	int				i;
 	int				j;
 	char			current;
@@ -677,6 +680,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	i = 1;
 	j = 1;
 	current = info->argv[i][0];
+	temp_ls = NULL;
 	initialize_t_info_struct_variables(info);
 	if((current != '-') || (current == '-' && info->argv[i][1] == '\0'))
 		handle_improper_usage_of_dash(ls, info);
@@ -685,12 +689,15 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 		i = set_up_environment_to_collect_flags(info, i, j);	
 		if(i == info->argc && (flag_status(info) == false))
 			single_argument(ls, info, ".");
+/*
+// Gives directory names recursively // placing this inside process_dir_valid
 		else if(i == info->argc && info->flag.uppercase_r == true)
 		{
 			ls = implement_recurssion(".", ls, info);
 			merge_sort(&ls);
 			print_file_name(ls);
 		}
+*/
 /*
 	while(ls)
 	{
@@ -703,6 +710,25 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	}
 	delete_list(&ls);
 */
+//		printf("i:|%d|\n", i);
+//		printf("info->argc:|%d|\n", info->argc);
+
+		if(i == 2 && info->argc == 2 && info->flag.uppercase_r == true)
+		{
+			temp_ls = implement_recurssion(".", temp_ls, info);
+			merge_sort_dir(&temp_ls);
+//			print_file_name(ls);
+//			printf("|%s|\n", temp_ls->dir_path);
+//			while(temp_ls)
+//			{
+//				printf("|%s|\n", temp_ls->dir_path);
+//				temp_ls = temp_ls->next;
+//			}
+			single_argument(ls, info, temp_ls->dir_path);
+			get_files_from_stored_dir_path(ls, temp_ls, info);
+			delete_list(&temp_ls);
+			return;
+		}
 
 		while(i < info->argc)
 		{
