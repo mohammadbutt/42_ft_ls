@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/02 18:12:15 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/02 21:10:54 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,12 @@ void ft_exit_no_dir(char *str)
 	ft_printf("ft_ls: ");
 	perror(str);
 	exit(EXIT_SUCCESS);
+}
+
+void ft_permission_denied(char *str)
+{
+	ft_printf("ft_ls: ");
+	perror(str);
 }
 
 void	ft_no_dir(char *dir_path_str)
@@ -368,7 +374,7 @@ void process_invalid_file(t_ls *ls, t_info *info)
 	while(i < arg_count)
 	{
 		file_status = stat(arg_str[i], &meta);
-		if(file_status < 0)
+		if(file_status == -1)
 			ls = store_file_name(ls, arg_str[i]);
 		i++;
 	}
@@ -380,10 +386,23 @@ void process_invalid_file(t_ls *ls, t_info *info)
 	}
 }
 
+/*
+** In function process_valid_file.
+** If a directory/folder has permission denied, it will still be able to go
+** through the below if statement
+** 	if((stat(arg_str[i], &meta) == 0) && (opendir(arg_str[i]) == NULL))
+** which is why an additional if statement will be placed:
+** 	if(S_ISREG(meta.st_mode))
+** This if statement will determine if a file is a regular file or not.
+** 
+** The below one liner can also check if its a valid file as well as a directory:
+**
+** if((stat(arg_str[i], &meta) == 0) && (S_ISREG(meta.st_mode))); 
+*/
+
 void	process_valid_file(t_ls *ls, t_info *info)
 {
 	struct stat		meta;
-	int				file_status;
 	char			**arg_str;
 	int				arg_count;
 	int 			i;
@@ -393,8 +412,10 @@ void	process_valid_file(t_ls *ls, t_info *info)
 	i = info->var.i;
 	while(i < arg_count)
 	{
-		file_status = stat(arg_str[i], &meta);
-		if((file_status == 0) && (opendir(arg_str[i]) == NULL))
+//		if((stat(arg_str[i], &meta) == 0) && (opendir(arg_str[i]) == NULL))
+//			if(S_ISREG(meta.st_mode))
+//	If below if statement breaks, replace it with the above if statement
+		if((stat(arg_str[i], &meta) == 0) && (S_ISREG(meta.st_mode)))
 			ls = store_file_name(ls, arg_str[i]);
 		i++;
 	}
@@ -420,7 +441,10 @@ void	process_valid_file(t_ls *ls, t_info *info)
 ** swapping the order of stat with S_ISDIR as shown below will not work:
 ** if((S_ISDIR(meta.st_mode) == 1) && (stat(full_path, &meta) == 0))
 **
-** Return Values:
+** Return Values of (stat(full_path, &meta):
+** 0 for both valid file and directory.
+**
+** Return Values of (S_ISDIR(meta.st_mode):
 ** 1 means it is a directory.
 ** 0 means it is a file.
 ** -1 mean it is an invalid file.
@@ -475,17 +499,36 @@ t_ls *implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
 ** info->var.i = i
 ** info->argv = arg_string
 ** info->argc = arg_count
+** When storing valid directories, all the directories are stored including the
+** ones that have permission denied.
+** if(dir != NULL)
+**		temp_ls = store_valid_dir(temp)
+** Above if statement will work, but it will not store directories that have
+** permission denied, which is why the below if statement is used to store the
+** directories, including the ones that have permission denied:
+**
+** 	if(stat(info->argv[info->var.i], &meta) == 0)
+**		if(S_ISDIR(meta.st_mode) == 1)
+**			temp_ls = store_valid_dir(temp);
+** This if statement 
 */
 
 t_ls	*store_dir_path_without_flag(t_ls *temp_ls, t_info *info)
 {
+	struct stat meta;
 	DIR * dir;
 
 	while((info->var.i < info->argc) && (info->flag.uppercase_r == false))
 	{
 		dir = opendir(info->argv[info->var.i]);
-		if (dir != NULL)
-			temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
+		if(stat(info->argv[info->var.i], &meta) == 0)
+			if(S_ISDIR(meta.st_mode) == 1)
+				temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
+//		ft_printf("|%d|", stat(info->argv[info->var.i], &meta));
+//		ft_printf("|%d|", S_ISDIR(meta.st_mode));
+//		ft_printf("|%s|\n", info->argv[info->var.i]);
+//		if(S_ISDIR(meta.st_mode))
+//			temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
 		(dir != NULL) && (closedir(dir));
 		info->var.i++;
 	}
@@ -724,9 +767,16 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 //				printf("|%s|\n", temp_ls->dir_path);
 //				temp_ls = temp_ls->next;
 //			}
-			single_argument(ls, info, temp_ls->dir_path);
-			get_files_from_stored_dir_path(ls, temp_ls, info);
-			delete_list(&temp_ls);
+			while(temp_ls)
+			{
+				ft_printf("%s:\n", temp_ls->dir_path);
+				single_argument(ls, info, temp_ls->dir_path);
+				write(1, "\n", 1);
+				temp_ls = temp_ls->next;
+			}
+//			get_files_from_stored_dir_path(ls, temp_ls, info);
+			if(temp_ls != NULL)
+				delete_list(&temp_ls);
 			return;
 		}
 
@@ -986,13 +1036,16 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 //	int				count;
 
 	dir = opendir(dir_path_str);
-	while((data = readdir(dir)) != NULL)
-	{
-//		if(info->flag.a == true)
-//			ls = store_file_name(ls, data->d_name);
-		if(data->d_name[0] != '.')
-			ls = store_file_name(ls, data->d_name);
-	}
+	if(dir == NULL)
+		ft_permission_denied(dir_path_str);
+	else if(dir != NULL)
+		while((data = readdir(dir)) != NULL)
+		{
+			if(info->flag.a == true)
+				ls = store_file_name(ls, data->d_name);
+			if(data->d_name[0] != '.')
+				ls = store_file_name(ls, data->d_name);
+		}
 	if(dir != NULL)
 		closedir(dir);
 	merge_sort(&ls);

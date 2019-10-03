@@ -1,5 +1,10 @@
 a.out
 *.o
-no_rights
 ft_ls
 a.out.dSYM
+# Below files have permission denied for testing purposes
+# to change permission do:
+# chmod 000 file_or_folder_name
+no_rights
+no_right_folder
+no_right_file
