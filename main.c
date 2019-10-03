@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/02 21:10:54 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/02 21:29:33 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -450,7 +450,8 @@ void	process_valid_file(t_ls *ls, t_info *info)
 ** -1 mean it is an invalid file.
 ** _POSIX_PATH_MAX can store upto 256 characters
 */
-t_ls *implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
+//t_ls *implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
+t_ls	*implement_recurssion(t_ls *temp_ls, t_info *info, char *path)
 {
 	struct dirent	*dr;
 	struct stat		meta;
@@ -472,8 +473,8 @@ t_ls *implement_recurssion(char *path, t_ls *temp_ls, t_info *info)
 //
 //	temp_ls = store_file_name(temp_ls, full_path); // Use this to see stored values
 				temp_ls = store_valid_dir(temp_ls, full_path);
-				implement_recurssion(full_path, temp_ls, info);
-
+//				implement_recurssion(full_path, temp_ls, info);
+				implement_recurssion(temp_ls, info, full_path);
 //				ft_printf("|%s|\n", temp_ls->file_name);
 //				temp_ls = store_file_name(temp_ls, info->argv[info->var.i]);
 
@@ -539,8 +540,8 @@ void get_files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 	while(temp_ls)
 	{
 		(info->var.new_line == true) && (ft_printf("\n"));
-		(info->argc > 2) && (ft_printf("%s:\n", temp_ls->dir_path));
-		if(info->flag.uppercase_r == false)
+		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->dir_path));
+//		if(info->flag.uppercase_r == false)
 			single_argument(ls, info, temp_ls->dir_path);
 		info->var.new_line = true;
 		temp_ls = temp_ls->next;
@@ -736,7 +737,8 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 // Gives directory names recursively // placing this inside process_dir_valid
 		else if(i == info->argc && info->flag.uppercase_r == true)
 		{
-			ls = implement_recurssion(".", ls, info);
+//			ls = implement_recurssion(".", ls, info);
+			ls = implement_recurssion(ls, info, ".");
 			merge_sort(&ls);
 			print_file_name(ls);
 		}
@@ -758,8 +760,12 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 
 		if(i == 2 && info->argc == 2 && info->flag.uppercase_r == true)
 		{
-			temp_ls = implement_recurssion(".", temp_ls, info);
+			single_argument(ls, info, ".");
+			write(1, "\n", 1);
+			temp_ls = implement_recurssion(temp_ls, info, ".");
+//			temp_ls = implement_recurssion(".", temp_ls, info);
 			merge_sort_dir(&temp_ls);
+			get_files_from_stored_dir_path(ls, temp_ls, info);
 //			print_file_name(ls);
 //			printf("|%s|\n", temp_ls->dir_path);
 //			while(temp_ls)
@@ -767,6 +773,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 //				printf("|%s|\n", temp_ls->dir_path);
 //				temp_ls = temp_ls->next;
 //			}
+/*
 			while(temp_ls)
 			{
 				ft_printf("%s:\n", temp_ls->dir_path);
@@ -774,6 +781,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 				write(1, "\n", 1);
 				temp_ls = temp_ls->next;
 			}
+*/
 //			get_files_from_stored_dir_path(ls, temp_ls, info);
 			if(temp_ls != NULL)
 				delete_list(&temp_ls);
