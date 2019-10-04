@@ -53,3 +53,4 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 16. [Big O Cheatsheet - bigocheatsheet](https://www.bigocheatsheet.com/)
 17. [Algorithms and Data Structures - Cooervo.github.io](https://cooervo.github.io/Algorithms-DataStructures-BigONotation/index.html)
 18. [List all directories in a given directory - Works - Stackoverflow](https://stackoverflow.com/questions/1723002/how-to-list-all-subdirectories-in-a-given-directory-in-c)
+19. [A Recursive Directory Scanning program](https://johnloomis.org/ece537/notes/Files/Examples/printdir.html)
