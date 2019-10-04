@@ -6,7 +6,7 @@
 #    By: mbutt <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 15:35:11 by mbutt             #+#    #+#              #
-#    Updated: 2019/10/02 21:09:30 by mbutt            ###   ########.fr        #
+#    Updated: 2019/10/03 15:39:28 by mbutt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ CYAN:=\033[1;36m
 NAME = ft_ls
 CC = gcc
 #CFLAGS = -Wall -Wextra -Werror -I. -c
-CFLAGS = -I. -c
+CFLAGS = -I. -c -g
 DEBUG = #-g3 -fsanitize=address
 
 SRC = *.c

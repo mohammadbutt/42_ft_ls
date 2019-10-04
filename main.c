@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/03 14:51:43 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/03 18:59:47 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,12 +378,16 @@ void process_invalid_file(t_ls *ls, t_info *info)
 			ls = store_file_name(ls, arg_str[i]);
 		i++;
 	}
+
+//	ft_printf("i:|%s|\n", i);
+//	ft_printf("info->vari.i|%d|\n", info->var.i);
 	if(ls != NULL)
 	{
 		merge_sort(&ls);
 		print_invalid_file_name(ls);
 		delete_list(&ls);
 	}
+//	ft_printf("Does it come here\n");
 }
 
 /*
@@ -469,28 +473,11 @@ t_ls	*store_dir_recursively(t_ls *temp_ls, t_info *info, char *path)
 		{
 			if(dr->d_name[0] != '.')
 			{
-//				ft_printf("%s\n", full_path);
-//
-//	temp_ls = store_file_name(temp_ls, full_path); // Use this to see stored values
 				temp_ls = store_valid_dir(temp_ls, full_path);
-//				store_dir_recursively(full_path, temp_ls, info);
 				store_dir_recursively(temp_ls, info, full_path);
-//				ft_printf("|%s|\n", temp_ls->file_name);
-//				temp_ls = store_file_name(temp_ls, info->argv[info->var.i]);
-
-//				merge_sort(&temp_ls);
-//				print_file_name(temp_ls);
-//				delete_list(&temp_ls);
 			}
 		}
 	}
-//	ft_printf("1:\n");
-//	ft_printf("|%s|\n", temp_ls->file_name);
-//	merge_sort(&temp_ls);
-//	printf("|%s\n", temp_ls->file_name);
-//	print_file_name(temp_ls);
-//	delete_list(&temp_ls);
-
 	closedir(dir);
 	return(temp_ls);
 }
@@ -535,6 +522,8 @@ t_ls	*store_dir_path_without_flag(t_ls *temp_ls, t_info *info)
 	}
 	return(temp_ls);
 }
+void print_recursively_stored_dir(t_ls *ls, t_info *info, char *current_dir);
+
 void get_files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 {
 	while(temp_ls)
@@ -550,13 +539,30 @@ void get_files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 void process_dir_valid(t_ls *ls, t_info *info)
 {
 	t_ls			*temp_ls;
+//	char			*current_dir_path;
 
 	temp_ls = NULL;
+//	current_dir_path = info->argv[info->var.i];
+	temp_ls = store_dir_path_without_flag(temp_ls, info);
 	if(flag_status(info) == false)
-		temp_ls = store_dir_path_without_flag(temp_ls, info);
-	merge_sort_dir(&temp_ls);
-	get_files_from_stored_dir_path(ls, temp_ls, info);
-	delete_list(&temp_ls);
+	{
+		merge_sort_dir(&temp_ls);
+		get_files_from_stored_dir_path(ls, temp_ls, info);
+		delete_list(&temp_ls);
+	}
+/*
+	else if(flag_status(info) == true)
+	{
+//		temp_ls = store_dir_path_without_flag(temp_ls, info);
+//		merge_sort_dir(&temp_ls);
+//		while(temp_ls)
+//		{
+			print_recursively_stored_dir(ls, info, info->argv[info->var.i]);
+//			temp_ls = temp_ls->next;
+//		}
+//		delete_list(&temp_ls);
+	}
+*/
 }
 /*
 // Adding recurssion;
@@ -609,14 +615,18 @@ void process_dir_valid(t_ls *ls, t_info *info)
 
 void	process_dir(t_ls *ls, t_info *info)
 {
+//ft_printf("cp1\n");
 	info->var.i = info->var.temp_i;
 	process_invalid_file(ls, info);
 
+//ft_printf("cp2\n");
 	info->var.i = info->var.temp_i;
 	process_valid_file(ls, info);
 
+//ft_printf("cp3\n");
 	info->var.i = info->var.temp_i;
 	process_dir_valid(ls, info);
+//ft_printf("cp4\n");
 	exit(EXIT_SUCCESS);
 }
 
@@ -690,17 +700,15 @@ int	set_up_environment_to_collect_flags(t_info *info, int i, int j)
 		while(j < info->var.str_len)
 		{
 			if(info->argv[i][0] == '-')
-				ls_collect_flag_and_illegal_option(info, i ,j);
-			else if(info->argv[i][0] != '-')
 			{
-				info->var.double_break = true;
-				break;
+				(j == 0) && (j = 1);
+				ls_collect_flag_and_illegal_option(info, i ,j);
 			}
+			else if(info->argv[i][0] != '-')
+				return(i);
 			j++;
 		}
-		if(info->var.double_break == true)
-			break;
-		j = 1;
+		j = 0;
 		i++;
 	}
 	return(i);
@@ -719,10 +727,8 @@ void	print_recursively_stored_dir(t_ls *ls, t_info *info, char *current_dir)
 	t_ls *temp_ls;
 
 	temp_ls = NULL;
-//	single_argument(ls, info, ".");
 	single_argument(ls, info, current_dir);
 	write(1, "\n", 1);
-//	temp_ls = store_dir_recursively(temp_ls, info, ".");
 	temp_ls = store_dir_recursively(temp_ls, info, current_dir);
 	merge_sort_dir(&temp_ls);
 	get_files_from_stored_dir_path(ls, temp_ls, info);
