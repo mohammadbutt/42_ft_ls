@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/21 22:32:43 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/21 22:32:19 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -544,7 +544,11 @@ void	free_inner_dir(t_ls *ls)
 	}
 }
 int		start_recursive_call(t_ls *temp_ls);
-t_ls	*store_file_recursively(char *path)
+
+
+
+
+t_ls	*store_file_recursively(char *path) //Will be replaced by store_inner_dir
 {
 	struct dirent	*dr;
 	struct stat		meta;
@@ -552,6 +556,7 @@ t_ls	*store_file_recursively(char *path)
 	char full_path[_POSIX_PATH_MAX];
 	t_ls *temp_ls;
 
+//	printf("start1\n\n\n");
 	if((dir = opendir(path)) == NULL)
 	{
 		ft_permission_denied(path);
@@ -559,6 +564,7 @@ t_ls	*store_file_recursively(char *path)
 	}
 	while((dr = readdir(dir)) != NULL)
 	{
+//		full_path[0] = 0;
 		ft_strcpy(full_path, path);
 		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
 		ft_strcat(full_path, dr->d_name);
@@ -569,7 +575,7 @@ t_ls	*store_file_recursively(char *path)
 //				temp_ls = store_valid_dir(temp_ls, full_path);
 //				recursive_for_reference(temp_ls, info, full_path);
 //				start_recursive_call(temp_ls);
-			temp_ls = store_file_name(temp_ls, full_path);
+				temp_ls = store_file_name(temp_ls, full_path);
 			}
 		}
 	}
@@ -577,26 +583,60 @@ t_ls	*store_file_recursively(char *path)
 		closedir(dir);
 	if(temp_ls != NULL)
 		merge_sort(&temp_ls);
+//	printf("end1\n\n\n\n");
 	return(temp_ls);
 }
 
+/*
+** I had initially decided to store the inner directories on stack as below:
+** char full_path[_POSIX_PATH_MAX]
+** _POSIX_PATH_MAX which allocates 256 bytes, so I decided to find out the total
+** number of files on my current system to get an approximate idea how much
+** memory will be reseverd on stack.
+** running the below command gave me the total number of files at the root:
+** ls -R | wc -l
+** This was 45,238.
+** 45,238 * 256 = 11,580,928.
+** When I allocated this much memory on stack, well it didn't work, but malloc
+** will allow memory allocation of upto INT_MAX, which is 2,147,483,647.
+** Now there are two nice things about malloc in this case:
+** 1. We are able to allocate more memory than stack.
+** 2. Memory allocated using malloc can be used again when it's free, but that's
+** not the case when memory is allocated on stack, when memory is allocated on
+** stack, it can not be freed, the only way would be to reuse that variable
+** that has memory on stack.
+** Ran a few more test. Might be able to store file names on stack.
+** Each occurence can have upto 26,000 recursivce calls.
+*/
+
+int		start_recursive_call(t_ls *temp_ls);
+/*
+t_ls	*store_inner_dir(char *file_path)
+{
+	char 
+}
+*/
 int		start_recursive_call(t_ls *temp_ls)
 {
 	t_ls			*inner_dir;
 	struct	stat	meta;
-
+	
 	while(temp_ls)
 	{
-		if(stat(temp_ls->file_name, &meta) == 0)
-			if(S_ISDIR(meta.st_mode))
+//		if(stat(temp_ls->file_name, &meta) == 0)
+//		{
+//			if(S_ISDIR(meta.st_mode))
 				inner_dir = store_file_recursively(temp_ls->file_name);
+		print_file_name(temp_ls);
 		if(inner_dir != NULL)
 		{
-			print_file_name(inner_dir);
+//			print_file_name(inner_dir);
 //			free_inner_dir(inner_dir);
 //			return(0);
 			start_recursive_call(inner_dir);
-			free_inner_dir(inner_dir);
+			delete_list(&inner_dir);
+//			free_inner_dir(inner_dir);
+//		}
 		}
 		temp_ls = temp_ls->next;
 	}
