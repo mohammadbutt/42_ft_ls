@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/22 21:12:13 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/22 21:33:40 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -559,6 +559,7 @@ t_ls	*store_file_recursively(char *path) //Will be replaced by store_inner_dir
 //	printf("start1\n\n\n");
 	if((dir = opendir(path)) == NULL)
 	{
+		ft_printf("\n./%s\n", path);
 		ft_permission_denied(path);
 		return(NULL);
 	}
@@ -627,20 +628,19 @@ int		start_recursive_call(t_ls *temp_ls)
 	{
 		if(stat(temp_ls->file_name, &meta) == 0)
 		{
-//			print_file_name(temp_ls);
 			if(S_ISDIR(meta.st_mode))
 			{
-//				inner_dir = store_file_recursively(temp_ls->file_name);
+				inner_dir = store_file_recursively(temp_ls->file_name);
 //				print_file_name(temp_ls);
-//				if(inner_dir != NULL)
-//				{
+				if(inner_dir != NULL)
+				{
 //					print_file_name(inner_dir);
 //					free_inner_dir(inner_dir);
 //					return(0);
 //					start_recursive_call(inner_dir);
 //					delete_list(&inner_dir);
 //					free_inner_dir(inner_dir);
-//				}
+				}
 			}
 //			temp_ls = temp_ls->next;
 		}
