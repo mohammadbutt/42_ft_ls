@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/22 21:50:35 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/23 13:37:35 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -543,12 +543,12 @@ void	free_inner_dir(t_ls *ls)
 		ls = temp_ls;
 	}
 }
-int		start_recursive_call(t_ls *temp_ls);
+int		start_recursive_call(t_ls *temp_ls, t_info *info);
+t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
 
 
 
-
-t_ls	*store_file_recursively(char *path) //Will be replaced by store_inner_dir
+t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 {
 	struct dirent	*dr;
 	struct stat		meta;
@@ -577,7 +577,9 @@ t_ls	*store_file_recursively(char *path) //Will be replaced by store_inner_dir
 //				temp_ls = store_valid_dir(temp_ls, full_path);
 //				recursive_for_reference(temp_ls, info, full_path);
 //				start_recursive_call(temp_ls);
-				temp_ls = store_file_name(temp_ls, full_path);
+//				temp_ls = store_file_name(temp_ls, full_path);
+				temp_ls = store_root_files(temp_ls, info, full_path);
+				ft_printf("./%s:\n", full_path);
 			}
 		}
 	}
@@ -585,7 +587,6 @@ t_ls	*store_file_recursively(char *path) //Will be replaced by store_inner_dir
 		closedir(dir);
 	if(temp_ls != NULL)
 		merge_sort(&temp_ls);
-//	printf("end1\n\n\n\n");
 	return(temp_ls);
 }
 
@@ -611,41 +612,46 @@ t_ls	*store_file_recursively(char *path) //Will be replaced by store_inner_dir
 ** Each occurence can have upto 26,000 recursivce calls.
 */
 
-int		start_recursive_call(t_ls *temp_ls);
+//int		start_recursive_call(t_ls *temp_ls, t_info *info);
 /*
 t_ls	*store_inner_dir(char *file_path)
 {
 	char 
 }
 */
-int		start_recursive_call(t_ls *temp_ls)
+int		start_recursive_call(t_ls *temp_ls, t_info *info)
 {
 	t_ls			*inner_dir;
 	struct	stat	meta;
 
 	print_file_name(temp_ls);
+
 	while(temp_ls)
 	{
 		if(stat(temp_ls->file_name, &meta) == 0)
 		{
+
 			if(S_ISDIR(meta.st_mode))
 			{
-				inner_dir = store_file_recursively(temp_ls->file_name);
+
+				inner_dir = store_file_recursively(info, temp_ls->file_name);
 //				print_file_name(temp_ls);
 				if(inner_dir != NULL)
 				{
 //					print_file_name(inner_dir);
 //					free_inner_dir(inner_dir);
 //					return(0);
-//					start_recursive_call(inner_dir);
-//					delete_list(&inner_dir);
+					start_recursive_call(inner_dir, info);
+					delete_list(&inner_dir);
 //					free_inner_dir(inner_dir);
 				}
+
 			}
-//			temp_ls = temp_ls->next;
+
 		}
 		temp_ls = temp_ls->next;
 	}
+
 	return(0);
 }
 /*
@@ -975,7 +981,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 			temp_ls = store_root_files(temp_ls, info, ".");
 //			print_file_name(temp_ls);
 //			store_dir_recursively(temp_ls, info, ".");
-			start_recursive_call(temp_ls);
+			start_recursive_call(temp_ls, info);
 			delete_list(&temp_ls);
 			return;
 		}
@@ -1109,6 +1115,7 @@ void print_file_name(t_ls *ls)
 	
 
 	i = 0;
+
 	while(ls)
 	{
 		str = ls->file_name;
