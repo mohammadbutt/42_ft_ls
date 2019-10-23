@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/21 22:32:19 by mbutt            ###   ########.fr       */
+/*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
+/*   Updated: 2019/10/22 21:12:13 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -570,7 +570,8 @@ t_ls	*store_file_recursively(char *path) //Will be replaced by store_inner_dir
 		ft_strcat(full_path, dr->d_name);
 		if(stat(full_path, &meta) == 0)
 		{
-			if(dr->d_name[0] != '.')
+//			if(dr->d_name[0] != '.')
+			if(ft_strcmp(dr->d_name, ".") && ft_strcmp(dr->d_name, ".."))
 			{
 //				temp_ls = store_valid_dir(temp_ls, full_path);
 //				recursive_for_reference(temp_ls, info, full_path);
@@ -620,23 +621,28 @@ int		start_recursive_call(t_ls *temp_ls)
 {
 	t_ls			*inner_dir;
 	struct	stat	meta;
-	
+
+	print_file_name(temp_ls);
 	while(temp_ls)
 	{
-//		if(stat(temp_ls->file_name, &meta) == 0)
-//		{
-//			if(S_ISDIR(meta.st_mode))
-				inner_dir = store_file_recursively(temp_ls->file_name);
-		print_file_name(temp_ls);
-		if(inner_dir != NULL)
+		if(stat(temp_ls->file_name, &meta) == 0)
 		{
-//			print_file_name(inner_dir);
-//			free_inner_dir(inner_dir);
-//			return(0);
-			start_recursive_call(inner_dir);
-			delete_list(&inner_dir);
-//			free_inner_dir(inner_dir);
-//		}
+//			print_file_name(temp_ls);
+			if(S_ISDIR(meta.st_mode))
+			{
+//				inner_dir = store_file_recursively(temp_ls->file_name);
+//				print_file_name(temp_ls);
+//				if(inner_dir != NULL)
+//				{
+//					print_file_name(inner_dir);
+//					free_inner_dir(inner_dir);
+//					return(0);
+//					start_recursive_call(inner_dir);
+//					delete_list(&inner_dir);
+//					free_inner_dir(inner_dir);
+//				}
+			}
+//			temp_ls = temp_ls->next;
 		}
 		temp_ls = temp_ls->next;
 	}

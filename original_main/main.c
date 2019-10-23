@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 13:24:55 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/21 22:32:43 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/22 18:07:58 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -435,6 +435,12 @@ void	process_valid_file(t_ls *ls, t_info *info)
 	}
 }
 
+/*
+** if(ft_strcmp(dr->d_name, ".") && (ft_strcmp(dr->d_name, ".."))
+** is equal to
+** if((ft_strcmp(dr->d_name, ".") != 0 && (ft_strcmp(dr->d_name, "..") != 0)))
+*/
+
 t_ls	*recursive_for_reference(t_ls *temp_ls, t_info *info, char *path)
 {
 	struct dirent	*dr;
@@ -451,7 +457,7 @@ t_ls	*recursive_for_reference(t_ls *temp_ls, t_info *info, char *path)
 		ft_strcat(full_path, dr->d_name);
 		if((stat(full_path, &meta) == 0) && (S_ISDIR(meta.st_mode) == 1))
 		{
-			if(dr->d_name[0] != '.')
+			if(ft_strcmp(dr->d_name, ".") && ft_strcmp(dr->d_name, ".."))
 			{
 				temp_ls = store_valid_dir(temp_ls, full_path);
 				recursive_for_reference(temp_ls, info, full_path);
