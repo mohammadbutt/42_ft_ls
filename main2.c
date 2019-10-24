@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/24 00:22:18 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/24 13:31:34 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -584,7 +584,7 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 	struct dirent	*dr;
 	struct stat		meta;
 	DIR *dir;
-//	char full_path[_POSIX_PATH_MAX];
+	char full_path[_POSIX_PATH_MAX];
 //	char full_path[200];
 //	char full_path[256];
 //	char *full_path;
@@ -607,43 +607,40 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 //	if(dir != NULL)
 //		temp_ls = store_root_files(temp_ls, info, path);
 	
+
 /*
 	if(dir != NULL)
 	{
+		full_path[0] = 0;
 		ft_strcpy(full_path, path);
 		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
 		ft_strcat(full_path, dr->d_name);
-		single_argument(temp_ls, info, full_path);	
-		temp_ls = store_root_files(temp_ls, info, full_path);
+		single_argument(temp_ls, info, full_path);
+		if(stat(full_path, &meta))
+			if(dr->d_name[0] != '.')
+				temp_ls = store_root_files(temp_ls, info, full_path);
 //		print_file_name(temp_ls);
 	}
 */
-/*
+
 	while((dr = readdir(dir)) != NULL)
 	{
 //		full_path[0] = 0;
+//
 		ft_strcpy(full_path, path);
 		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
 		ft_strcat(full_path, dr->d_name);
 		if(stat(full_path, &meta) == 0)
 		{
-//			if(dr->d_name[0] != '.')
-			if(ft_strcmp(dr->d_name, ".") && ft_strcmp(dr->d_name, ".."))
+			if(dr->d_name[0] != '.')
+//			if(ft_strcmp(dr->d_name, ".") && ft_strcmp(dr->d_name, ".."))
 			{
-//				temp_ls = store_valid_dir(temp_ls, full_path);
-//				recursive_for_reference(temp_ls, info, full_path);
-//				start_recursive_call(temp_ls);
-//				temp_ls = store_file_name(temp_ls, full_path);
-//				ft_printf("\n./%s:\n", path);
-//				ft_printf("\n./%s:\n", full_path);
-//				return(temp_ls);
-//				temp_ls = store_root_files(temp_ls, info, full_path);
-//				printf("?|%s::\n", full_path);
-//				ft_printf("./%s:\n", full_path);
+				temp_ls = store_file_name(temp_ls, full_path);
+				merge_sort(&temp_ls);
 			}
 		}
 	}
-*/
+
 //	single_argument(temp_ls, info, full_path);
 	if(dir != NULL)
 		closedir(dir);
