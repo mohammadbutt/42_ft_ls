@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/24 22:49:45 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/25 00:03:14 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -599,6 +599,25 @@ int find_last_slash(char *file_path_with_slash)
 	return(0);
 }
 
+/*
+** is_directory returns 1 if a file path is a directory. If file path is not a
+** directory, it returns a 0.
+*/
+
+int is_directory(char *parent, char *name)
+{
+	DIR *dir;
+	char final_path[_POSIX_PATH_MAX];
+
+	ft_strcpy(final_path, parent);
+	ft_strcat(final_path, "/");
+	ft_strcat(final_path, name);
+	dir = opendir(final_path);
+	if(dir == NULL)
+		return(0);
+	closedir(dir);
+	return(1);
+}
 
 t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 {
@@ -619,12 +638,23 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 	else
 		ft_printf("\n./%s:\n", path);
 
-
+	int len;
+	len = ft_strlen(path) - 1;
 // Prints files with access to first folder
 	while((dr = readdir(dir)) != NULL)
 	{
 		if(dr->d_name[0] != '.')
-			temp_ls = store_file_name(temp_ls, dr->d_name);
+		{
+			if((is_directory(path, dr->d_name)) == 1)
+			{
+				ft_strcpy(full_path, path);
+				(full_path[len] != '/') && (ft_strcat(full_path, "/"));
+				ft_strcat(full_path, dr->d_name);
+				temp_ls = store_file_name(temp_ls, full_path);
+			}
+			else
+				temp_ls = store_file_name(temp_ls, dr->d_name);
+		}
 	}
 
 
@@ -1430,7 +1460,7 @@ void print_file_name(t_ls *ls)
 
 	i = 0;
 
-
+/*
 // Commenting this to modify the while loop slightly
 	while(ls)
 	{
@@ -1438,15 +1468,15 @@ void print_file_name(t_ls *ls)
 		ft_printf("%s\n", str);
 		ls = ls->next;
 	}
+*/
 
-/*
 	while(ls)
 	{
 		str = ls->file_name + find_last_slash(ls->file_name);
 		ft_printf("%s\n", str);
 		ls = ls->next;
 	}
-*/
+
 
 }
 
