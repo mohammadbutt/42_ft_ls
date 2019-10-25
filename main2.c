@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/24 13:31:34 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/24 22:49:45 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -578,6 +578,27 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info);
 t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
 
 
+/*
+** function find_last_slash, returns the index of the last slash that occurs in
+** a file path.
+** Functions is used in permission denied case, so slashes can be truncated
+** from the beginning of the file path, so just the name is returned.
+*/
+
+int find_last_slash(char *file_path_with_slash)
+{
+	int len;
+
+	len = ft_strlen(file_path_with_slash) - 1;
+	while(len)
+	{
+		if(file_path_with_slash[len] == '/')
+			return(len + 1);
+		len--;
+	}
+	return(0);
+}
+
 
 t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 {
@@ -585,29 +606,80 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 	struct stat		meta;
 	DIR *dir;
 	char full_path[_POSIX_PATH_MAX];
-//	char full_path[200];
-//	char full_path[256];
-//	char *full_path;
 	t_ls *temp_ls;
 
 	temp_ls = NULL;	
-//	printf("++++++++Comes at start++++++\n");
-//	printf("start1\n\n\n");
-//	ft_strcpy(full_path, "This is a test");
 	if((dir = opendir(path)) == NULL)
 	{
 		ft_printf("\n./%s\n", path);
-		ft_permission_denied(path);
+//		ft_permission_denied(path);
+		ft_permission_denied(path + find_last_slash(path));
 		return(NULL);
 	}
 	else
-	{
 		ft_printf("\n./%s:\n", path);
+
+
+// Prints files with access to first folder
+	while((dr = readdir(dir)) != NULL)
+	{
+		if(dr->d_name[0] != '.')
+			temp_ls = store_file_name(temp_ls, dr->d_name);
+	}
+
+
+/*
+// Prints all files but appends slashes with file_names
+	int len;
+	len = ft_strlen(path) - 1;
+
+	while((dr = readdir(dir)) != NULL)
+	{
+		if(dr->d_name[0] != '.')
+		{
+				ft_strcpy(full_path, path);
+				(full_path[len] != '/') && (ft_strcat(full_path, "/"));
+				ft_strcat(full_path, dr->d_name);
+				temp_ls = store_file_name(temp_ls, full_path);
+		}
+	}
+*/
+//		if(stat(full_path, &meta) == 0)
+/*
+			if(dr->d_name[0] != '.')
+			{
+				if(S_ISDIR(meta.st_mode) == 1)
+					temp_ls = store_file_name(temp_ls, full_path);
+				else if(S_ISDIR(meta.st_mode) == 0)
+					temp_ls = store_file_name(temp_ls, dr->d_name);
+			}
+*/
+
+
+/*
+	while((dr = readdir(dir)) != NULL)
+	{
+		if((stat(dr->d_name, &meta) == 0) && (dr->d_name[0] != 0))
+		{
+			if(S_ISDIR(meta.st_mode))
+			{
+//			if(dr->d_name[0] != '.')
+//			{
+				full_path[0] = 0;
+				ft_strcpy(full_path, path);
+				(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
+				ft_strcat(full_path, dr->d_name);
+				temp_ls= store_file_name(temp_ls, full_path);
+			}
+//			}
+			else
+				temp_ls= store_file_name(temp_ls, dr->d_name);
+		}
 	}
 //	if(dir != NULL)
 //		temp_ls = store_root_files(temp_ls, info, path);
 	
-
+*/
 /*
 	if(dir != NULL)
 	{
@@ -622,25 +694,187 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 //		print_file_name(temp_ls);
 	}
 */
+//	printf("(%s)\n", path);
+//	printf("Comes here1\n");
+//	ft_strcpy(full_path, path);
+//	(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
+//	ft_strcat(full_path, dr->d_name);
 
+
+	// 0 means have not found, 1 means found, -1  dont search
+/*
+	while((dr = readdir(dir)) != NULL)
+	{
+		if (dr->d_name[0] != '.')
+		{
+			if(stat(dr->d_name, &meta) == 0)
+			{
+//				if(S_ISDIR(meta.st_mode))
+//				{
+//					printf("Does it ever come here\n\n\n\n");
+//					full_path[0] = 0;
+//					ft_strcpy(full_path, path);
+//					(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
+//					ft_strcat(full_path, dr->d_name);
+//					temp_ls= store_file_name(temp_ls, full_path);
+//				}
+				if(S_ISREG(meta.st_mode))
+				{
+//					printf("here2\n\n");
+					temp_ls = store_file_name(temp_ls, dr->d_name);
+				}
+				else
+				{
+					temp_ls = store_file_name(temp_ls, dr->d_name);
+				}
+			}
+		}
+	}
+*/
+	
+/*
+	while((dr = readdir(dir)) != NULL)
+	{
+		if (dr->d_name[0] != '.')
+		{
+//			if(stat(dr->d_name, &meta) == 0)
+//			{
+//				if(S_ISDIR(meta.st_mode))
+//				{
+//					printf("Does it ever come here\n\n\n\n");
+					full_path[0] = 0;
+					ft_strcpy(full_path, path);
+					(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
+					ft_strcat(full_path, dr->d_name);
+					temp_ls= store_file_name(temp_ls, full_path);
+//				}
+//				if (S_ISDIR(meta.st_mode))
+//					temp_ls = store_file_name(temp_ls, dr->d_name);
+//			}
+		}
+	}
+*/
+/*
+	while((dr = readdir(dir)) != NULL)
+	{
+		if (dr->d_name[0] != '.')
+			temp_ls = store_file_name(temp_ls, dr->d_name);
+	}
+*/	
+/*	
+	while((dr = readdir(dir)) != NULL)
+	{
+		if(stat(dr->d_name, &meta) == 0 && (S_ISDIR(meta.st_mode) == 1))
+			if(found_dir == 0)
+				found_dir = 1;
+		if(found_dir != 1 && dr->d_name[0] != '.')
+		{
+			if(S_ISDIR(meta.st_mode) == 1) // If it is a folder
+				temp_ls = store_file_name(temp_ls, dr->d_name + find_last_slash(dr->d_name));
+			else
+				temp_ls = store_file_name(temp_ls, dr->d_name);
+		}
+		else if(found_dir == 1 && dr->d_name[0] != '.')
+		{
+			full_path[0] = 0;
+			ft_strcpy(full_path, path);
+			(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
+			ft_strcat(full_path, dr->d_name);
+			temp_ls = store_file_name(temp_ls, full_path);
+			found_dir = -1;
+//			found_dir = -1;
+		}
+*/
+//		if(stat(full_path, &meta) == 0)
+/*
+			if(dr->d_name[0] != '.')
+			{
+//				if(S_ISDIR(meta.st_mode) == 1)
+				if(found_dir == 1)
+				{
+					temp_ls = store_file_name(temp_ls, full_path);
+					found_dir = -1;
+				}
+				else
+					temp_ls = store_file_name(temp_ls, dr->d_name);
+			}
+*/
+//				if(S_ISDIR(meta.st_mode) == 1)	// 1 means its a directory
+//					temp_ls = store_file_name(temp_ls, full_path);
+//				else if(S_ISDIR(meta.st_mode) == 0) // 0 means its a file
+//					temp_ls = store_file_name(temp_ls, dr->d_name);
+//				else if(S_ISDIR(meta.st_mode) == 0)
+//					temp_ls = store_file_name(temp_ls, full_path + find_last_slash(full_path));
+//			}
+
+/*
 	while((dr = readdir(dir)) != NULL)
 	{
 //		full_path[0] = 0;
-//
 		ft_strcpy(full_path, path);
 		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
 		ft_strcat(full_path, dr->d_name);
 		if(stat(full_path, &meta) == 0)
+			if(dr->d_name[0] != '.')
+			{
+//				if(S_ISDIR(meta.st_mode) == 1)
+					temp_ls = store_file_name(temp_ls, full_path);
+//				else if(S_ISDIR(meta.st_mode) == 0)
+//					temp_ls = store_file_name(temp_ls, full_path + find_last_slash(full_path));
+			}
+	}
+*/
+
+/*
+	while((dr = readdir(dir)) != NULL)
+	{
+		if((stat(dr->name, &meta) == 0) && S_ISDIR(meta.st_mode) == 1)
 		{
+			full_path[0] = 0;
+			ft_strcpy(full_path, path);
+			(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
+			ft_strcat(full_path, dr->d_name);
+		}
+//		if(stat(full_path, &meta) == 0)
+			if(dr->d_name[0] != '.')
+			{
+				if(S_ISDIR(meta.st_mode) == 1)
+					temp_ls = store_file_name(temp_ls, full_path);
+				else if(S_ISDIR(meta.st_mode) == 0)
+					temp_ls = store_file_name(temp_ls, dr->d_name);
+			}
+	}
+*/
+/*
+
+		if((stat(dr->d_name, &meta) == 0) && (S_ISDIR(meta.st_mode) == 1))
+		{
+		ft_strcpy(full_path, path);
+		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
+		}
+		ft_strcat(full_path, dr->d_name);
+//		{
 			if(dr->d_name[0] != '.')
 //			if(ft_strcmp(dr->d_name, ".") && ft_strcmp(dr->d_name, ".."))
 			{
-				temp_ls = store_file_name(temp_ls, full_path);
-				merge_sort(&temp_ls);
+				temp_ls = store_file_name(temp_ls, dr->d_name);
+//				temp_ls = store_file_name(temp_ls, dr->d_name);
+//				temp_ls = store_file_name(temp_ls, full_path);
 			}
-		}
-	}
+//		}
+*/
+	
+	merge_sort(&temp_ls);
 
+//	while(temp_ls)
+//	{
+//		full_path[0] = 0;
+//		ft_strcpy(full_path, path);
+//		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
+//		ft_strcat(full_path, dr->d_name);
+//		temp_ls = store_file_name(temp_ls, full_path);
+
+//	}
 //	single_argument(temp_ls, info, full_path);
 	if(dir != NULL)
 		closedir(dir);
@@ -690,8 +924,8 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 		if(temp_ls->file_name)
 			print_file_name(temp_ls);
 
-	if(temp_ls != NULL)
-	{
+//	if(temp_ls != NULL)
+//	{
 		while(temp_ls != NULL)
 		{
 			if(stat(temp_ls->file_name, &meta) == 0)
@@ -716,7 +950,7 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 			}
 			temp_ls = temp_ls->next;
 		}
-	}
+//	}
 //	while(inner_dir)
 //	{
 //	if(inner_dir->file_name)
@@ -1196,12 +1430,24 @@ void print_file_name(t_ls *ls)
 
 	i = 0;
 
+
+// Commenting this to modify the while loop slightly
 	while(ls)
 	{
 		str = ls->file_name;
 		ft_printf("%s\n", str);
 		ls = ls->next;
 	}
+
+/*
+	while(ls)
+	{
+		str = ls->file_name + find_last_slash(ls->file_name);
+		ft_printf("%s\n", str);
+		ls = ls->next;
+	}
+*/
+
 }
 
 
