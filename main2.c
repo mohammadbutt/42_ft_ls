@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/25 19:36:17 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/25 20:17:59 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,6 +253,71 @@ t_ls	*store_file_name(t_ls *ls, char *file_name)
 		ls = append(ls, file_name);
 	return(ls);
 }
+
+t_ls	*create(char *valid_file_path_str)
+{
+	t_ls *new_node;
+
+	new_node = malloc(sizeof(t_ls));
+	if(new_node == NULL)
+		exit(EXIT_SUCCESS);
+	new_node->file_name = ft_strdup(valid_file_path_str);
+	new_node->next = NULL;
+	return(new_node);
+}
+
+t_ls *append(t_ls *head, char *valid_file_path_str)
+{
+	t_ls *cursor;
+	t_ls *new_node;
+
+	cursor = head;
+	while(cursor->next != NULL)
+		cursor = cursor->next;
+	new_node = create(valid_file_path_str);
+	cursor->next = new_node;
+	return(head);
+}
+
+// Storing file names in a linked list with slash index
+
+t_ls	*create_with_index(char *valid_file_path_str, int index)
+{
+	t_ls *new_node;
+
+	new_node = malloc(sizeof(t_ls));
+	if(new_node == NULL)
+		exit(EXIT_SUCCESS);
+	new_node->file_name = ft_strdup(valid_file_path_str);
+	new_node->slash_index = index;
+	new_node->next = NULL;
+	return(new_node);
+}
+
+t_ls *append_with_index(t_ls *head, char *valid_file_path_str, int index)
+{
+	t_ls *cursor;
+	t_ls *new_node;
+
+	cursor = head;
+	while(cursor->next != NULL)
+		cursor = cursor->next;
+	new_node = create_with_index(valid_file_path_str, index);
+	cursor->next = new_node;
+	return(head);
+}
+
+
+t_ls	*store_file_name_with_index(t_ls *ls, char *file_name, int index)
+{
+	if(ls == NULL)
+		ls = create_with_index(file_name, index);
+	else
+		ls = append_with_index(ls, file_name, index);
+	return(ls);
+}
+
+
 
 // Above functions are created to handle dir -R flag
 
@@ -670,7 +735,7 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 	i = 0;
 	j = 0;
 	temp_i = 0;
-	
+//	new_ls->slash_index = 0;
 //	ft_strcpy(full_path, path);
 //	(full_path[path_len] != '/') && (ft_strcat(full_path, "/"));
 	
@@ -679,15 +744,18 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 			full_path[i++] = path[j++];
 	(full_path[i] != '/') && (full_path[i++] = '/');
 	temp_i = i;
+//	new_ls->slash_index = i;
 	while(temp_ls)
 	{
 		i = temp_i;
+//		i = new_ls->slash_index;
 		j = 0;
 		if(temp_ls->file_name)
 			while(temp_ls->file_name[j])
 				full_path[i++] = temp_ls->file_name[j++];
 	   	full_path[i] = '\0';
-		new_ls = store_file_name(new_ls, full_path);
+//		new_ls = store_file_name(new_ls, full_path);
+		new_ls = store_file_name_with_index(new_ls, full_path, temp_i);
 		temp_ls = temp_ls->next;
 	}
 
@@ -1540,30 +1608,6 @@ t_ls *append_list_for_invalid(t_ls *head, char *invalid_dir_path_str)
 	return(head);
 }
 
-t_ls	*create(char *valid_file_path_str)
-{
-	t_ls *new_node;
-
-	new_node = malloc(sizeof(t_ls));
-	if(new_node == NULL)
-		exit(EXIT_SUCCESS);
-	new_node->file_name = ft_strdup(valid_file_path_str);
-	new_node->next = NULL;
-	return(new_node);
-}
-
-t_ls *append(t_ls *head, char *valid_file_path_str)
-{
-	t_ls *cursor;
-	t_ls *new_node;
-
-	cursor = head;
-	while(cursor->next != NULL)
-		cursor = cursor->next;
-	new_node = create(valid_file_path_str);
-	cursor->next = new_node;
-	return(head);
-}
 
 /*
 ** Function print_file_name will print contents, files and folders, of the
@@ -1574,14 +1618,10 @@ void print_file_name(t_ls *ls)
 {
 //	int i;
 	char *str;
-	int file_path_len;
-
-	file_path_len = 0;
-	if(ls)
-		file_path_len = find_last_slash(ls->file_name);
 
 
-// Commenting this to modify the while loop slightly
+// Good to run this to see data in raw form
+
 /*
 	while(ls)
 	{
@@ -1600,15 +1640,30 @@ void print_file_name(t_ls *ls)
 		ls = ls->next;
 	}
 */
+/*
+// skips slash
+	int file_path_len;
+	file_path_len = 0;
+	if(ls)
+		file_path_len = find_last_slash(ls->file_name);
 
-// skipping slash
 	while(ls)
 	{
 		str = ls->file_name + file_path_len;
 		ft_printf("%s\n", str);
 		ls = ls->next;
 	}
-
+*/
+//	int slash_index;
+//	slash_index = ls->slash_index;
+	while(ls)
+	{
+//		str = ls->file_name + slash_index;
+		str = ls->file_name + ls->slash_index;
+//		printf("|%d|\n", ls->slash_index);
+		ft_printf("%s\n", str);
+		ls = ls->next;
+	}
 }
 
 

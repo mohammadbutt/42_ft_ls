@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/02 18:26:12 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/25 19:45:28 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -59,6 +59,7 @@ typedef struct s_ls
 	char 			*file_name;
 	char			*invalid_file_name;
 	char			*dir_path; // Added
+	int				slash_index; // Added
 	
 	struct	s_ls	*next;
 }					t_ls;
