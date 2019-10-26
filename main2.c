@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/25 00:55:16 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/25 18:48:15 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -658,16 +658,37 @@ char *is_directory(char *parent, char *name, char final_path[])
 //	return(1);
 }
 
+t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
+{
+	char full_path[_POSIX_PATH_MAX];
+	int	path_len;
+
+	path_len = ft_strlen(path) - 1; 
+
+	while(temp_ls)
+	{
+//		ft_strcpy(full_path, temp_ls->file_name);
+		ft_strcpy(full_path, path);
+		(full_path[path_len] != '/') && (ft_strcat(full_path, "/"));
+		ft_strcat(full_path, temp_ls->file_name);
+		new_ls = store_file_name(new_ls, full_path);
+		temp_ls = temp_ls->next;
+	}
+	return(new_ls);
+}
+
 
 t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 {
 	struct dirent	*dr;
-	struct stat		meta;
+//	struct stat		meta;
 	DIR *dir;
-	char full_path[_POSIX_PATH_MAX];
+//	char full_path[_POSIX_PATH_MAX];
 	t_ls *temp_ls;
+	t_ls *new_ls;
 
-	temp_ls = NULL;	
+	temp_ls = NULL;
+	new_ls = NULL;
 	if((dir = opendir(path)) == NULL)
 	{
 		ft_printf("\n./%s\n", path);
@@ -678,17 +699,42 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 	else
 		ft_printf("\n./%s:\n", path);
 
-	int len;
-	len = ft_strlen(path) - 1;
+//	int len;
+//	len = ft_strlen(path) - 1;
 	while((dr = readdir(dir)) != NULL)
 	{
 		if(dr->d_name[0] != '.')
 		{
-			is_directory(path, dr->d_name, full_path);
-			temp_ls = store_file_name(temp_ls, full_path);
+//			is_directory(path, dr->d_name, full_path);
+//			temp_ls = store_file_name(temp_ls, full_path);
+			temp_ls = store_file_name(temp_ls, dr->d_name);
 		}
 	}
+	merge_sort(&temp_ls);
+	if(dir != NULL)
+		closedir(dir);
+	if(temp_ls)
+		new_ls = append_slash(new_ls, temp_ls, path);
+	delete_list(&temp_ls);
+//	append_slash(&temp_ls)
 
+//	while(temp_ls)
+//	{
+//		full_path[0] = 0;
+//		ft_strcpy(full_path, path);
+//		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
+//		ft_strcat(full_path, dr->d_name);
+//		temp_ls = store_file_name(temp_ls, full_path);
+
+//	}
+//	single_argument(temp_ls, info, full_path);
+//	if(temp_ls != NULL)
+//		merge_sort(&temp_ls);
+//	printf("segimprove\n");
+//	printf("========Does it come here========\n");
+//	return(temp_ls);
+	return(new_ls);
+}
 /*
 // Prints files with Recursion, but speed is slow
 	while((dr = readdir(dir)) != NULL)
@@ -942,29 +988,8 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 //				temp_ls = store_file_name(temp_ls, full_path);
 			}
 //		}
-*/
-	
-	merge_sort(&temp_ls);
-
-//	while(temp_ls)
-//	{
-//		full_path[0] = 0;
-//		ft_strcpy(full_path, path);
-//		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-//		ft_strcat(full_path, dr->d_name);
-//		temp_ls = store_file_name(temp_ls, full_path);
-
-//	}
-//	single_argument(temp_ls, info, full_path);
-	if(dir != NULL)
-		closedir(dir);
-//	if(temp_ls != NULL)
-//		merge_sort(&temp_ls);
-//	printf("segimprove\n");
-//	printf("========Does it come here========\n");
-	return(temp_ls);
 }
-
+*/
 /*
 ** I had initially decided to store the inner directories on stack as below:
 ** char full_path[_POSIX_PATH_MAX]
@@ -997,9 +1022,10 @@ t_ls	*store_inner_dir(char *file_path)
 int		start_recursive_call(t_ls *temp_ls, t_info *info)
 {
 	t_ls			*inner_dir;
+//	t_ls			*new_inner_dir;
 	struct	stat	meta;
 
-	
+	inner_dir = NULL;	
 	if(temp_ls != NULL)
 		if(temp_ls->file_name)
 			print_file_name(temp_ls);
@@ -1019,6 +1045,7 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 					{
 						start_recursive_call(inner_dir, info);
 //						printf("Does it come here\n\n\n");
+//						delete_list(&new_inner_dir);
 						delete_list(&inner_dir);
 //						free_inner_dir(inner_dir);
 					}
@@ -1512,22 +1539,24 @@ void print_file_name(t_ls *ls)
 
 
 // Commenting this to modify the while loop slightly
+
+/*
 	while(ls)
 	{
 		str = ls->file_name;
 		ft_printf("%s\n", str);
 		ls = ls->next;
 	}
+*/
 
 
-/*
 	while(ls)
 	{
 		str = ls->file_name + find_last_slash(ls->file_name);
 		ft_printf("%s\n", str);
 		ls = ls->next;
 	}
-*/
+
 
 }
 
