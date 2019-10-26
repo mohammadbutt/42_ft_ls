@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/25 20:17:59 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/25 22:34:52 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -510,6 +510,7 @@ void	process_valid_file(t_ls *ls, t_info *info)
 	}
 }
 
+/*
 t_ls	*recursive_for_reference(t_ls *temp_ls, t_info *info, char *path)
 {
 	struct dirent	*dr;
@@ -536,7 +537,7 @@ t_ls	*recursive_for_reference(t_ls *temp_ls, t_info *info, char *path)
 	closedir(dir);
 	return(temp_ls);
 }
-
+*/
 /*
 ** 1. stat(dirent->d_name, &stat) has to be called first
 ** 2. S_ISDIR(stat.st_mode) is used to idetify if a given file is directory.
@@ -638,6 +639,23 @@ void	delete_list(t_ls **head_ref)
 	*head_ref = NULL;
 }
 
+void delete_list_file_name(t_ls **head_ref)
+{
+	t_ls *current_node;
+	t_ls *next_node;
+
+	current_node = *head_ref;
+//	if(current == NULL)
+//		return;
+	while(current_node != NULL)
+	{
+		next_node = current_node->next;
+		free(current_node->file_name);
+		free(current_node);
+		current_node = next_node;
+	}
+	*head_ref = NULL;
+}
 
 int		start_recursive_call(t_ls *temp_ls, t_info *info);
 t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
@@ -1658,12 +1676,12 @@ void print_file_name(t_ls *ls)
 //	slash_index = ls->slash_index;
 	while(ls)
 	{
-//		str = ls->file_name + slash_index;
-		str = ls->file_name + ls->slash_index;
-//		printf("|%d|\n", ls->slash_index);
-		ft_printf("%s\n", str);
+//		str = ls->file_name + ls->slash_index;
+//		ft_printf("%s\n", str);
+		ft_printf("%s\n", ls->file_name + ls->slash_index);
 		ls = ls->next;
 	}
+//	delete_list(&ls);
 }
 
 
@@ -1794,6 +1812,7 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 	dir = opendir(dir_path_str);
 	if(dir == NULL)
 		ft_permission_denied(dir_path_str);
+
 	else if(dir != NULL)
 		while((data = readdir(dir)) != NULL)
 		{
@@ -1804,10 +1823,12 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 		}
 	if(dir != NULL)
 		closedir(dir);
+
+
 	merge_sort(&ls);
-//	count = get_count(ls); // Will be used later when alligning columns
 	print_file_name(ls);
-	delete_list(&ls);
+	delete_list_file_name(&ls);
+//	delete_list(&ls);
 }
 
 /*
@@ -1852,6 +1873,22 @@ void	multiple_argument(t_ls *ls, t_info *info, char *dir_path_str)
 ** so fewer parameters are passed around
 */
 
+void free_double_array(char **double_array)
+{
+	int i;
+
+	i = 0;
+
+	if(double_array)
+		while(double_array[i])
+		{
+			free(double_array[i]);
+			i++;
+		}
+	free(double_array);
+//	double_array = NULL;
+}
+
 char **ft_double_strdup(int argc, char *source[])
 {
 	char **dest;
@@ -1889,9 +1926,20 @@ int main(int argc, char *argv[])
 */
 
 	if(argc == 1)
+	{
+//		printf("1\n");
 		single_argument(ls, &info, ".");
+
+	}
 	else if(argc > 1)
+	{
+//		printf("2\n");
 		ls_start_parsing(ls, &info);
+	}
+	
+	free_double_array(info.argv);
+	while(1);
+
 	return(0);
 
 }
