@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/25 22:34:52 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/25 22:57:27 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -842,7 +842,8 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 		closedir(dir);
 	if(temp_ls)
 		new_ls = append_slash(new_ls, temp_ls, path);
-	delete_list(&temp_ls);
+	delete_list_file_name(&temp_ls);
+//	delete_list(&temp_ls);
 //	append_slash(&temp_ls)
 
 //	while(temp_ls)
@@ -1171,9 +1172,9 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 					if(inner_dir != NULL)
 					{
 						start_recursive_call(inner_dir, info);
-//						printf("Does it come here\n\n\n");
+						delete_list_file_name(&inner_dir);
 //						delete_list(&new_inner_dir);
-						delete_list(&inner_dir);
+//						delete_list(&inner_dir);
 //						free_inner_dir(inner_dir);
 					}
 				
@@ -1539,7 +1540,8 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 //			temp_ls = store_file_name(temp_ls, ".");
 //			print_file_name(temp_ls);
 			start_recursive_call(temp_ls, info);
-			delete_list(&temp_ls);
+			delete_list_file_name(&temp_ls);
+//			delete_list(&temp_ls);
 /*
 			if(temp_ls == NULL)
 				ft_printf("|Successfully deleted all nodes|\n");
@@ -1938,7 +1940,7 @@ int main(int argc, char *argv[])
 	}
 	
 	free_double_array(info.argv);
-	while(1);
+//	while(1);
 
 	return(0);
 
