@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/25 18:48:15 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/25 19:36:17 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -661,19 +661,60 @@ char *is_directory(char *parent, char *name, char final_path[])
 t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 {
 	char full_path[_POSIX_PATH_MAX];
-	int	path_len;
+//	int	path_len;
+	int i;
+	int j;
+	int temp_i;
 
-	path_len = ft_strlen(path) - 1; 
-
+//	path_len = ft_strlen(path) - 1; 
+	i = 0;
+	j = 0;
+	temp_i = 0;
+	
+//	ft_strcpy(full_path, path);
+//	(full_path[path_len] != '/') && (ft_strcat(full_path, "/"));
+	
+	if(path)
+		while(path[j])
+			full_path[i++] = path[j++];
+	(full_path[i] != '/') && (full_path[i++] = '/');
+	temp_i = i;
 	while(temp_ls)
 	{
-//		ft_strcpy(full_path, temp_ls->file_name);
-		ft_strcpy(full_path, path);
-		(full_path[path_len] != '/') && (ft_strcat(full_path, "/"));
-		ft_strcat(full_path, temp_ls->file_name);
+		i = temp_i;
+		j = 0;
+		if(temp_ls->file_name)
+			while(temp_ls->file_name[j])
+				full_path[i++] = temp_ls->file_name[j++];
+	   	full_path[i] = '\0';
 		new_ls = store_file_name(new_ls, full_path);
 		temp_ls = temp_ls->next;
 	}
+
+/*
+ deprecated because improved it by retaining index
+	while(temp_ls)
+	{
+//		ft_strcpy(full_path, path);
+//		(full_path[path_len] != '/') && (ft_strcat(full_path, "/"));
+//		ft_strcat(full_path, temp_ls->file_name);
+//		new_ls = store_file_name(new_ls, full_path);
+//		temp_ls = temp_ls->next;
+
+	}
+*/
+/*
+	while(temp_ls)
+	{
+		if(path)
+			while(path)
+				full_path[i++] = path[j++];
+		(full_path[i] != '/') && (full_path[i] = "/");
+		if(temp_ls->file_name)
+			while(temp_ls->file_name)
+				full_path[i]
+	}
+*/
 	return(new_ls);
 }
 
@@ -1531,15 +1572,16 @@ t_ls *append(t_ls *head, char *valid_file_path_str)
 
 void print_file_name(t_ls *ls)
 {
-	int i;
+//	int i;
 	char *str;
-	
+	int file_path_len;
 
-	i = 0;
+	file_path_len = 0;
+	if(ls)
+		file_path_len = find_last_slash(ls->file_name);
 
 
 // Commenting this to modify the while loop slightly
-
 /*
 	while(ls)
 	{
@@ -1549,14 +1591,23 @@ void print_file_name(t_ls *ls)
 	}
 */
 
-
+/*
+ Deprecated because len is calculated outside the while loop
 	while(ls)
 	{
 		str = ls->file_name + find_last_slash(ls->file_name);
 		ft_printf("%s\n", str);
 		ls = ls->next;
 	}
+*/
 
+// skipping slash
+	while(ls)
+	{
+		str = ls->file_name + file_path_len;
+		ft_printf("%s\n", str);
+		ls = ls->next;
+	}
 
 }
 
