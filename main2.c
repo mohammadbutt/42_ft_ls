@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/25 22:57:27 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/26 00:07:19 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -804,6 +804,17 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 	return(new_ls);
 }
 
+/*
+** Just to test how file_names are stored in the linked list.
+*/
+void print_stored_file_names(t_ls *ls)
+{
+	while(ls)
+	{
+		printf("|%s|\n", ls->file_name);
+		ls = ls->next;
+	}
+}
 
 t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 {
@@ -838,6 +849,9 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 		}
 	}
 	merge_sort(&temp_ls);
+
+//	print_stored_file_names(temp_ls);
+
 	if(dir != NULL)
 		closedir(dir);
 	if(temp_ls)
