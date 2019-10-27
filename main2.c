@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/26 20:42:41 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/26 23:10:59 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1262,12 +1262,20 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 ** This if statement 
 */
 
-t_ls	*store_dir_path_without_flag(t_ls *temp_ls, t_info *info)
+
+/*
+** Functions store_dir_path_regular and store_dir_path_for_recurssion
+** are really similar. The only difference is:
+** 1. store_dir_path_without_flag stores directory in linked list in dir_path.
+** 2. store_dir_path_for_recurssion stores directory in linked list in file_name
+*/
+t_ls	*store_dir_path_regular(t_ls *temp_ls, t_info *info)
 {
 	struct stat meta;
-	DIR * dir;
+	DIR 	*dir;
 
-	while((info->var.i < info->argc) && (info->flag.uppercase_r == false))
+//	while((info->var.i < info->argc) && (info->flag.uppercase_r == false))
+	while(info->var.i < info->argc)
 	{
 		dir = opendir(info->argv[info->var.i]);
 		if(stat(info->argv[info->var.i], &meta) == 0)
@@ -1283,20 +1291,67 @@ t_ls	*store_dir_path_without_flag(t_ls *temp_ls, t_info *info)
 	}
 	return(temp_ls);
 }
+
+t_ls *store_dir_path_recurssion(t_ls *temp_ls, t_info *info)
+{
+	struct stat meta;
+	DIR	*dir;
+
+	while(info->var.i < info->argc)
+	{
+		dir = opendir(info->argv[info->var.i]);
+		if(stat(info->argv[info->var.i], &meta) == 0)
+			if(S_ISDIR(meta.st_mode) == 1)
+				temp_ls = store_file_name(temp_ls, info->argv[info->var.i]);
+		(dir != NULL) && (closedir(dir));
+		info->var.i++;
+	}
+	return(temp_ls);
+}
+
 //void print_recursively_stored_dir(t_ls *ls, t_info *info, char *current_dir);
 
-void get_files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
+void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 {
 	while(temp_ls)
 	{
 		(info->var.new_line == true) && (ft_printf("\n"));
 		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->dir_path));
-//		if(info->flag.uppercase_r == false)
-			single_argument(ls, info, temp_ls->dir_path);
+		single_argument(ls, info, temp_ls->dir_path);
 		info->var.new_line = true;
 		temp_ls = temp_ls->next;
 	}
 }
+
+int start_recursive_call(t_ls *temp_ls, t_info *info);
+
+/*
+void files_from_stored_dir_path_recurssion(t_ls *temp_ls, t_info *info)
+{
+//	t_ls *temp_ls_new;
+//	while(temp_ls)
+//	{
+//		(info->var.new_line == true) && (ft_printf("\n"));
+//		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->file_name));
+		start_recursive_call(temp_ls, info);
+//		temp_ls = temp_ls->next;
+//		(info->var.new_line == true) && (ft_printf("\n"));
+//		(info->argc >= 2) && (ft_printf("%s:\n", (temp_ls->file_name));
+//		temp_ls_new = store_root_files(temp_ls_new, info, temp_ls->file_name);
+//		start_recursive_call(temp_ls_new, info);
+//		if(temp_ls_new)
+//			delete_list_file_name(&temp_ls_new);
+//		info->var.new_line = true;
+//		temp_ls = temp_ls->next;
+//	}
+
+//	while(temp_ls_new)
+//	{
+//		printf("|%s|\n", temp_ls_new->file_name);
+//		temp_ls_new = temp_ls_new->next;
+//	}
+}
+*/
 void process_dir_valid(t_ls *ls, t_info *info)
 {
 	t_ls			*temp_ls;
@@ -1304,14 +1359,34 @@ void process_dir_valid(t_ls *ls, t_info *info)
 
 	temp_ls = NULL;
 //	current_dir_path = info->argv[info->var.i];
-	temp_ls = store_dir_path_without_flag(temp_ls, info);
 //	if(flag_status(info) == false)
-//	{
+	if(info->flag.uppercase_r == false)
+	{
+		temp_ls = store_dir_path_regular(temp_ls, info);
 		merge_sort_dir(&temp_ls);
-		get_files_from_stored_dir_path(ls, temp_ls, info);
+		files_from_stored_dir_path(ls, temp_ls, info);
 		delete_list_dir_path(&temp_ls);
-//		delete_list(&temp_ls);
-//	}
+	}
+	else if(info->flag.uppercase_r == true)
+	{
+		temp_ls = store_dir_path_recurssion(temp_ls, info);
+		merge_sort(&temp_ls);
+		start_recursive_call(temp_ls, info);
+//		files_from_stored_dir_path_recurssion(temp_ls, info);
+		delete_list_file_name(&temp_ls);
+	}
+/*
+		while(temp_ls)
+		{
+			ls = store_root_files(ls, info, temp_ls->file_name);
+			start_recursive_call(ls, info);
+			delete_list_file_name(&ls);
+			temp_ls = temp_ls->next;
+		}
+		delete_list_file_name(&temp_ls);
+*/
+//		printf("Does it come to process_dir_valid\n");
+//		merge_sort_dir(&temp_ls);
 /*
 	else if(flag_status(info) == true)
 	{
@@ -1593,17 +1668,27 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 			return;
 		}
 
-		ft_printf("i:|%i|\n", i);
-		ft_printf("info->argc:|%i|\n", info->argc);
+//		ft_printf("i:|%i|\n", i);
+//		ft_printf("info->argc:|%i|\n", info->argc);
+//
+//
+	if	(i < info->argc)
+		{
+			info->var.temp_i = i;
+			process_dir(ls, info);
+		}
+	}
+
+/*	
 		while(i < info->argc)
 		{
-//			printf("Does it come here?\n");
+			printf("Does it come here?\n");
 			info->var.temp_i = i;
 			process_dir(ls, info);
 			i++;
 		}
 	}
-
+*/
 }
 
 void	initialize_info_values(t_info *info)
