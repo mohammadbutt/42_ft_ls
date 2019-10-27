@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/26 23:10:59 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/26 23:55:57 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -679,7 +679,7 @@ void	delete_list_dir_path(t_ls **head_ref)
 	*head_ref = NULL;
 }
 
-int		start_recursive_call(t_ls *temp_ls, t_info *info);
+int		start_recursive_call(t_ls *temp_ls, t_info *info, bool skip_first_print);
 t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
 
 
@@ -1174,6 +1174,12 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 ** that has memory on stack.
 ** Ran a few more test. Might be able to store file names on stack.
 ** Each occurence can have upto 26,000 recursivce calls.
+** skip_first_print is used because when valid directory names are entered,
+** they get stored in a linked list: to avoid printing the valid directory
+** name right in the beginning skip_first_print is set to true for the first
+** time, but when it enters second recursion false is passed in.
+** for ./ft_ls -R skip_first_print is set to false because in that case, root
+** files and directories need to be printed.
 */
 
 //int		start_recursive_call(t_ls *temp_ls, t_info *info);
@@ -1183,16 +1189,15 @@ t_ls	*store_inner_dir(char *file_path)
 	char 
 }
 */
-int		start_recursive_call(t_ls *temp_ls, t_info *info)
+int		start_recursive_call(t_ls *temp_ls, t_info *info, bool skip_first_print)
 {
 	t_ls			*inner_dir;
 //	t_ls			*new_inner_dir;
 	struct	stat	meta;
 
 	inner_dir = NULL;	
-	if(temp_ls != NULL)
-		if(temp_ls->file_name)
-			print_file_name(temp_ls);
+	if(temp_ls != NULL && temp_ls->file_name && skip_first_print == false)
+		print_file_name(temp_ls);
 
 //	if(temp_ls != NULL)
 //	{
@@ -1207,7 +1212,7 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 					inner_dir = store_file_recursively(info, temp_ls->file_name);
 					if(inner_dir != NULL)
 					{
-						start_recursive_call(inner_dir, info);
+						start_recursive_call(inner_dir, info, false);
 						delete_list_file_name(&inner_dir);
 //						delete_list(&new_inner_dir);
 //						delete_list(&inner_dir);
@@ -1323,7 +1328,7 @@ void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 	}
 }
 
-int start_recursive_call(t_ls *temp_ls, t_info *info);
+int start_recursive_call(t_ls *temp_ls, t_info *info, bool skip_first_print);
 
 /*
 void files_from_stored_dir_path_recurssion(t_ls *temp_ls, t_info *info)
@@ -1371,8 +1376,7 @@ void process_dir_valid(t_ls *ls, t_info *info)
 	{
 		temp_ls = store_dir_path_recurssion(temp_ls, info);
 		merge_sort(&temp_ls);
-		start_recursive_call(temp_ls, info);
-//		files_from_stored_dir_path_recurssion(temp_ls, info);
+		start_recursive_call(temp_ls, info, true);
 		delete_list_file_name(&temp_ls);
 	}
 /*
@@ -1656,7 +1660,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 			temp_ls = store_root_files(temp_ls, info, ".");
 //			temp_ls = store_file_name(temp_ls, ".");
 //			print_file_name(temp_ls);
-			start_recursive_call(temp_ls, info);
+			start_recursive_call(temp_ls, info, false);
 			delete_list_file_name(&temp_ls);
 //			delete_list(&temp_ls);
 /*
