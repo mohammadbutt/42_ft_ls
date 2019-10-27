@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/26 00:07:19 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/26 20:42:41 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -435,6 +435,10 @@ void process_dir_invalid(t_ls *ls, t_info *info)
 ** included to check if (opendir(file_name_str) == NULL) if it is NULL and it is
 ** 0 it means, the selected item will only be a file.
 */
+
+
+void	delete_list_file_name(t_ls **head_ref);
+
 void process_invalid_file(t_ls *ls, t_info *info)
 {
 	struct stat		meta;
@@ -460,7 +464,7 @@ void process_invalid_file(t_ls *ls, t_info *info)
 	{
 		merge_sort(&ls);
 		print_invalid_file_name(ls);
-		delete_list(&ls);
+		delete_list_file_name(&ls);
 	}
 //	ft_printf("Does it come here\n");
 }
@@ -478,6 +482,7 @@ void process_invalid_file(t_ls *ls, t_info *info)
 **
 ** if((stat(arg_str[i], &meta) == 0) && (S_ISREG(meta.st_mode))); 
 */
+void	delete_list_file_name(t_ls **head_ref);
 
 void	process_valid_file(t_ls *ls, t_info *info)
 {
@@ -506,7 +511,8 @@ void	process_valid_file(t_ls *ls, t_info *info)
 	{
 		merge_sort(&ls);
 		print_file_name(ls);
-		delete_list(&ls);
+//		delete_list(&ls);
+		delete_list_file_name(&ls);
 	}
 }
 
@@ -651,6 +657,22 @@ void delete_list_file_name(t_ls **head_ref)
 	{
 		next_node = current_node->next;
 		free(current_node->file_name);
+		free(current_node);
+		current_node = next_node;
+	}
+	*head_ref = NULL;
+}
+
+void	delete_list_dir_path(t_ls **head_ref)
+{
+	t_ls *current_node;
+	t_ls *next_node;
+
+	current_node = *head_ref;
+	while(current_node != NULL)
+	{
+		next_node = current_node->next;
+		free(current_node->dir_path);
 		free(current_node);
 		current_node = next_node;
 	}
@@ -1283,12 +1305,13 @@ void process_dir_valid(t_ls *ls, t_info *info)
 	temp_ls = NULL;
 //	current_dir_path = info->argv[info->var.i];
 	temp_ls = store_dir_path_without_flag(temp_ls, info);
-	if(flag_status(info) == false)
-	{
+//	if(flag_status(info) == false)
+//	{
 		merge_sort_dir(&temp_ls);
 		get_files_from_stored_dir_path(ls, temp_ls, info);
-		delete_list(&temp_ls);
-	}
+		delete_list_dir_path(&temp_ls);
+//		delete_list(&temp_ls);
+//	}
 /*
 	else if(flag_status(info) == true)
 	{
@@ -1365,8 +1388,13 @@ void	process_dir(t_ls *ls, t_info *info)
 //ft_printf("cp3\n");
 	info->var.i = info->var.temp_i;
 	process_dir_valid(ls, info);
+
+//	if(info->flag.uppercase_r == true)
+//	{
+//		while()
+//	}
 //ft_printf("cp4\n");
-	exit(EXIT_SUCCESS);
+//	exit(EXIT_SUCCESS);
 }
 
 /*
@@ -1565,10 +1593,11 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 			return;
 		}
 
-		ft_printf("|%i|\n", i);
-		ft_printf("|%i|\n", info->argc);
+		ft_printf("i:|%i|\n", i);
+		ft_printf("info->argc:|%i|\n", info->argc);
 		while(i < info->argc)
 		{
+//			printf("Does it come here?\n");
 			info->var.temp_i = i;
 			process_dir(ls, info);
 			i++;
@@ -1745,6 +1774,7 @@ t_ls	*sorted_merge(t_ls *a, t_ls *b)
 	else if(b == NULL)
 		return(a);
 	if(ft_strcmp(a->file_name, b->file_name) <= 0)
+//	if(ft_strcmp(a->file_name, b->file_name) < 0)
 	{
 		result = a;
 		result->next = sorted_merge(a->next, b);
