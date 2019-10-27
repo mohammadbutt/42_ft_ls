@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/26 20:42:14 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/27 00:13:26 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -84,6 +84,7 @@ typedef struct s_info
 	t_ls_var		var;
 	int				argc;
 	char			**argv;
+	bool			skip_print;
 }					t_info;
 
 /*

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/26 23:55:57 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/27 00:12:24 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -679,7 +679,7 @@ void	delete_list_dir_path(t_ls **head_ref)
 	*head_ref = NULL;
 }
 
-int		start_recursive_call(t_ls *temp_ls, t_info *info, bool skip_first_print);
+int		start_recursive_call(t_ls *temp_ls, t_info *info);
 t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
 
 
@@ -856,7 +856,7 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 		ft_permission_denied(path + find_last_slash(path));
 		return(NULL);
 	}
-	else
+	else if(info->skip_print == false)
 		ft_printf("\n./%s:\n", path);
 
 //	int len;
@@ -1189,43 +1189,32 @@ t_ls	*store_inner_dir(char *file_path)
 	char 
 }
 */
-int		start_recursive_call(t_ls *temp_ls, t_info *info, bool skip_first_print)
+int		start_recursive_call(t_ls *temp_ls, t_info *info)
 {
 	t_ls			*inner_dir;
 //	t_ls			*new_inner_dir;
 	struct	stat	meta;
 
 	inner_dir = NULL;	
-	if(temp_ls != NULL && temp_ls->file_name && skip_first_print == false)
+	if(temp_ls != NULL && temp_ls->file_name && info->skip_print == false)
 		print_file_name(temp_ls);
 
 //	if(temp_ls != NULL)
 //	{
-		while(temp_ls != NULL)
+	while(temp_ls != NULL)
+	{
+		if(stat(temp_ls->file_name, &meta) == 0 && S_ISDIR(meta.st_mode))
 		{
-			if(stat(temp_ls->file_name, &meta) == 0)
+			inner_dir = store_file_recursively(info, temp_ls->file_name);
+			info->skip_print = false;
+			if(inner_dir != NULL)
 			{
-				if(S_ISDIR(meta.st_mode))
-				{
-// Problem is like below this
-
-					inner_dir = store_file_recursively(info, temp_ls->file_name);
-					if(inner_dir != NULL)
-					{
-						start_recursive_call(inner_dir, info, false);
-						delete_list_file_name(&inner_dir);
-//						delete_list(&new_inner_dir);
-//						delete_list(&inner_dir);
-//						free_inner_dir(inner_dir);
-					}
-				
-//					temp_ls = temp_ls->next;	
-//					start_recursive_call(temp_ls, info);
-// Segfault above this
-				}
+				start_recursive_call(inner_dir, info);
+				delete_list_file_name(&inner_dir);
 			}
-			temp_ls = temp_ls->next;
 		}
+		temp_ls = temp_ls->next;
+	}
 //	}
 //	while(inner_dir)
 //	{
@@ -1328,7 +1317,7 @@ void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 	}
 }
 
-int start_recursive_call(t_ls *temp_ls, t_info *info, bool skip_first_print);
+int start_recursive_call(t_ls *temp_ls, t_info *info);
 
 /*
 void files_from_stored_dir_path_recurssion(t_ls *temp_ls, t_info *info)
@@ -1376,7 +1365,7 @@ void process_dir_valid(t_ls *ls, t_info *info)
 	{
 		temp_ls = store_dir_path_recurssion(temp_ls, info);
 		merge_sort(&temp_ls);
-		start_recursive_call(temp_ls, info, true);
+		start_recursive_call(temp_ls, info);
 		delete_list_file_name(&temp_ls);
 	}
 /*
@@ -1650,7 +1639,6 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 */
 //		printf("i:|%d|\n", i);
 //		printf("info->argc:|%d|\n", info->argc);
-
 		if(i == 2 && info->argc == 2 && info->flag.uppercase_r == true)
 		{
 //			print_recursively_stored_dir(ls, info, ".");
@@ -1660,7 +1648,8 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 			temp_ls = store_root_files(temp_ls, info, ".");
 //			temp_ls = store_file_name(temp_ls, ".");
 //			print_file_name(temp_ls);
-			start_recursive_call(temp_ls, info, false);
+			info->skip_print = false;
+			start_recursive_call(temp_ls, info);
 			delete_list_file_name(&temp_ls);
 //			delete_list(&temp_ls);
 /*
@@ -1678,6 +1667,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 //
 	if	(i < info->argc)
 		{
+			info->skip_print = true;
 			info->var.temp_i = i;
 			process_dir(ls, info);
 		}
