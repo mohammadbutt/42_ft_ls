@@ -32,7 +32,7 @@ Below is a table and format of `ls -l` and `./ft_ls -l`
 
 |Permission|st_nlink|Owner| 2018_october|st_size|Month|Date|time|Filename|
 |----------|--------|-----|-------------|-------|-----|----|----|--------|
-|          |        |     |             |       |     |    |    |        |
+|          |        |     |             |       |     |    |    |  :checkmark:      |
 
 
 #### Optional/Bonus Flags:
