@@ -22,7 +22,10 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
    - Reverse the order of the sot to get reverse lexical order or the oldest entries.
 5. `-t`
    - Sort by time modified (most recently modified first).
-   
+
+#### `-l`
+
+
 #### Optional/Bonus Flags:
 1. `-u`
    - Use time of last access (not modified, or printed).
