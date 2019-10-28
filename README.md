@@ -30,7 +30,8 @@ First line of the output `ls -l` gives a total. This total is file system blocks
 
 
 |Permission|st_nlink|Owner| 2018_october|st_size|Month|Date|time|Filename|
-|----------|----|---|-----|-------------|-------|-----|----|----|--------|
+|----------|--------|-----|-------------|-------|-----|----|----|--------|
+|          |        |     |             |       |     |    |    |        |
 
 
 #### Optional/Bonus Flags:
