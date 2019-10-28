@@ -30,7 +30,7 @@ First line of the output `ls -l` gives a total. This total is file system blocks
 
 Below is a table and format of `ls -l` and `./ft_ls -l`
 
-|Permission|st_nlink|Owner st_uid| Group Owner st_gid|st_size|month, date, time st_c_timespec.tv_sec|d_name|
+|Permission|st_nlink|Owner st_uid| Group Owner st_gid|st_size|month, date, time st_ctimespec.tv_sec|d_name|
 |----------|--------|------------|-------------------|-------|--------------------------------------|------|
 |          |   ✔    |  ✔         |        ✔          |   ✔   |                                      | ✔    |
 
