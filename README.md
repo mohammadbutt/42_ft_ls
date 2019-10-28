@@ -73,3 +73,4 @@ Below is a table and format of `ls -l author` and `./ft_ls -l author`
 21. [View file permissions in Linux](https://askubuntu.com/questions/528411/how-do-you-view-file-permissions)
 22. [ls -l permissions](https://stackoverflow.com/questions/10323060/printing-file-permissions-like-ls-l-using-stat2-in-c)
 23. [Permission Bits explained](https://www.gnu.org/software/libc/manual/html_node/Permission-Bits.html)
+24. [Linux File type](https://www.gnu.org/software/libc/manual/html_node/Testing-File-Type.html#Testing-File-Type)
