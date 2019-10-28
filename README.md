@@ -26,6 +26,8 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 #### `-l` flag
 -l flag has several elements to it. It's generally called long format and it gives several pieces of information about a file or directory. It displays Unix file type, permissions, number of hardlinks, owner, group, size in bytes, last-modified date and time , and file name.
 
+First line of the output `ls -l` gives a total. This total is file system blocks. Running `ls -s` shows the size of each file and folder, their sum will equal to the sum of total for `ls -l`
+
 
 #### Optional/Bonus Flags:
 1. `-u`
