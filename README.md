@@ -72,3 +72,4 @@ Below is a table and format of `ls -l author` and `./ft_ls -l author`
 20. [Linux print file information format](http://www.hep.by/gnu/findutils/Print-File-Information.html)
 21. [View file permissions in Linux](https://askubuntu.com/questions/528411/how-do-you-view-file-permissions)
 22. [ls -l permissions](https://stackoverflow.com/questions/10323060/printing-file-permissions-like-ls-l-using-stat2-in-c)
+23. [Permission Bits explained](https://www.gnu.org/software/libc/manual/html_node/Permission-Bits.html)
