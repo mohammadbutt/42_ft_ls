@@ -67,3 +67,4 @@ Below is a table and format of `ls -l` and `./ft_ls -l`
 18. [List all directories in a given directory - Works - Stackoverflow](https://stackoverflow.com/questions/1723002/how-to-list-all-subdirectories-in-a-given-directory-in-c)
 19. [A Recursive Directory Scanning program](https://johnloomis.org/ece537/notes/Files/Examples/printdir.html)
 20. [Linux print file information format](http://www.hep.by/gnu/findutils/Print-File-Information.html)
+21. [View file permissions in Linux](https://askubuntu.com/questions/528411/how-do-you-view-file-permissions)
