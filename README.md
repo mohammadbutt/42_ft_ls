@@ -30,9 +30,9 @@ First line of the output `ls -l` gives a total. This total is file system blocks
 
 Below is a table and format of `ls -l` and `./ft_ls -l`
 
-|Permission|st_nlink|Owner| 2018_october|st_size|Month|Date|time|d_name|
-|----------|--------|-----|-------------|-------|-----|----|----|------|
-|          |   ✔    |  ✔  |             |   ✔   |     |    |    | ✔    |
+|Permission|st_nlink|Owner st_uid| Group Owner st_gid|st_size|Month|Date|time|d_name|
+|----------|--------|------------|-------------------|-------|-----|----|----|------|
+|          |   ✔    |  ✔         |        ✔          |   ✔   |     |    |    | ✔    |
 
 
 #### Optional/Bonus Flags:
