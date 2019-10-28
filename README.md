@@ -23,7 +23,8 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 5. `-t`
    - Sort by time modified (most recently modified first).
 
-#### `-l`
+#### `-l` flag
+-l flag has several elements to it. It's generally called long format and it gives several pieces of information about a file or directory. It displays Unix file type, permissions, number of hardlinks, owner, group, size in bytes, last-modified date and time , and file name.
 
 
 #### Optional/Bonus Flags:
