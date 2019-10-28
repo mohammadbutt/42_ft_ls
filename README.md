@@ -28,13 +28,14 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 
 First line of the output `ls -l` gives a total. This total is file system blocks. Running `ls -s` shows the size of each file and folder, their sum will equal to the sum of total for `ls -l`. File system block can be acessed in stat(2).
 
-Below is a table and format of `ls -l` and `./ft_ls -l`
+Below is a table and format of `ls -l author` and `./ft_ls -l author`
 
 
 |Permission|st_nlink|owner id| group owner id |size in bytes |month, date, time  |file name|
 |----------|--------|--------|----------------|--------------|-------------------|---------|
 |Permission|st_nlink|st_uid  |        st_gid  |   st_size    |st_ctimespec.tv_sec|d_name   |
 |          |   ✔    |   ✔    |         ✔      |     ✔        |       ✔           |      ✔  |
+|-rw-r--r--|    1   |  mbutt |   2018_october |       6      | Sep 18 15:35      |  author |
 
 
 #### Optional/Bonus Flags:
