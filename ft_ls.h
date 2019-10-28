@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/27 00:13:26 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/27 19:39:08 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -55,7 +55,8 @@ typedef struct s_ls_flag
 
 typedef struct s_ls
 {
-	struct	stat	meta; // Added
+//	struct	stat	meta; // Added
+	struct stat stat;
 	char 			*file_name;
 	char			*invalid_file_name;
 	char			*dir_path; // Added
@@ -85,6 +86,8 @@ typedef struct s_info
 	int				argc;
 	char			**argv;
 	bool			skip_print;
+	bool			print_path_name;
+	bool			no_dot_slash;
 }					t_info;
 
 /*

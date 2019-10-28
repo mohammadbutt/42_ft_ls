@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/27 17:17:02 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/27 19:43:03 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -465,6 +465,8 @@ void process_invalid_file(t_ls *ls, t_info *info)
 		merge_sort(&ls);
 		print_invalid_file_name(ls);
 		delete_list_file_name(&ls);
+		info->print_path_name = true;
+		info->no_dot_slash = true;
 	}
 //	ft_printf("Does it come here\n");
 }
@@ -503,16 +505,26 @@ void	process_valid_file(t_ls *ls, t_info *info)
 			ls = store_file_name(ls, arg_str[i]);
 		i++;
 	}
-	if(ls != NULL)
-		info->var.new_line = true;
-	else if(ls == NULL)
-		info->var.new_line = false;
+//	if(ls != NULL)
+//	{
+//		info->var.new_line = true;
+//		info->print_path_name = true;
+//		info->no_dot_slash = true;
+//	}
+//	else if(ls == NULL)
+//	{
+//		info->var.new_line = false;
+//		info->print_path_name = false;
+//	}
 	if(ls != NULL)
 	{
 		merge_sort(&ls);
 		print_file_name(ls);
 //		delete_list(&ls);
 		delete_list_file_name(&ls);
+		info->var.new_line = true;
+		info->print_path_name = true;
+		info->no_dot_slash = true;
 	}
 }
 
@@ -851,13 +863,17 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 	new_ls = NULL;
 	if((dir = opendir(path)) == NULL)
 	{
-		ft_printf("\n./%s\n", path);
+		(info->no_dot_slash == false) && (ft_printf("\n./%s\n", path));
+		(info->no_dot_slash == true) && (ft_printf("\n%s\n", path));
 //		ft_permission_denied(path);
 		ft_permission_denied(path + find_last_slash(path));
 		return(NULL);
 	}
-	else if(info->skip_print == false)
-		ft_printf("\n./%s:\n", path);
+	else if(info->skip_print == false || info->print_path_name == true)
+	{
+		(info->no_dot_slash == false) && (ft_printf("\n./%s:\n", path));
+		(info->no_dot_slash == true) && (ft_printf("\n%s:\n", path));
+	}
 
 //	int len;
 //	len = ft_strlen(path) - 1;
@@ -874,10 +890,14 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 
 //	print_stored_file_names(temp_ls);
 
+/*
 	if(dir != NULL)
 		closedir(dir);
 	if(temp_ls)
 		new_ls = append_slash(new_ls, temp_ls, path);
+*/
+	(dir != NULL) && (closedir(dir));
+	(temp_ls) && (new_ls = append_slash(new_ls, temp_ls, path));
 	delete_list_file_name(&temp_ls);
 //	delete_list(&temp_ls);
 //	append_slash(&temp_ls)
@@ -1446,6 +1466,9 @@ void process_dir_valid(t_ls *ls, t_info *info)
 void	process_dir(t_ls *ls, t_info *info)
 {
 //ft_printf("cp1\n");
+	info->var.new_line = false;
+	info->print_path_name = false;
+	info->no_dot_slash = false;
 	info->var.i = info->var.temp_i;
 	process_invalid_file(ls, info);
 
