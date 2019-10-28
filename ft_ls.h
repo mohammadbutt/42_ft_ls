@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/27 19:39:08 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/27 23:50:13 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -18,11 +18,19 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <sys/stat.h>
+#include <pwd.h>
+#include <grp.h>
+#include <time.h>
 
 /*
 ** Notes about headers that are included
-** 
-** <stdbool.h> to have access to bool data type
+**
+** <dirent.h>	to access struct dirent
+** <sys/stat.h>	to access struct stat
+** <stdbool.h>	to access bool data type
+** <pwd.h>		to access getpwuid
+** <grp.h>		to access getgrgid
+** <time.h>		to access ctime
 */
 
 /*

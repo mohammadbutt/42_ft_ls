@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/27 19:43:03 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/28 00:06:55 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1779,7 +1779,7 @@ t_ls *append_list_for_invalid(t_ls *head, char *invalid_dir_path_str)
 ** current directory.
 */
 
-void print_file_name(t_ls *ls)
+void print_file_name_notes(t_ls *ls)
 {
 //	int i;
 	char *str;
@@ -1829,6 +1829,59 @@ void print_file_name(t_ls *ls)
 		ls = ls->next;
 	}
 //	delete_list(&ls);
+}
+/*
+// Original without stat
+void print_file_name(t_ls *ls)
+{
+	char *str;
+
+	while(ls)
+	{
+		str = ls->file_name + ls->slash_index;
+		ft_printf("%s\n", str);
+		ls = ls->next;
+	}
+}
+*/
+
+void get_total_for_dash_l(t_ls *ls)
+{
+	struct stat meta;
+	int total;
+
+	total = 0;
+	while(ls)
+	{
+		stat(ls->file_name, &meta);
+		total = total + meta.st_blocks;
+		ls = ls->next;
+	}
+	ft_printf("total %d\n", total);
+}
+
+void print_file_name(t_ls *ls)
+{
+	struct stat meta;
+	char *str;
+	int total;
+
+	total = 0;
+	
+//	if(info->flag.l == true)
+//		get_total_for_dash_l(ls);
+	while(ls)
+	{
+		str = ls->file_name + ls->slash_index;
+		stat(ls->file_name, &meta);
+//		ft_printf("|%d|", meta.st_size); 5th column
+//		ft_printf("|%d|", meta.st_blocks); Use this to get total
+//		ft_printf("|%s|", getpwuid(meta.st_uid)->pw_name); Owner
+//		ft_printf("|%s|", getgrgid(meta.st_gid)->gr_name); Group_id
+		ft_printf("|%s|", ctime(&meta.st_ctimespec.tv_sec)); // Date time
+		ft_printf("%s\n", str);
+		ls = ls->next;
+	}
 }
 
 
@@ -1951,6 +2004,8 @@ int get_count(t_ls *ls)
 ** And then it will start storing names of all files and folders in a linked
 ** list, and as mentioned earlier, but ignore hidden files which begin with '.'
 */
+
+// Works trying to add stat to this
 void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 {
 	struct dirent	*data;
