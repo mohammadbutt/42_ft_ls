@@ -31,8 +31,13 @@ First line of the output `ls -l` gives a total. This total is file system blocks
 Below is a table and format of `ls -l` and `./ft_ls -l`
 
 |Permission|st_nlink|Owner st_uid| Group Owner st_gid|size in bytes st_size|month, date, time st_ctimespec.tv_sec|d_name|
-|----------|--------|------------|-------------------|--------------------------|--------------------------------------|------|
-|          |   ✔    |  ✔         |        ✔          |   ✔                      |               ✔                      | ✔    |
+|----------|--------|------------|-------------------|---------------------|--------------------------------------|------|
+|          |   ✔    |  ✔         |        ✔          |   ✔                 |               ✔                      | ✔    |
+
+|Permission|st_nlink|Owner id| Group Owner id |size in bytes |month, date, time  |file name|
+|----------|--------|--------|----------------|--------------|-------------------|---------|
+|Permission|st_nlink|st_uid  |        st_gid  |   st_size    |st_ctimespec.tv_sec|d_name   |
+|          |   ✔    |   ✔    |         ✔      |     ✔        |       ✔           |      ✔  |
 
 
 #### Optional/Bonus Flags:
