@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/28 16:38:56 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/28 22:14:44 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1845,7 +1845,7 @@ void print_file_name(t_ls *ls)
 }
 */
 
-void get_total_for_dash_l(t_ls *ls)
+void get_total_for_long_listing(t_ls *ls)
 {
 	struct stat meta;
 	int total;
@@ -1882,6 +1882,130 @@ char permission_file_type(int file_mode)
 
 }
 
+char extended_attributes(struct stat meta, char *file_name)
+{
+	ssize_t xattr;
+	char character;
+
+	xattr = 0;
+	xattr = listxattr(file_name, NULL, 0, XATTR_NOFOLLOW);
+//	(xattr < 0) && (xattr = 0);
+	if(xattr > 0)
+		character = '@';
+	else
+		character = ' ';
+	return(character);
+}
+
+void permission_column(struct stat meta, char *file_name)
+{
+	int i;
+	char extended_character;
+	char permission[12];
+
+	i = 0;
+	extended_character = extended_attributes(meta, file_name);
+	permission[i++] = permission_file_type(meta.st_mode);
+	permission[i++] = (meta.st_mode & S_IRUSR) ? 'r' : '-';
+	permission[i++] = (meta.st_mode & S_IWUSR) ? 'w' : '-';
+	permission[i++] = (meta.st_mode & S_IXUSR) ? 'x' : '-';
+	permission[i++] = (meta.st_mode & S_IRGRP) ? 'r' : '-';
+	permission[i++] = (meta.st_mode & S_IWGRP) ? 'w' : '-';
+	permission[i++] = (meta.st_mode & S_IXGRP) ? 'x' : '-';
+	permission[i++] = (meta.st_mode & S_IROTH) ? 'r' : '-';
+	permission[i++] = (meta.st_mode & S_IWOTH) ? 'w' : '-';
+	permission[i++] = (meta.st_mode & S_IXOTH) ? 'x' : '-';
+	permission[i++] = extended_character;
+	permission[i] = '\0';
+	ft_printf("%s ", permission);
+}
+
+void link_column(struct stat meta, int link_padding)
+{
+//	int link;
+
+//	link = meta.st_nlink;
+/*
+	if(link <= 9)
+		ft_printf(" %d ", link);
+	else if(link >= 10)
+		ft_printf("%d ", link);
+*/
+	ft_printf("%*d ", link_padding, meta.st_nlink);
+}
+
+void owner_and_group_column(struct stat meta)
+{
+	ft_printf("%s  ", getpwuid(meta.st_uid)->pw_name);
+	ft_printf("%s  ", getgrgid(meta.st_gid)->gr_name);
+}
+
+
+void size_column(struct stat meta, int size_padding)
+{
+	ft_printf("%*d ", size_padding, meta.st_size);
+}
+
+/*
+** skip_day_and_space = 4 because time string's first three characters are to
+** represent a day + 1 for space.
+*/
+
+void month_date_time_column(struct stat meta)
+{
+	int skip_day_and_space;
+	char month_date_time[32];
+	
+	skip_day_and_space = 4;
+	ft_strncpy (month_date_time, ctime(&meta.st_ctimespec.tv_sec), 16);
+	ft_printf("%s ", month_date_time + skip_day_and_space);
+}
+
+void long_file_listing(struct stat meta, char *file_name, int link_padding,
+		int size_padding)
+{
+	permission_column(meta, file_name);
+	link_column(meta, link_padding);
+	owner_and_group_column(meta);
+	size_column(meta, size_padding);
+	month_date_time_column(meta);
+}
+
+int get_link_padding(t_ls *ls)
+{
+	struct stat meta;
+	int padding;
+	int numlen;
+
+	padding = 0;
+	numlen = 0;
+	while (ls)
+	{
+		lstat(ls->file_name, &meta);
+		numlen = ft_numlen(meta.st_nlink, 10);
+		(numlen > padding) && (padding = numlen);
+		ls = ls->next;
+	}
+	return(padding);
+}
+
+int get_size_padding(t_ls *ls)
+{
+	struct stat meta;
+	int padding;
+	int numlen;
+
+	padding = 0;
+	numlen = 0;
+	while(ls)
+	{
+		lstat(ls->file_name, &meta);
+		numlen = ft_numlen(meta.st_size, 10);
+		(numlen > padding) && (padding = numlen);
+		ls = ls->next;
+	}
+	return(padding);
+}
 /*
 ** stat(2) is an incredibly powerful functions that provides information about
 ** a filepath. However, it is not good at determining a symbolike link.
@@ -1900,16 +2024,22 @@ void print_file_name(t_ls *ls)
 	total = 0;
 	
 //	if(info->flag.l == true)
-//		get_total_for_dash_l(ls);
-	char permission[12];
-	int i;
-	i = 0;
+	get_total_for_long_listing(ls);
+//	char permission[12];
+//	int i;
+//	i = 0;
 //	int mode;
+	int link_padding;
+	int size_padding;
+
+	link_padding = get_link_padding(ls);
+	size_padding = get_size_padding(ls);
 	while(ls)
 	{
-		i = 0;
+//		i = 0;
 		str = ls->file_name + ls->slash_index;
 		lstat(ls->file_name, &meta);
+		long_file_listing(meta, ls->file_name, link_padding, size_padding);
 //		ft_printf("|%d|", meta.st_size); 5th column
 //		ft_printf("|%d|", meta.st_blocks); Use this to get total
 //		ft_printf("|%s|", getpwuid(meta.st_uid)->pw_name); Owner
@@ -1918,6 +2048,7 @@ void print_file_name(t_ls *ls)
 //		ft_printf((S_ISDIR(meta.st_mode)) ? "d": "-");
 //		permission[i++] = (S_ISDIR(meta.st_mode)) ? 'd' : '-';
 //		mode = meta.st_mode;
+/*
 		permission[i++] = permission_file_type(meta.st_mode);
 		permission[i++] = (meta.st_mode & S_IRUSR) ? 'r' : '-';
 		permission[i++] = (meta.st_mode & S_IWUSR) ? 'w' : '-';
@@ -1928,9 +2059,10 @@ void print_file_name(t_ls *ls)
 		permission[i++] = (meta.st_mode & S_IROTH) ? 'r' : '-';
 		permission[i++] = (meta.st_mode & S_IWOTH) ? 'w' : '-';
 		permission[i++] = (meta.st_mode & S_IXOTH) ? 'x' : '-';
-		permission[i++] = Figure out @ ' ' and '+'
+//		permission[i++] = Figure out @ ' ' and '+'
 		permission[i] = '\0';
 		ft_printf("%s  ", permission);
+*/
 		ft_printf("%s\n", str);
 		ls = ls->next;
 	}

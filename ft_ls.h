@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/27 23:50:13 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/28 21:58:25 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <sys/stat.h>
+#include <sys/xattr.h>
 #include <pwd.h>
 #include <grp.h>
 #include <time.h>
@@ -25,12 +26,13 @@
 /*
 ** Notes about headers that are included
 **
-** <dirent.h>	to access struct dirent
-** <sys/stat.h>	to access struct stat
-** <stdbool.h>	to access bool data type
-** <pwd.h>		to access getpwuid
-** <grp.h>		to access getgrgid
-** <time.h>		to access ctime
+** <dirent.h>		to access struct dirent
+** <sys/stat.h>		to access struct stat
+** <sys/xattr.h> 	to access listxattr
+** <stdbool.h>		to access bool data type
+** <pwd.h>			to access getpwuid
+** <grp.h>			to access getgrgid
+** <time.h>			to access ctime
 */
 
 /*
@@ -69,6 +71,8 @@ typedef struct s_ls
 	char			*invalid_file_name;
 	char			*dir_path; // Added
 	int				slash_index; // Added
+	int				link_padding;
+	int				size_padding;
 	
 	struct	s_ls	*next;
 }					t_ls;
