@@ -75,4 +75,4 @@ Below is a table and format of `ls -l author` and `./ft_ls -l author`
 23. [Permission Bits explained](https://www.gnu.org/software/libc/manual/html_node/Permission-Bits.html)
 24. [Linux File type](https://www.gnu.org/software/libc/manual/html_node/Testing-File-Type.html#Testing-File-Type)
 25. [Determining if a file is a link](https://stackoverflow.com/questions/3984948/how-to-figure-out-if-a-file-is-a-link)
-26. [Extended Attributes @](https://stackoverflow.com/questions/36229265/how-to-get-extended-attributes-of-a-fileunix-c)
+26. [Extended Attributes @ that appears in permission/chmod](https://stackoverflow.com/questions/36229265/how-to-get-extended-attributes-of-a-fileunix-c)
