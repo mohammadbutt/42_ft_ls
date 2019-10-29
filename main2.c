@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/28 00:06:55 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/28 16:38:56 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1860,6 +1860,37 @@ void get_total_for_dash_l(t_ls *ls)
 	ft_printf("total %d\n", total);
 }
 
+char permission_file_type(int file_mode)
+{
+	char type;
+	
+	if(S_ISDIR(file_mode))
+		type = 'd';
+	else if(S_ISCHR(file_mode))
+		type = 'c';
+	else if(S_ISBLK(file_mode))
+		type = 'b';
+	else if(S_ISFIFO(file_mode))
+		type = 'p';
+	else if(S_ISLNK(file_mode))
+		type = 'l';
+	else if(S_ISSOCK(file_mode))
+		type = 's';
+	else
+		type = '-';
+	return(type);
+
+}
+
+/*
+** stat(2) is an incredibly powerful functions that provides information about
+** a filepath. However, it is not good at determining a symbolike link.
+** 
+** In order to know if a file is a symoblik link, lstat(2) is used instead.
+** man 2 stat and man 2 lstat has some really good information and it also
+** mentions members of stat struct family and time struct.
+*/
+
 void print_file_name(t_ls *ls)
 {
 	struct stat meta;
@@ -1870,15 +1901,36 @@ void print_file_name(t_ls *ls)
 	
 //	if(info->flag.l == true)
 //		get_total_for_dash_l(ls);
+	char permission[12];
+	int i;
+	i = 0;
+//	int mode;
 	while(ls)
 	{
+		i = 0;
 		str = ls->file_name + ls->slash_index;
-		stat(ls->file_name, &meta);
+		lstat(ls->file_name, &meta);
 //		ft_printf("|%d|", meta.st_size); 5th column
 //		ft_printf("|%d|", meta.st_blocks); Use this to get total
 //		ft_printf("|%s|", getpwuid(meta.st_uid)->pw_name); Owner
 //		ft_printf("|%s|", getgrgid(meta.st_gid)->gr_name); Group_id
-		ft_printf("|%s|", ctime(&meta.st_ctimespec.tv_sec)); // Date time
+//		ft_printf("|%s|", ctime(&meta.st_ctimespec.tv_sec)); // Date time
+//		ft_printf((S_ISDIR(meta.st_mode)) ? "d": "-");
+//		permission[i++] = (S_ISDIR(meta.st_mode)) ? 'd' : '-';
+//		mode = meta.st_mode;
+		permission[i++] = permission_file_type(meta.st_mode);
+		permission[i++] = (meta.st_mode & S_IRUSR) ? 'r' : '-';
+		permission[i++] = (meta.st_mode & S_IWUSR) ? 'w' : '-';
+		permission[i++] = (meta.st_mode & S_IXUSR) ? 'x' : '-';
+		permission[i++] = (meta.st_mode & S_IRGRP) ? 'r' : '-';
+		permission[i++] = (meta.st_mode & S_IWGRP) ? 'w' : '-';
+		permission[i++] = (meta.st_mode & S_IXGRP) ? 'x' : '-';
+		permission[i++] = (meta.st_mode & S_IROTH) ? 'r' : '-';
+		permission[i++] = (meta.st_mode & S_IWOTH) ? 'w' : '-';
+		permission[i++] = (meta.st_mode & S_IXOTH) ? 'x' : '-';
+		permission[i++] = Figure out @ ' ' and '+'
+		permission[i] = '\0';
+		ft_printf("%s  ", permission);
 		ft_printf("%s\n", str);
 		ls = ls->next;
 	}
