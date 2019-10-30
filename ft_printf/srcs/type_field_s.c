@@ -6,11 +6,12 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 22:57:44 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/16 19:17:26 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/29 23:24:17 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h>
 
 /*
 ** s_append_buffer looks if the minus flag is true or false.
@@ -62,25 +63,40 @@ void	s_append_buffer(t_printf *pr, char *str, int repeat)
 
 void	collect_s(t_printf *pr)
 {
-	char	*temp_s;
-	char	s[pr->width_field + ft_abs(pr->precision_field) + FT_MEMORY];
+	char	*ts;
+//	char	s[pr->width_field + ft_abs(pr->precision_field) + FT_MEMORY];
+	char	*s;
 	int		repeat;
 	int		width;
 	int		precision;
 
-	s[0] = 0;
 	width = pr->width_field;
 	precision = pr->precision_field;
 	repeat = 0;
-	temp_s = va_arg(pr->arguments, char *);
-	if (temp_s == NULL)
-		temp_s = "(null)";
+	ts = va_arg(pr->arguments, char *);
+//	printf("|%s|", ts);
+	s = malloc(sizeof(char) * ((ft_strlen(ts)) + width + 1 + ft_abs(precision)));
+//	if(s != NULL)
+//	{
+//		printf("----------------Memory allocation failed------------\n");
+//		return;
+//	}
+//	printf("|%s|", s);
+
+	s[0] = 0;
+//	width = pr->width_field;
+//	precision = pr->precision_field;
+//	repeat = 0;
+//	ts = va_arg(pr->arguments, char *);
+	if (ts == NULL)
+		ts = "(null)";
 	if (pr->precision_field > 0)
-		ft_strncpy(s, temp_s, pr->precision_field);
+		ft_strncpy(s, ts, pr->precision_field);
 	else if (pr->precision_field == -1)
-		ft_strcpy(s, temp_s);
+		ft_strcpy(s, ts);
 	else if (pr->precision_field == 0)
 		(ft_strcpy(s, NULL));
 	repeat = ft_pad(pr->width_field, ft_strlen(s));
 	s_append_buffer(pr, s, repeat);
+	free(s);
 }

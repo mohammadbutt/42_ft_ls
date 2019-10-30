@@ -6,7 +6,7 @@
 #    By: mbutt <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 15:35:11 by mbutt             #+#    #+#              #
-#    Updated: 2019/10/25 22:18:43 by mbutt            ###   ########.fr        #
+#    Updated: 2019/10/30 15:25:08 by mbutt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ NAME = ft_ls
 CC = gcc
 #CFLAGS = -Wall -Wextra -Werror -I. -c
 CFLAGS = -I. -c -g
+WFLAGS = -Wall -Wextra -Werror
 DEBUG = #-g3 -fsanitize=address -ggdb
 
 SRC = *.c
@@ -34,7 +35,7 @@ all: $(NAME)
 $(NAME):
 	@make -C $(FT_PRINTF_DIR) # runs Makefile for ft_printf
 	@echo "${CYAN}Compiling Makefile for ft_ls...${NC}"
-	@$(CC) $(CFLAGS) $(SRC) # Creates .o(object) files
+	@$(CC) $(CFLAGS) $(WFLAGS) $(SRC) # Creates .o(object) files
 	@$(CC) $(OBJ) $(FT_PRINTF_STATIC) $(DEBUG) -o $(NAME)
 	@echo "${GREEN}Generated ft_ls succesfully.${NC}"	
 

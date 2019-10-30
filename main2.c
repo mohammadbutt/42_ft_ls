@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/28 22:14:44 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/30 15:24:51 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -706,11 +706,19 @@ int find_last_slash(char *file_path_with_slash)
 {
 	int len;
 
+	len = 0;
 	len = ft_strlen(file_path_with_slash) - 1;
+
+	ft_printf("find_last_index|%d|\n", len);
+	if(len <= 0)
+		return(0);
 	while(len)
 	{
 		if(file_path_with_slash[len] == '/')
+		{
+			ft_printf("find_last_index|%d|\n", len + 1);
 			return(len + 1);
+		}
 		len--;
 	}
 	return(0);
@@ -737,7 +745,7 @@ int is_directory(char *parent, char *name)
 	return(1);
 }
 */
-
+/*
 char *is_directory(char *parent, char *name, char final_path[])
 {
 	DIR *dir;
@@ -747,19 +755,19 @@ char *is_directory(char *parent, char *name, char final_path[])
 	i = 0;
 	j = 0;
 //	char final_path[_POSIX_PATH_MAX];
-/*
-	if(parent)
-	{
-		while(parent[j])
-			final_path[i++] = parent[j++];
-		final_path[i++] = '/';
-	}
-	j = 0;
-	if(name)
-		while(name[j])
-			final_path[i++] = name[j++];
-	final_path[i] = '\0';
-*/
+
+//	if(parent)
+//	{
+//		while(parent[j])
+//			final_path[i++] = parent[j++];
+//		final_path[i++] = '/';
+//	}
+//	j = 0;
+//	if(name)
+//		while(name[j])
+//			final_path[i++] = name[j++];
+//	final_path[i] = '\0';
+
 
 // Try to optemize the below
 	ft_strcpy(final_path, parent);
@@ -774,7 +782,7 @@ char *is_directory(char *parent, char *name, char final_path[])
 	return(final_path);
 //	return(1);
 }
-
+*/
 t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 {
 	char full_path[_POSIX_PATH_MAX];
@@ -783,6 +791,7 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 	int j;
 	int temp_i;
 
+//	ft_printf(BGREEN"---------Enters append_slash-------\n", NC);
 //	path_len = ft_strlen(path) - 1; 
 	i = 0;
 	j = 0;
@@ -807,6 +816,7 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 				full_path[i++] = temp_ls->file_name[j++];
 	   	full_path[i] = '\0';
 //		new_ls = store_file_name(new_ls, full_path);
+//		ft_printf("temp_i|%d|\n", temp_i);
 		new_ls = store_file_name_with_index(new_ls, full_path, temp_i);
 		temp_ls = temp_ls->next;
 	}
@@ -897,7 +907,8 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 		new_ls = append_slash(new_ls, temp_ls, path);
 */
 	(dir != NULL) && (closedir(dir));
-	(temp_ls) && (new_ls = append_slash(new_ls, temp_ls, path));
+//	ft_printf(BGREEN"---Enters store_file_recursively---\n");
+	(temp_ls != NULL) && (new_ls = append_slash(new_ls, temp_ls, path));
 	delete_list_file_name(&temp_ls);
 //	delete_list(&temp_ls);
 //	append_slash(&temp_ls)
@@ -1225,6 +1236,7 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 	{
 		if(stat(temp_ls->file_name, &meta) == 0 && S_ISDIR(meta.st_mode))
 		{
+//			ft_printf(BGREEN"----Entering start_recursive_call----\n"NC);
 			inner_dir = store_file_recursively(info, temp_ls->file_name);
 			info->skip_print = false;
 			if(inner_dir != NULL)
@@ -1782,7 +1794,7 @@ t_ls *append_list_for_invalid(t_ls *head, char *invalid_dir_path_str)
 void print_file_name_notes(t_ls *ls)
 {
 //	int i;
-	char *str;
+//	char *str;
 
 
 // Good to run this to see data in raw form
@@ -1845,6 +1857,21 @@ void print_file_name(t_ls *ls)
 }
 */
 
+/*
+** Returns a substring
+*/
+char *ft_substring(char *dest, char *source, int start)
+{
+    int i;
+
+    i = 0;
+    if(source)
+        while(source[start])
+            dest[i++] = source[start++];
+    dest[i] = '\0';
+    return(dest);
+}
+
 void get_total_for_long_listing(t_ls *ls)
 {
 	struct stat meta;
@@ -1882,7 +1909,8 @@ char permission_file_type(int file_mode)
 
 }
 
-char extended_attributes(struct stat meta, char *file_name)
+//char extended_attributes(struct stat meta, char *file_name)
+char 	extended_attributes(char *file_name)
 {
 	ssize_t xattr;
 	char character;
@@ -1904,7 +1932,8 @@ void permission_column(struct stat meta, char *file_name)
 	char permission[12];
 
 	i = 0;
-	extended_character = extended_attributes(meta, file_name);
+//	extended_character = extended_attributes(meta, file_name);
+	extended_character = extended_attributes(file_name);
 	permission[i++] = permission_file_type(meta.st_mode);
 	permission[i++] = (meta.st_mode & S_IRUSR) ? 'r' : '-';
 	permission[i++] = (meta.st_mode & S_IWUSR) ? 'w' : '-';
@@ -1936,8 +1965,16 @@ void link_column(struct stat meta, int link_padding)
 
 void owner_and_group_column(struct stat meta)
 {
+//	char *owner_name;
+//	char *group_name;
+
+//	owner_name = getpwuid(meta.st_uid)->pw_name;
+//	group_name = getgrgid(meta.st_gid)->gr_name;
+
 	ft_printf("%s  ", getpwuid(meta.st_uid)->pw_name);
 	ft_printf("%s  ", getgrgid(meta.st_gid)->gr_name);
+//	printf("%s  ", owner_name);
+//	printf("%s  ", group_name);
 }
 
 
@@ -1954,21 +1991,32 @@ void size_column(struct stat meta, int size_padding)
 void month_date_time_column(struct stat meta)
 {
 	int skip_day_and_space;
-	char month_date_time[32];
+	char *month_date_time;
 	
+	month_date_time = malloc(sizeof(char) * (32));
+	if(month_date_time == NULL)
+		return;
 	skip_day_and_space = 4;
 	ft_strncpy (month_date_time, ctime(&meta.st_ctimespec.tv_sec), 16);
-	ft_printf("%s ", month_date_time + skip_day_and_space);
+	ft_printf("%s ", month_date_time + skip_day_and_space);	
+//	ft_printf("|%s |", month_date_time + skip_day_and_space);
+
+	free(month_date_time);
 }
 
 void long_file_listing(struct stat meta, char *file_name, int link_padding,
 		int size_padding)
 {
 	permission_column(meta, file_name);
+
 	link_column(meta, link_padding);
+
 	owner_and_group_column(meta);
+
 	size_column(meta, size_padding);
+
 	month_date_time_column(meta);
+
 }
 
 int get_link_padding(t_ls *ls)
@@ -1982,7 +2030,7 @@ int get_link_padding(t_ls *ls)
 	while (ls)
 	{
 		lstat(ls->file_name, &meta);
-		numlen = ft_numlen(meta.st_nlink, 10);
+		numlen = ft_numlen(meta.st_nlink, FT_DECIMAL);
 		(numlen > padding) && (padding = numlen);
 		ls = ls->next;
 	}
@@ -2000,7 +2048,7 @@ int get_size_padding(t_ls *ls)
 	while(ls)
 	{
 		lstat(ls->file_name, &meta);
-		numlen = ft_numlen(meta.st_size, 10);
+		numlen = ft_numlen(meta.st_size, FT_DECIMAL);
 		(numlen > padding) && (padding = numlen);
 		ls = ls->next;
 	}
@@ -2021,14 +2069,12 @@ void print_file_name(t_ls *ls)
 	char *str;
 	int total;
 
+	str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
+//	printf("sizeof(%lu)\n", sizeof(str));
 	total = 0;
 	
-//	if(info->flag.l == true)
 	get_total_for_long_listing(ls);
-//	char permission[12];
-//	int i;
-//	i = 0;
-//	int mode;
+
 	int link_padding;
 	int size_padding;
 
@@ -2036,19 +2082,26 @@ void print_file_name(t_ls *ls)
 	size_padding = get_size_padding(ls);
 	while(ls)
 	{
-//		i = 0;
-		str = ls->file_name + ls->slash_index;
+		str[0] = 0;
+		if(ls->slash_index >= 0)
+			ft_substring(str, ls->file_name, ls->slash_index);
+		else if(ls->slash_index < 0)
+			ft_strcpy(str, ls->file_name);
 		lstat(ls->file_name, &meta);
 		long_file_listing(meta, ls->file_name, link_padding, size_padding);
-//		ft_printf("|%d|", meta.st_size); 5th column
-//		ft_printf("|%d|", meta.st_blocks); Use this to get total
-//		ft_printf("|%s|", getpwuid(meta.st_uid)->pw_name); Owner
-//		ft_printf("|%s|", getgrgid(meta.st_gid)->gr_name); Group_id
-//		ft_printf("|%s|", ctime(&meta.st_ctimespec.tv_sec)); // Date time
-//		ft_printf((S_ISDIR(meta.st_mode)) ? "d": "-");
-//		permission[i++] = (S_ISDIR(meta.st_mode)) ? 'd' : '-';
-//		mode = meta.st_mode;
+
+//		ft_printf("------|%s|---\n", ls->file_name);
+
 /*
+		ft_printf("|%d|", meta.st_size); 5th column
+		ft_printf("|%d|", meta.st_blocks); Use this to get total
+		ft_printf("|%s|", getpwuid(meta.st_uid)->pw_name); Owner
+		ft_printf("|%s|", getgrgid(meta.st_gid)->gr_name); Group_id
+		ft_printf("|%s|", ctime(&meta.st_ctimespec.tv_sec)); // Date time
+		ft_printf((S_ISDIR(meta.st_mode)) ? "d": "-");
+		permission[i++] = (S_ISDIR(meta.st_mode)) ? 'd' : '-';
+		mode = meta.st_mode;
+
 		permission[i++] = permission_file_type(meta.st_mode);
 		permission[i++] = (meta.st_mode & S_IRUSR) ? 'r' : '-';
 		permission[i++] = (meta.st_mode & S_IWUSR) ? 'w' : '-';
@@ -2059,13 +2112,13 @@ void print_file_name(t_ls *ls)
 		permission[i++] = (meta.st_mode & S_IROTH) ? 'r' : '-';
 		permission[i++] = (meta.st_mode & S_IWOTH) ? 'w' : '-';
 		permission[i++] = (meta.st_mode & S_IXOTH) ? 'x' : '-';
-//		permission[i++] = Figure out @ ' ' and '+'
 		permission[i] = '\0';
 		ft_printf("%s  ", permission);
 */
 		ft_printf("%s\n", str);
 		ls = ls->next;
 	}
+	free(str);
 }
 
 
@@ -2199,8 +2252,8 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 	dir = opendir(dir_path_str);
 	if(dir == NULL)
 		ft_permission_denied(dir_path_str);
-
 	else if(dir != NULL)
+	{
 		while((data = readdir(dir)) != NULL)
 		{
 			if(info->flag.a == true)
@@ -2208,13 +2261,14 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 			if(data->d_name[0] != '.')
 				ls = store_file_name(ls, data->d_name);
 		}
+	}
 	if(dir != NULL)
+	{
 		closedir(dir);
-
-
-	merge_sort(&ls);
-	print_file_name(ls);
-	delete_list_file_name(&ls);
+		merge_sort(&ls);
+		print_file_name(ls);
+		delete_list_file_name(&ls);
+	}
 //	delete_list(&ls);
 }
 
@@ -2243,13 +2297,15 @@ void	multiple_argument(t_ls *ls, t_info *info, char *dir_path_str)
 			ls = store_file_name(ls, data->d_name);
 	}
 	if(dir != NULL)
+	{
 		closedir(dir);
-	merge_sort(&ls);
+		merge_sort(&ls);
 //	count = get_count(ls); // Will be used later when alligning columns
-	print_file_name(ls);
-	multiple_argument(ls, info, dir_path_str);
+		print_file_name(ls);
+		multiple_argument(ls, info, dir_path_str);
 //	process_dir_valid(ls, info); //
-	delete_list(&ls);
+		delete_list(&ls);
+	}
 
 }
 
