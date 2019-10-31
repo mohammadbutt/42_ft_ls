@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/31 01:25:21 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/31 01:55:40 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2012,22 +2012,26 @@ void size_column(struct stat meta, int size_padding)
 /*
 ** skip_day_and_space = 4 because time string's first three characters are to
 ** represent a day + 1 for space.
+** To calulate time in years, take time in seconds and divide it by 86,400 sec
+** per day and divide it by 365 days, so to convert 1,572,511,743 seconds into
+** years, we would do:
+** (1572511743 seconds / 86400 seconds per day) / 365 days = 49.86 years.
 */
 
 
 void month_date_time_column(struct stat meta)
 {
-	struct timespec ts;
-	time_t t_now;
+	struct timespec last_modified;
+	time_t seconds_since_epoch;
 //	int skip_day_and_space;
 	char *month_date;
 	char *time_or_year;
-	long t_pointer;
+	char *time_str;
 	
 //	ts = NULL;
-	ts = meta.st_mtimespec;
-	t_now = time(&t_now);
-	t_pointer = (long)ctime(&meta.st_mtimespec.tv_sec);
+	last_modified = meta.st_mtimespec;
+	seconds_since_epoch = time(&seconds_since_epoch);
+	time_str = ctime(&meta.st_mtimespec.tv_sec);
 
 	month_date = malloc(sizeof(char) * (8));
 	time_or_year = malloc(sizeof(char) * (8));
@@ -2038,8 +2042,7 @@ void month_date_time_column(struct stat meta)
 	month_date[0] = 0;
 	time_or_year[0] = 0;
 
-	ft_substr_start_end(month_date, ctime(&meta.st_mtimespec.tv_sec), 4, 6);
-	ft_printf("%s ", month_date);
+	ft_printf("%s ", ft_substr_start_end(month_date, time_str, 4, 6));
 
 //	ft_printf(BBLUE"\npointer       |%ld|\n"NC, t_pointer);
 //	ft_printf(BBLUE"\nts.tv_sec     |%ld|\n"NC, ts.tv_sec);
@@ -2051,29 +2054,29 @@ void month_date_time_column(struct stat meta)
 //		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 11, 5);
 //	else if(t_now + SIX_MONTH > ts.tv_sec)
 //		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 20, 4);
-/*
-	ft_printf(BGREEN"\nt_now    |%ld|\n"NC, t_now);
-	ft_printf(BGREEN"\nts.tv_sec|%ld|\n"NC, ts.tv_sec);
-	ft_printf(BGREEN"\ndiff     |%ld|\n"NC,t_now - ts.tv_sec);
-	ft_printf(BGREEN"\nSIX_MONTH|%ld|\n"NC, SIX_MONTH);
-	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, ctime(&meta.st_mtimespec.tv_sec));
-	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, &meta.st_mtimespec.tv_sec);
-	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, &meta.st_mtimespec);
-*/
+
+//	ft_printf(BGREEN"\nt_now    |%ld|\n"NC, seconds_since_epoch);
+//	ft_printf(BGREEN"\nts.tv_sec|%ld|\n"NC, ts.tv_sec);
+//	ft_printf(BGREEN"\ndiff     |%ld|\n"NC,t_now - ts.tv_sec);
+//	ft_printf(BGREEN"\nSIX_MONTH|%ld|\n"NC, SIX_MONTH);
+//	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, ctime(&meta.st_mtimespec.tv_sec));
+//	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, &meta.st_mtimespec.tv_sec);
+//	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, &meta.st_mtimespec);
+
 //	if((t_pointer) >= (SIX_MONTH + t_now))
 //		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 11, 5);
 //	else if((t_pointer) < (SIX_MONTH + t_now))
 //		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 20, 4);
 	
-	if((t_now - ts.tv_sec) < SIX_MONTH)
+	if((seconds_since_epoch - last_modified.tv_sec) < SIX_MONTH)
 	{
-		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 11, 5);	
-		ft_printf("%s ", time_or_year);
+		ft_printf("%s ", ft_substr_start_end(time_or_year, time_str, 11, 5));	
+//		ft_printf("%s ", time_or_year);
 	}
-	else if((t_now - ts.tv_sec) >= SIX_MONTH)
+	else if((seconds_since_epoch - last_modified.tv_sec) >= SIX_MONTH)
 	{
-		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 20, 4);	
-		ft_printf("%5s ", time_or_year);
+		ft_printf("%5s ", ft_substr_start_end(time_or_year, time_str, 20, 4));	
+//		ft_printf("%5s ", time_or_year);
 	}
 
 //	if((t_pointer) >= (SIX_MONTH + t_now))
