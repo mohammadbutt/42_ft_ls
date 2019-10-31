@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/30 15:24:51 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/31 01:25:21 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -709,16 +709,13 @@ int find_last_slash(char *file_path_with_slash)
 	len = 0;
 	len = ft_strlen(file_path_with_slash) - 1;
 
-	ft_printf("find_last_index|%d|\n", len);
+//	ft_printf("find_last_index|%d|\n", len);
 	if(len <= 0)
 		return(0);
 	while(len)
 	{
 		if(file_path_with_slash[len] == '/')
-		{
-			ft_printf("find_last_index|%d|\n", len + 1);
 			return(len + 1);
-		}
 		len--;
 	}
 	return(0);
@@ -1872,6 +1869,23 @@ char *ft_substring(char *dest, char *source, int start)
     return(dest);
 }
 
+char *ft_substr_start_end(char *dest, char *source, int start, int end)
+{
+	int i;
+
+	i = 0;
+
+	if(source)
+		while(end && source[start])
+		{
+			dest[i++] = source[start++];
+			end--;
+		}
+	dest[i] = '\0';
+	return(dest);
+}
+
+
 void get_total_for_long_listing(t_ls *ls)
 {
 	struct stat meta;
@@ -1882,6 +1896,8 @@ void get_total_for_long_listing(t_ls *ls)
 	{
 		stat(ls->file_name, &meta);
 		total = total + meta.st_blocks;
+//		ft_printf(BCYAN"%d "NC, meta.st_blocks); // These need to be removed
+//		ft_printf(BCYAN"%s \n"NC, ls->file_name);  // These need to be removed
 		ls = ls->next;
 	}
 	ft_printf("total %d\n", total);
@@ -1971,8 +1987,18 @@ void owner_and_group_column(struct stat meta)
 //	owner_name = getpwuid(meta.st_uid)->pw_name;
 //	group_name = getgrgid(meta.st_gid)->gr_name;
 
+
+
+//	ft_printf(BGREEN"---Enters owner_and_group_column---\n"NC);
+
 	ft_printf("%s  ", getpwuid(meta.st_uid)->pw_name);
+//	ft_printf(BGREEN"---Got user name in owner_and_group_column---\n"NC);
+
 	ft_printf("%s  ", getgrgid(meta.st_gid)->gr_name);
+//	ft_printf(BGREEN"---Finished with owner_and_group_column---\n"NC);
+
+
+
 //	printf("%s  ", owner_name);
 //	printf("%s  ", group_name);
 }
@@ -1988,6 +2014,102 @@ void size_column(struct stat meta, int size_padding)
 ** represent a day + 1 for space.
 */
 
+
+void month_date_time_column(struct stat meta)
+{
+	struct timespec ts;
+	time_t t_now;
+//	int skip_day_and_space;
+	char *month_date;
+	char *time_or_year;
+	long t_pointer;
+	
+//	ts = NULL;
+	ts = meta.st_mtimespec;
+	t_now = time(&t_now);
+	t_pointer = (long)ctime(&meta.st_mtimespec.tv_sec);
+
+	month_date = malloc(sizeof(char) * (8));
+	time_or_year = malloc(sizeof(char) * (8));
+
+	if(month_date == NULL || time_or_year == NULL)
+		return;
+
+	month_date[0] = 0;
+	time_or_year[0] = 0;
+
+	ft_substr_start_end(month_date, ctime(&meta.st_mtimespec.tv_sec), 4, 6);
+	ft_printf("%s ", month_date);
+
+//	ft_printf(BBLUE"\npointer       |%ld|\n"NC, t_pointer);
+//	ft_printf(BBLUE"\nts.tv_sec     |%ld|\n"NC, ts.tv_sec);
+//	ft_printf(BBLUE"\nnow           |%ld|\n"NC, t_now);
+//	ft_printf(BBLUE"\nadd      |%ld|\n"NC, ts.tv_sec + t_now);
+//	ft_printf(BBLUE"\nSIX_MONTH|%ld|\n"NC, SIX_MONTH);
+
+//	if(t_now + SIX_MONTH <= ts.tv_sec)
+//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 11, 5);
+//	else if(t_now + SIX_MONTH > ts.tv_sec)
+//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 20, 4);
+/*
+	ft_printf(BGREEN"\nt_now    |%ld|\n"NC, t_now);
+	ft_printf(BGREEN"\nts.tv_sec|%ld|\n"NC, ts.tv_sec);
+	ft_printf(BGREEN"\ndiff     |%ld|\n"NC,t_now - ts.tv_sec);
+	ft_printf(BGREEN"\nSIX_MONTH|%ld|\n"NC, SIX_MONTH);
+	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, ctime(&meta.st_mtimespec.tv_sec));
+	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, &meta.st_mtimespec.tv_sec);
+	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, &meta.st_mtimespec);
+*/
+//	if((t_pointer) >= (SIX_MONTH + t_now))
+//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 11, 5);
+//	else if((t_pointer) < (SIX_MONTH + t_now))
+//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 20, 4);
+	
+	if((t_now - ts.tv_sec) < SIX_MONTH)
+	{
+		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 11, 5);	
+		ft_printf("%s ", time_or_year);
+	}
+	else if((t_now - ts.tv_sec) >= SIX_MONTH)
+	{
+		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 20, 4);	
+		ft_printf("%5s ", time_or_year);
+	}
+
+//	if((t_pointer) >= (SIX_MONTH + t_now))
+//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 11, 5);
+//	else if((t_pointer) < (SIX_MONTH + t_now))
+//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 20, 4);
+
+//	skip_day_and_space = 4;
+//	ft_strncpy (month_date_time, ctime(&meta.st_mtimespec.tv_sec), 16);
+// Below can be deleted later - For testing puporses to get time
+
+
+
+//	ft_printf(BBLUE"\natime    |%s|\n"NC, ctime(&meta.st_atimespec.tv_sec));
+//	ft_printf(BBLUE"\nbirthtime|%s|\n"NC, ctime(&meta.st_birthtimespec.tv_sec));
+//	ft_printf(BBLUE"\nctime    |%s|\n"NC, ctime(&meta.st_ctimespec.tv_sec));
+//	ft_printf(BBLUE"\nmtime    |%s|\n"NC, ctime(&meta.st_mtimespec.tv_sec));
+	
+// Above can be deleted later - For testing purposes to get time
+	
+	
+//	ft_printf("%s ", month_date_time + skip_day_and_space);	
+//	ft_printf("|%s |", month_date_time + skip_day_and_space);
+
+
+
+//	ft_printf("%s ", time_or_year);
+
+	free(month_date);
+	free(time_or_year);
+}
+
+
+/*
+// Works trying to improve dates to capture year for files that are older than
+// 6 months
 void month_date_time_column(struct stat meta)
 {
 	int skip_day_and_space;
@@ -1997,12 +2119,31 @@ void month_date_time_column(struct stat meta)
 	if(month_date_time == NULL)
 		return;
 	skip_day_and_space = 4;
-	ft_strncpy (month_date_time, ctime(&meta.st_ctimespec.tv_sec), 16);
+	ft_strncpy (month_date_time, ctime(&meta.st_mtimespec.tv_sec), 16);
+
+// Below can be deleted later - For testing puporses to get time
+
+
+	ft_printf(BBLUE"\natime    |%ld|\n"NC, &meta.st_atimespec.tv_sec);
+	ft_printf(BBLUE"\nbirthtime|%ld|\n"NC, &meta.st_birthtimespec.tv_sec);
+	ft_printf(BBLUE"\nctime    |%ld|\n"NC, &meta.st_ctimespec.tv_sec);
+	ft_printf(BBLUE"\nmtime    |%ld|\n"NC, &meta.st_mtimespec.tv_sec);
+
+//	ft_printf(BBLUE"\natime    |%ld|\n"NC, ctime(&meta.st_atimespec.tv_sec));
+//	ft_printf(BBLUE"\nbirthtime|%ld|\n"NC, ctime(&meta.st_birthtimespec.tv_sec));
+//	ft_printf(BBLUE"\nctime    |%ld|\n"NC, ctime(&meta.st_ctimespec.tv_sec));
+//	ft_printf(BBLUE"\nmtime    |%ld|\n"NC, ctime(&meta.st_mtimespec.tv_sec));
+	
+// Above can be deleted later - For testing purposes to get time
+	
+	
 	ft_printf("%s ", month_date_time + skip_day_and_space);	
 //	ft_printf("|%s |", month_date_time + skip_day_and_space);
 
 	free(month_date_time);
 }
+*/
+
 
 void long_file_listing(struct stat meta, char *file_name, int link_padding,
 		int size_padding)
@@ -2067,28 +2208,33 @@ void print_file_name(t_ls *ls)
 {
 	struct stat meta;
 	char *str;
-	int total;
-
-	str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
-//	printf("sizeof(%lu)\n", sizeof(str));
-	total = 0;
-	
-	get_total_for_long_listing(ls);
-
+//	char *link_str;
 	int link_padding;
 	int size_padding;
 
+	str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
+//	link_str = malloc(sizeof(char) * (_POSIX_PATH_MAX + 1));
+//	printf("sizeof(%lu)\n", sizeof(str));
+	
+	get_total_for_long_listing(ls);
 	link_padding = get_link_padding(ls);
 	size_padding = get_size_padding(ls);
 	while(ls)
 	{
 		str[0] = 0;
+//		link_str[0] = 0;
 		if(ls->slash_index >= 0)
 			ft_substring(str, ls->file_name, ls->slash_index);
 		else if(ls->slash_index < 0)
 			ft_strcpy(str, ls->file_name);
+
 		lstat(ls->file_name, &meta);
 		long_file_listing(meta, ls->file_name, link_padding, size_padding);
+
+//		lstat(ls->file_name, &ls->stat);
+//		long_file_listing(ls->stat, ls->file_name, link_padding, size_padding);
+
+
 
 //		ft_printf("------|%s|---\n", ls->file_name);
 
@@ -2115,9 +2261,18 @@ void print_file_name(t_ls *ls)
 		permission[i] = '\0';
 		ft_printf("%s  ", permission);
 */
-		ft_printf("%s\n", str);
+//		if(S_ISLNK(meta.st_mode))
+//		{
+//			readlink(ls->file_name, link_str, _POSIX_PATH_MAX + 1);
+//			ft_printf("%s -> %s\n", str, link_str);
+//		}
+//		else
+//		{
+				ft_printf("%s\n", str);
+//		}
 		ls = ls->next;
 	}
+//	free(link_str);
 	free(str);
 }
 

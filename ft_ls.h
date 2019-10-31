@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/28 21:58:25 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/30 22:22:19 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -39,11 +39,19 @@
 ** Macros----------------------------------------------------------------------
 ** FT_PATH_MAX is equal to 1024 because macro __DARWIN_MAXPATHLEN and PATH_MAX
 ** can hold upto 1024 characters.
+** To get 6 months in seconds:
+** Divide 365 days / 2 = 182.5 days = 6 months
+** multiply 182 by 86,400 because there are 86,400 seconds in one day, which
+** is equal to 15,768,000.
+**
+** Another way to calculate this is to:
+** multiply 60 seconds with 60 minutes with 24 hours = 86,400 seconds in a day
+** multiply 86,400 with 182.5 days(6 months) is equal to 15,768,000.
 */
 
 # define VALID_FLAG "latrR"
 # define FT_PATH_MAX 1024
-
+# define SIX_MONTH 15768000
 
 /*
 ** Structs---------------------------------------------------------------------
