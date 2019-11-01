@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/31 18:08:45 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/31 18:41:54 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2151,16 +2151,23 @@ int get_size_padding(t_ls *ls)
 ** mentions members of stat struct family and time struct.
 */
 
+void file_is_link(char *link_str, char *ls_file_name, char *str)
+{
+	ft_bzero(link_str, _POSIX_PATH_MAX);
+	readlink(ls_file_name, link_str, _POSIX_PATH_MAX);
+	ft_printf("%s -> %s\n", str, link_str);
+}
+
 void print_file_name(t_ls *ls)
 {
 	struct stat meta;
 	char *str;
-//	char *link_str;
+	char *link_str;
 	int link_padding;
 	int size_padding;
 
 	str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
-//	link_str = malloc(sizeof(char) * (_POSIX_PATH_MAX + 1));
+	link_str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
 //	printf("sizeof(%lu)\n", sizeof(str));
 	
 	get_total_for_long_listing(ls);
@@ -2208,18 +2215,18 @@ void print_file_name(t_ls *ls)
 		permission[i] = '\0';
 		ft_printf("%s  ", permission);
 */
-//		if(S_ISLNK(meta.st_mode))
-//		{
-//			readlink(ls->file_name, link_str, _POSIX_PATH_MAX + 1);
+		if(S_ISLNK(meta.st_mode))
+		{
+			file_is_link(link_str, ls->file_name, str);
+//			ft_bzero(link_str, _POSIX_PATH_MAX);
+//			readlink(ls->file_name, link_str, _POSIX_PATH_MAX);
 //			ft_printf("%s -> %s\n", str, link_str);
-//		}
-//		else
-//		{
+		}
+		else
 				ft_printf("%s\n", str);
-//		}
 		ls = ls->next;
 	}
-//	free(link_str);
+	free(link_str);
 	free(str);
 }
 
