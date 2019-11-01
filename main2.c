@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/31 01:55:40 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/31 18:08:45 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,8 +316,6 @@ t_ls	*store_file_name_with_index(t_ls *ls, char *file_name, int index)
 		ls = append_with_index(ls, file_name, index);
 	return(ls);
 }
-
-
 
 // Above functions are created to handle dir -R flag
 
@@ -782,21 +780,23 @@ char *is_directory(char *parent, char *name, char final_path[])
 */
 t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 {
-	char full_path[_POSIX_PATH_MAX];
+//	char full_path[_POSIX_PATH_MAX];
 //	int	path_len;
+	char *full_path;
 	int i;
 	int j;
 	int temp_i;
 
 //	ft_printf(BGREEN"---------Enters append_slash-------\n", NC);
-//	path_len = ft_strlen(path) - 1; 
+//	path_len = ft_strlen(path) - 1;
+	full_path = malloc(sizeof(char) * (_POSIX_PATH_MAX));
 	i = 0;
 	j = 0;
 	temp_i = 0;
 //	new_ls->slash_index = 0;
 //	ft_strcpy(full_path, path);
 //	(full_path[path_len] != '/') && (ft_strcat(full_path, "/"));
-	
+	full_path[0] = 0;
 	if(path)
 		while(path[j])
 			full_path[i++] = path[j++];
@@ -842,6 +842,8 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 				full_path[i]
 	}
 */
+//	if (full_path != NULL)
+	free(full_path);
 	return(new_ls);
 }
 
@@ -1990,11 +1992,12 @@ void owner_and_group_column(struct stat meta)
 
 
 //	ft_printf(BGREEN"---Enters owner_and_group_column---\n"NC);
-
-	ft_printf("%s  ", getpwuid(meta.st_uid)->pw_name);
+	
+	if(getpwuid(meta.st_uid)->pw_name)
+		ft_printf("%s  ", getpwuid(meta.st_uid)->pw_name);
 //	ft_printf(BGREEN"---Got user name in owner_and_group_column---\n"NC);
-
-	ft_printf("%s  ", getgrgid(meta.st_gid)->gr_name);
+	if(getgrgid(meta.st_gid)->gr_name)
+		ft_printf("%s  ", getgrgid(meta.st_gid)->gr_name);
 //	ft_printf(BGREEN"---Finished with owner_and_group_column---\n"NC);
 
 
@@ -2023,88 +2026,33 @@ void month_date_time_column(struct stat meta)
 {
 	struct timespec last_modified;
 	time_t seconds_since_epoch;
-//	int skip_day_and_space;
 	char *month_date;
 	char *time_or_year;
 	char *time_str;
 	
-//	ts = NULL;
 	last_modified = meta.st_mtimespec;
 	seconds_since_epoch = time(&seconds_since_epoch);
 	time_str = ctime(&meta.st_mtimespec.tv_sec);
-
 	month_date = malloc(sizeof(char) * (8));
 	time_or_year = malloc(sizeof(char) * (8));
-
 	if(month_date == NULL || time_or_year == NULL)
 		return;
-
 	month_date[0] = 0;
 	time_or_year[0] = 0;
-
-	ft_printf("%s ", ft_substr_start_end(month_date, time_str, 4, 6));
-
-//	ft_printf(BBLUE"\npointer       |%ld|\n"NC, t_pointer);
-//	ft_printf(BBLUE"\nts.tv_sec     |%ld|\n"NC, ts.tv_sec);
-//	ft_printf(BBLUE"\nnow           |%ld|\n"NC, t_now);
-//	ft_printf(BBLUE"\nadd      |%ld|\n"NC, ts.tv_sec + t_now);
-//	ft_printf(BBLUE"\nSIX_MONTH|%ld|\n"NC, SIX_MONTH);
-
-//	if(t_now + SIX_MONTH <= ts.tv_sec)
-//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 11, 5);
-//	else if(t_now + SIX_MONTH > ts.tv_sec)
-//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 20, 4);
-
-//	ft_printf(BGREEN"\nt_now    |%ld|\n"NC, seconds_since_epoch);
-//	ft_printf(BGREEN"\nts.tv_sec|%ld|\n"NC, ts.tv_sec);
-//	ft_printf(BGREEN"\ndiff     |%ld|\n"NC,t_now - ts.tv_sec);
-//	ft_printf(BGREEN"\nSIX_MONTH|%ld|\n"NC, SIX_MONTH);
-//	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, ctime(&meta.st_mtimespec.tv_sec));
-//	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, &meta.st_mtimespec.tv_sec);
-//	ft_printf(BGREEN"\nmeta     |%ld|\n"NC, &meta.st_mtimespec);
-
-//	if((t_pointer) >= (SIX_MONTH + t_now))
-//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 11, 5);
-//	else if((t_pointer) < (SIX_MONTH + t_now))
-//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 20, 4);
-	
-	if((seconds_since_epoch - last_modified.tv_sec) < SIX_MONTH)
-	{
-		ft_printf("%s ", ft_substr_start_end(time_or_year, time_str, 11, 5));	
-//		ft_printf("%s ", time_or_year);
-	}
-	else if((seconds_since_epoch - last_modified.tv_sec) >= SIX_MONTH)
-	{
-		ft_printf("%5s ", ft_substr_start_end(time_or_year, time_str, 20, 4));	
-//		ft_printf("%5s ", time_or_year);
-	}
-
-//	if((t_pointer) >= (SIX_MONTH + t_now))
-//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 11, 5);
-//	else if((t_pointer) < (SIX_MONTH + t_now))
-//		ft_substr_start_end(time_or_year, ctime(&meta.st_mtimespec.tv_sec), 20, 4);
-
-//	skip_day_and_space = 4;
-//	ft_strncpy (month_date_time, ctime(&meta.st_mtimespec.tv_sec), 16);
-// Below can be deleted later - For testing puporses to get time
-
-
-
+// Just to see what dates are printed below
 //	ft_printf(BBLUE"\natime    |%s|\n"NC, ctime(&meta.st_atimespec.tv_sec));
-//	ft_printf(BBLUE"\nbirthtime|%s|\n"NC, ctime(&meta.st_birthtimespec.tv_sec));
-//	ft_printf(BBLUE"\nctime    |%s|\n"NC, ctime(&meta.st_ctimespec.tv_sec));
-//	ft_printf(BBLUE"\nmtime    |%s|\n"NC, ctime(&meta.st_mtimespec.tv_sec));
-	
-// Above can be deleted later - For testing purposes to get time
-	
-	
-//	ft_printf("%s ", month_date_time + skip_day_and_space);	
-//	ft_printf("|%s |", month_date_time + skip_day_and_space);
+//	ft_printf(BBLUE"birthtime|%s|\n"NC, ctime(&meta.st_birthtimespec.tv_sec));
+//	ft_printf(BBLUE"ctime    |%s|\n"NC, ctime(&meta.st_ctimespec.tv_sec));
+//	ft_printf(BBLUE"mtime    |%s|\n"NC, ctime(&meta.st_mtimespec.tv_sec));
 
 
+// Just to see what dates are printed above
 
-//	ft_printf("%s ", time_or_year);
-
+	ft_printf("%s ", ft_substr_start_end(month_date, time_str, 4, 6));	
+	if((seconds_since_epoch - last_modified.tv_sec) < SIX_MONTH)
+		ft_printf("%s ", ft_substr_start_end(time_or_year, time_str, 11, 5));
+	else if((seconds_since_epoch - last_modified.tv_sec) >= SIX_MONTH)
+		ft_printf("%5s ", ft_substr_start_end(time_or_year, time_str, 20, 4));
 	free(month_date);
 	free(time_or_year);
 }
@@ -2152,13 +2100,9 @@ void long_file_listing(struct stat meta, char *file_name, int link_padding,
 		int size_padding)
 {
 	permission_column(meta, file_name);
-
 	link_column(meta, link_padding);
-
 	owner_and_group_column(meta);
-
 	size_column(meta, size_padding);
-
 	month_date_time_column(meta);
 
 }
