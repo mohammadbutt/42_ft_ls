@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/31 18:41:54 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/31 21:32:48 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2142,6 +2142,40 @@ int get_size_padding(t_ls *ls)
 	}
 	return(padding);
 }
+
+int find_max(int num1, int num2)
+{
+	if(num1 > num2)
+		return(num1);
+	return(num2);
+}
+
+void padding_and_blocks_total(t_ls *ls, int *pad_nlink, int *pad_size)
+{
+	struct stat meta;
+	int numlen_nlink;
+	int numlen_size;
+	int total;
+
+	numlen_nlink = 0;
+	numlen_size = 0;
+	total = 0;
+	while(ls)
+	{
+		stat(ls->file_name, &meta);
+		total = total + meta.st_blocks;
+//		nlink_numlen = ft_numlen(meta.st_nlink, FT_DECIMAL);
+//		(nlink_numlen > nlink_pad) && (nlink_pad = nlink_numlen);
+		*pad_nlink = find_max(ft_numlen(meta.st_nlink, FT_DECIMAL), *pad_nlink);
+		*pad_size = find_max(ft_numlen(meta.st_size, FT_DECIMAL), *pad_size);
+//		size_numlen = ft_numlen(meta.st_size, FT_DECIMAL);
+//		(size_numlen > size_pad) && (size_pad = size_numlen);
+
+		ls = ls->next;
+	}
+	ft_printf("total %d\n", total);
+}
+
 /*
 ** stat(2) is an incredibly powerful functions that provides information about
 ** a filepath. However, it is not good at determining a symbolike link.
@@ -2160,19 +2194,30 @@ void file_is_link(char *link_str, char *ls_file_name, char *str)
 
 void print_file_name(t_ls *ls)
 {
+//	t_info		info;
 	struct stat meta;
 	char *str;
 	char *link_str;
 	int link_padding;
 	int size_padding;
+	
+//	info.pad_size = 0;
+//	info.pad_nlink = 0;
+//	info.total_blocks = 0;
 
 	str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
 	link_str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
 //	printf("sizeof(%lu)\n", sizeof(str));
 	
-	get_total_for_long_listing(ls);
-	link_padding = get_link_padding(ls);
-	size_padding = get_size_padding(ls);
+	link_padding = 0;
+	size_padding = 0;
+	padding_and_blocks_total(ls, &link_padding, &size_padding);
+//	ft_printf("nlink_padding:|%d|\n", link_padding);
+//	ft_printf("size_padding:|%d|\n", size_padding);
+
+//	get_total_for_long_listing(ls);
+//	link_padding = get_link_padding(ls);
+//	size_padding = get_size_padding(ls);
 	while(ls)
 	{
 		str[0] = 0;
@@ -2468,7 +2513,9 @@ int main(int argc, char *argv[])
 	ls = NULL;
 	info.argc = argc;
 	info.argv = ft_double_strdup(argc, argv);
-
+//	info.pad_size = 0;
+//	info.pad_nlink = 0;
+//	info.total_blocks = 0;
 /*
 // To test stored string
 	int i = 0;

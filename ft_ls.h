@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/31 01:55:54 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/10/31 20:38:48 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -108,6 +108,9 @@ typedef struct s_info
 	bool			skip_print;
 	bool			print_path_name;
 	bool			no_dot_slash;
+//	int				pad_size;
+//	int				pad_nlink;
+//	int				total_blocks;
 }					t_info;
 
 /*
