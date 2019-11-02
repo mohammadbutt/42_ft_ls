@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/01 22:21:49 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/01 22:35:11 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2014,7 +2014,7 @@ void permission_column(struct stat meta, char *file_name)
 	ft_printf("%s ", permission);
 }
 
-void link_column(struct stat meta, int link_padding)
+void link_column(struct stat meta, int pad_nlink)
 {
 //	int link;
 
@@ -2025,7 +2025,7 @@ void link_column(struct stat meta, int link_padding)
 	else if(link >= 10)
 		ft_printf("%d ", link);
 */
-	ft_printf("%*d ", link_padding, meta.st_nlink);
+	ft_printf("%*d ", pad_nlink, meta.st_nlink);
 }
 
 void owner_and_group_column(struct stat meta)
@@ -2054,9 +2054,9 @@ void owner_and_group_column(struct stat meta)
 }
 
 
-void size_column(struct stat meta, int size_padding)
+void size_column(struct stat meta, int pad_size)
 {
-	ft_printf("%*d ", size_padding, meta.st_size);
+	ft_printf("%*d ", pad_size, meta.st_size);
 }
 
 /*
@@ -2143,13 +2143,21 @@ void month_date_time_column(struct stat meta)
 */
 
 
-void long_file_listing(struct stat meta, char *file_name, int link_padding,
-		int size_padding)
+//void long_file_listing(struct stat meta, char *file_name, int link_padding,
+//		int size_padding)
+void	long_file_listing(struct stat meta, char *file_name, t_info *info)
 {
+//	int pad_size;
+//	int pad_nlink;
+
+//	pad_size = info->pad_size;
+
 	permission_column(meta, file_name);
-	link_column(meta, link_padding);
+	link_column(meta, info->pad_nlink);
+//	link_column(meta, link_padding);
 	owner_and_group_column(meta);
-	size_column(meta, size_padding);
+//	size_column(meta, size_padding);
+	size_column(meta, info->pad_size);
 	month_date_time_column(meta);
 
 }
@@ -2245,20 +2253,21 @@ void print_file_name(t_ls *ls, t_info *info)
 	struct stat meta;
 	char *str;
 	char *link_str;
-	int link_padding;
-	int size_padding;
+//	int link_padding;
+//	int size_padding;
 	
 //	info.pad_size = 0;
 //	info.pad_nlink = 0;
 //	info.total_blocks = 0;
-	link_padding = 0;
-	size_padding = 0;
+//	link_padding = 0;
+//	size_padding = 0;
 //	ft_printf("slash_index: |%d|\n", ls->slash_index);
 	str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
 	if(info->flag.l == true)
 	{
 		link_str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
-		padding_and_blocks_total(ls, &link_padding, &size_padding);
+//		padding_and_blocks_total(ls, &link_padding, &size_padding);
+		padding_and_blocks_total(ls, &info->pad_nlink, &info->pad_size);
 	}
 //	ft_printf("nlink_padding:|%d|\n", link_padding);
 //	ft_printf("size_padding:|%d|\n", size_padding);
@@ -2281,7 +2290,9 @@ void print_file_name(t_ls *ls, t_info *info)
 		if(info->flag.l == true)
 		{
 			lstat(ls->file_name, &meta);
-			long_file_listing(meta, ls->file_name, link_padding, size_padding);
+//			long_file_listing(meta, ls->file_name, link_padding, size_padding);
+//			long_file_listing(meta, ls->file_name, info->pad_nlink, info->pad_size);
+			long_file_listing(meta, ls->file_name, info);
 		}
 
 //		lstat(ls->file_name, &ls->stat);
