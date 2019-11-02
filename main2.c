@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/01 22:14:00 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/01 22:21:49 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2493,13 +2493,14 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 //		if(info->flag.l == true && ls != NULL)
 		if(ls != NULL)
 			new_ls = append_slash(new_ls, ls, dir_path_str);
+		delete_list_file_name(&ls);
 		print_file_name(new_ls, info);
+		delete_list_file_name(&new_ls);
 
 //		print_file_name(ls, info); // Commenting this to append slash for -l flag
 //		delete_list(&ls);
 //		if(ls && ls->file_name)
 //			delete_list(&ls);
-//			delete_list_file_name(&ls);
 	}
 //	delete_list(&ls);
 }
