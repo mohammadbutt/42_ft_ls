@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/01 22:35:11 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/01 23:15:28 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -887,8 +887,11 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 	}
 	else if(info->skip_print == false || info->print_path_name == true)
 	{
-		if(ft_strcmp(path, ".") && ft_strcmp(path, ".."))
+//		if(ft_strcmp(path, ".") && ft_strcmp(path, ".."))
+//		{
+		if(info->flag.a == false && path[0] != '.')
 		{
+//			ft_printf(BRED"\n|%s|\n"NC, path);
 			(info->no_dot_slash == false) && (ft_printf("\n./%s:\n", path));
 			(info->no_dot_slash == true) && (ft_printf("\n%s:\n", path));
 		}
@@ -1250,17 +1253,18 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 //			ft_printf(BGREEN"----Entering start_recursive_call----\n"NC);
 			if(info->flag.a == true)
 			{
-				if(ft_strcmp(temp_ls->file_name, ".") && ft_strcmp(temp_ls->file_name, ".."))
-				{
+//				if(ft_strcmp(temp_ls->file_name, ".") && ft_strcmp(temp_ls->file_name, ".."))
+//				{
 					inner_dir = store_file_recursively(info, temp_ls->file_name);
 					info->skip_print = false;
-				}
+//				}
 			}
 			else if(info->flag.a == false && temp_ls->file_name[0] != '.')
 			{
 				inner_dir = store_file_recursively(info, temp_ls->file_name);
 				info->skip_print = false;
 			}
+//			ft_printf(BRED"|%s|\n"NC, temp_ls->file_name);
 			if(inner_dir != NULL)
 			{
 				start_recursive_call(inner_dir, info);
@@ -1502,7 +1506,7 @@ void	process_dir(t_ls *ls, t_info *info)
 //ft_printf("cp1\n");
 	info->var.new_line = false;
 	info->print_path_name = false;
-	info->no_dot_slash = false;
+//	info->no_dot_slash = false;
 	info->var.i = info->var.temp_i;
 	process_invalid_file(ls, info);
 
@@ -1681,7 +1685,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 //		ft_printf("|%d|\n", info->argc);
 		if(i == info->argc && (flag_status(info) == false))
 		{
-			ft_printf("|%d|\n", info->flag.a);
+//			ft_printf("|%d|\n", info->flag.a);
 			single_argument(ls, info, ".");
 		}
 //		else if(i == 2 && info->argc == 2 && info->flag.upp)
@@ -1746,8 +1750,9 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 // Put it back on if something breaks
 	if	(i < info->argc)
 		{
-//			ft_printf(BRED"\n----Comes inside this if statement---\n"NC);
+//			ft_printf(BGREEN"\n----Comes inside this if statement---\n"NC);
 			info->skip_print = true;
+			info->no_dot_slash = true;
 			info->var.temp_i = i;
 			process_dir(ls, info);
 		}
