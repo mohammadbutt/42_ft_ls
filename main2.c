@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/01 23:15:28 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/02 21:30:13 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1717,7 +1717,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 		{
 			if(info->flag.a == true && info->flag.uppercase_r == false)
 				single_argument(ls, info, ".");
-			else if(info->flag.l == true)
+			else if(info->flag.l == true && info->flag.uppercase_r == false)
 				single_argument(ls, info, ".");
 
 			else if(i == 2 && info->argc == 2 && info->flag.uppercase_r == true)
@@ -2261,8 +2261,8 @@ void print_file_name(t_ls *ls, t_info *info)
 //	int link_padding;
 //	int size_padding;
 	
-//	info.pad_size = 0;
-//	info.pad_nlink = 0;
+	info->pad_size = 0;
+	info->pad_nlink = 0;
 //	info.total_blocks = 0;
 //	link_padding = 0;
 //	size_padding = 0;
