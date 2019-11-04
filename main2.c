@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/03 16:28:28 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/03 16:36:35 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1750,7 +1750,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 		//		single_argument(ls, info, ".");
 			}
 
-			else if(i == 2 && info->argc == 2 && info->flag.uppercase_r == true)
+			else if(info->flag.uppercase_r == true)
 				{
 //					print_recursively_stored_dir(ls, info, ".");
 //					temp_ls = store_root_files(temp_ls, info, ".");
