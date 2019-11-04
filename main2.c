@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/04 14:18:03 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/04 14:51:22 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,6 +221,28 @@ t_ls *sorted_merge_dir(t_ls *a, t_ls *b)
 	return(result);
 }
 
+t_ls *sorted_merge_dir_reverse(t_ls *a, t_ls *b)
+{
+	t_ls *result;
+
+	result = NULL;
+	if(a == NULL)
+		return(b);
+	else if(b == NULL)
+		return(a);
+	if(ft_strcmp(b->dir_path, a->dir_path) > 0)
+	{
+		result = b;
+		result->next = sorted_merge_dir_reverse(a, b->next);
+	}
+	else
+	{
+		result = a;
+		result->next = sorted_merge_dir_reverse(a->next, b);
+	}
+	return(result);
+}
+
 void	merge_sort_dir(t_ls **head_ref)
 {
 	t_ls *head;
@@ -233,7 +255,8 @@ void	merge_sort_dir(t_ls **head_ref)
 	front_back_split(head, &a, &b);
 	merge_sort_dir(&a);
 	merge_sort_dir(&b);
-	*head_ref = sorted_merge_dir(a, b);
+//	*head_ref = sorted_merge_dir(a, b);
+	*head_ref = sorted_merge_dir_reverse(a, b);
 }
 
 t_ls	*store_valid_dir(t_ls *ls, char *dir_path_str)
@@ -2570,6 +2593,30 @@ t_ls	*sorted_merge(t_ls *a, t_ls *b)
 	return(result);
 }
 
+t_ls *sorted_merge_reverse(t_ls *a, t_ls *b)
+{
+	t_ls *result;
+
+	result = NULL;
+	if(a == NULL)
+		return(b);
+	else if(b == NULL)
+		return(a);
+	if(ft_strcmp(b->file_name, a->file_name) > 0)
+	{
+		result = b;
+		result->next = sorted_merge_reverse(a, b->next);
+
+	}
+	else
+	{
+		result = a;
+		result->next = sorted_merge_reverse(a->next, b);
+
+	}
+	return(result);
+}
+
 void front_back_split(t_ls *source, t_ls **front_ref, t_ls **back_ref)
 {
 	t_ls *fast;
@@ -2603,7 +2650,8 @@ void	merge_sort(t_ls **head_ref)
 	front_back_split(head, &a, &b);
 	merge_sort(&a);
 	merge_sort(&b);
-	*head_ref = sorted_merge(a, b);
+//	*head_ref = sorted_merge(a, b);
+	*head_ref = sorted_merge_reverse(a, b);
 }
 
 /*
@@ -2832,7 +2880,7 @@ int main(int argc, char *argv[])
 		delete_list_file_name(&ls);
 //		free(ls);	
 //	free_double_array(info.argv);
-	while(1);
+//	while(1);
 
 	return(0);
 
