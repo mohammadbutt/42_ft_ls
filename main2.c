@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/02 21:30:13 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/03 16:28:28 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -788,7 +788,7 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 	char *full_path;
 	int i;
 	int j;
-	int temp_i;
+	int reset_i;
 
 //	ft_printf(BGREEN"---------Enters append_slash-------\n", NC);
 //	path_len = ft_strlen(path) - 1;
@@ -798,20 +798,23 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 //	full_path = malloc(sizeof(char) * (ft_strlen(path) + 1));
 	i = 0;
 	j = 0;
-	temp_i = 0;
+	reset_i = 0;
 //	new_ls->slash_index = 0;
 //	ft_strcpy(full_path, path);
 //	(full_path[path_len] != '/') && (ft_strcat(full_path, "/"));
 	full_path[0] = 0;
-	if(path)
-		while(path[j])
-			full_path[i++] = path[j++];
-	(full_path[i] != '/') && (full_path[i++] = '/');
-	temp_i = i;
+	if((ft_strcmp(path, ".") != 0) && (ft_strcmp(path, "..") != 0))
+		if(path)
+			while(path[j])
+				full_path[i++] = path[j++];
+//	(full_path[i] != '/') && (full_path[i++] = '/'); // Commenting this to use below
+	if(full_path[i] != '/')
+		full_path[i++] = '/';
+	reset_i = i;
 //	new_ls->slash_index = i;
 	while(temp_ls)
 	{
-		i = temp_i;
+		i = reset_i;
 //		i = new_ls->slash_index;
 		j = 0;
 		if(temp_ls->file_name)
@@ -820,8 +823,8 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 				full_path[i++] = temp_ls->file_name[j++];
 	   	full_path[i] = '\0';
 //		new_ls = store_file_name(new_ls, full_path);
-//		ft_printf("temp_i|%d|\n", temp_i);
-		new_ls = store_file_name_with_index(new_ls, full_path, temp_i);
+//		ft_printf("reset_i|%d|\n", reset_i);
+		new_ls = store_file_name_with_index(new_ls, full_path, reset_i);
 		temp_ls = temp_ls->next;
 	}
 
@@ -889,11 +892,19 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 	{
 //		if(ft_strcmp(path, ".") && ft_strcmp(path, ".."))
 //		{
-		if(info->flag.a == false && path[0] != '.')
+		if(info->flag.a == false)// && path[0] != '.')
 		{
 //			ft_printf(BRED"\n|%s|\n"NC, path);
 			(info->no_dot_slash == false) && (ft_printf("\n./%s:\n", path));
 			(info->no_dot_slash == true) && (ft_printf("\n%s:\n", path));
+		}
+		else if(info->flag.a == true)
+		{
+			if((ft_strcmp(path, ".") == 0) || (ft_strcmp(path, "..") == 0))
+			{
+				(info->no_dot_slash == false) && (ft_printf("\n./%s:\n", path));
+				(info->no_dot_slash == true) && (ft_printf("\n%s:\n", path));
+			}
 		}
 	}
 
@@ -908,6 +919,13 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 //			is_directory(path, dr->d_name, full_path);
 //			temp_ls = store_file_name(temp_ls, full_path);
 			temp_ls = store_file_name(temp_ls, dr->d_name);
+		}
+		else if(info->flag.a == true)
+		{
+//			if((ft_strcmp(temp_ls->file_name, ".") != 0) && (ft_strcmp(temp_ls->file_name, "..") != 0))
+//			{
+				temp_ls = store_file_name(temp_ls, dr->d_name);
+//			}
 		}
 	}
 	merge_sort(&temp_ls);
@@ -1248,6 +1266,8 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 //	{
 	while(temp_ls != NULL)
 	{
+//		if((ft_strcmp(temp_ls->file_name, ".") == 0) || (ft_strcmp(temp_ls->file_name, "..") == 0))
+//			temp_ls = temp_ls->next;
 		if(stat(temp_ls->file_name, &meta) == 0 && S_ISDIR(meta.st_mode))
 		{
 //			ft_printf(BGREEN"----Entering start_recursive_call----\n"NC);
@@ -1255,8 +1275,11 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 			{
 //				if(ft_strcmp(temp_ls->file_name, ".") && ft_strcmp(temp_ls->file_name, ".."))
 //				{
+				if((ft_strcmp(temp_ls->file_name, ".") != 0) && (ft_strcmp(temp_ls->file_name, "..") != 0))
+				{
 					inner_dir = store_file_recursively(info, temp_ls->file_name);
 					info->skip_print = false;
+				}
 //				}
 			}
 			else if(info->flag.a == false && temp_ls->file_name[0] != '.')
@@ -1267,8 +1290,10 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 //			ft_printf(BRED"|%s|\n"NC, temp_ls->file_name);
 			if(inner_dir != NULL)
 			{
-				start_recursive_call(inner_dir, info);
-				delete_list_file_name(&inner_dir);
+				{
+					start_recursive_call(inner_dir, info);
+					delete_list_file_name(&inner_dir);
+				}
 			}
 		}
 		temp_ls = temp_ls->next;
@@ -1718,7 +1743,12 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 			if(info->flag.a == true && info->flag.uppercase_r == false)
 				single_argument(ls, info, ".");
 			else if(info->flag.l == true && info->flag.uppercase_r == false)
-				single_argument(ls, info, ".");
+			{
+				temp_ls = store_root_files(temp_ls, info, ".");
+				print_file_name(temp_ls, info);
+				delete_list_file_name(&temp_ls);
+		//		single_argument(ls, info, ".");
+			}
 
 			else if(i == 2 && info->argc == 2 && info->flag.uppercase_r == true)
 				{
