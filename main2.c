@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/03 16:36:35 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/03 22:56:30 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -789,7 +789,8 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 	int i;
 	int j;
 	int reset_i;
-
+	char *ref_str;
+	
 //	ft_printf(BGREEN"---------Enters append_slash-------\n", NC);
 //	path_len = ft_strlen(path) - 1;
 //	if(ft_strcmp(temp_ls->file_name, ".") && ft_strcmp(temp_ls->file_name, ".."))
@@ -803,15 +804,70 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 //	ft_strcpy(full_path, path);
 //	(full_path[path_len] != '/') && (ft_strcat(full_path, "/"));
 	full_path[0] = 0;
-	if((ft_strcmp(path, ".") != 0) && (ft_strcmp(path, "..") != 0))
-		if(path)
-			while(path[j])
-				full_path[i++] = path[j++];
+//	if((ft_strcmp(path, ".") != 0) && (ft_strcmp(path, "..") != 0))
+	if(path)
+	{
+		while(path[j])
+			full_path[i++] = path[j++];
+		if(full_path[i] != '/')
+			full_path[i++] = '/';
+	}
 //	(full_path[i] != '/') && (full_path[i++] = '/'); // Commenting this to use below
-	if(full_path[i] != '/')
-		full_path[i++] = '/';
 	reset_i = i;
+	while(temp_ls && temp_ls->file_name)
+	{
+		ref_str = temp_ls->file_name;
+		i = reset_i;
+		j = 0;
+
+		if(ft_strcmp(ref_str, ".") == 0 || ft_strcmp(ref_str, "..") == 0)
+		{
+//			ft_printf(BWHITE"ENTERS 2\n");
+			new_ls = store_file_name_with_index(new_ls, ref_str, 0);
+//			ft_strcpy(full_path, ref_str);
+//			while(ref_str[j])
+//			{
+//				full_path[j] = ref_str[j];
+//				j++;
+//			}
+//			full_path[j] = '\0';
+		}
+		else
+		{
+//			ft_printf(BRED"enters 1\n"NC);
+			while(ref_str[j])
+				full_path[i++] = ref_str[j++];
+			full_path[i] = '\0';
+			new_ls = store_file_name_with_index(new_ls, full_path, reset_i);
+		}
+
+/*
+//		if(ft_strcmp(ref_str, ".") != 0 && ft_strcmp(ref_str, "..") != 0)
+//		{
+			ft_printf(BRED"enters 1\n"NC);
+			while(ref_str[j])
+				full_path[i++] = ref_str[j++];
+			full_path[i] = '\0';
+//		}
+
+		else if(ft_strcmp(ref_str, ".") == 0 || ft_strcmp(ref_str, "..") == 0)
+		{
+			ft_printf(BWHITE"ENTERS 2\n");
+			while(ref_str[j])
+			{
+				full_path[j] = ref_str[j];
+				j++;
+			}
+			full_path[j] = '\0';
+		}
+*/
+//		new_ls = store_file_name(new_ls, full_path);
+//		ft_printf("reset_i|%d|\n", reset_i);
+//		new_ls = store_file_name_with_index(new_ls, full_path, reset_i);
+		temp_ls = temp_ls->next;
+	}
 //	new_ls->slash_index = i;
+/*
 	while(temp_ls)
 	{
 		i = reset_i;
@@ -820,13 +876,29 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 		if(temp_ls->file_name)
 //		if((ft_strcmp(temp_ls->file_name, ".")) && (ft_strcmp(temp_ls->file_name, "..")))
 			while(temp_ls->file_name[j])
-				full_path[i++] = temp_ls->file_name[j++];
-	   	full_path[i] = '\0';
+			{
+				if((ft_strcmp(temp_ls->file_name, ".") != 0) && ft_strcmp(temp_ls->file_name, "..") != 0)
+				{
+					full_path[i++] = temp_ls->file_name[j++];
+//					full_path[i] = '\0';
+				}
+				else
+				{
+					full_path[j] = temp_ls->file_name[j];
+					j++;
+				}
+			}
+		if(i >= 0)
+	   		full_path[i] = '\0';
+		else
+			full_path[j] = '\0';
 //		new_ls = store_file_name(new_ls, full_path);
 //		ft_printf("reset_i|%d|\n", reset_i);
 		new_ls = store_file_name_with_index(new_ls, full_path, reset_i);
 		temp_ls = temp_ls->next;
 	}
+*/
+
 
 /*
  deprecated because improved it by retaining index
@@ -880,10 +952,14 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 
 	temp_ls = NULL;
 	new_ls = NULL;
+//	ft_printf(BGREEN"|%s|\n"NC, path);
+
+//	if(ft_strcmp(path, ".") != 0 && ft_strcmp(path, "..") != 0)
+//		return(new_ls);
 	if((dir = opendir(path)) == NULL)
 	{
-		(info->no_dot_slash == false) && (ft_printf("\n./%s\n", path));
-		(info->no_dot_slash == true) && (ft_printf("\n%s\n", path));
+		(info->no_dot_slash == false) && (ft_printf(BRED"\n./%s\n"NC, path));
+		(info->no_dot_slash == true) && (ft_printf(BRED"\n%s\n"NC, path));
 //		ft_permission_denied(path);
 		ft_permission_denied(path + find_last_slash(path));
 		return(NULL);
@@ -892,41 +968,60 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 	{
 //		if(ft_strcmp(path, ".") && ft_strcmp(path, ".."))
 //		{
-		if(info->flag.a == false)// && path[0] != '.')
-		{
+//		if(info->flag.a == false)// && path[0] != '.')
+//		{
 //			ft_printf(BRED"\n|%s|\n"NC, path);
 			(info->no_dot_slash == false) && (ft_printf("\n./%s:\n", path));
 			(info->no_dot_slash == true) && (ft_printf("\n%s:\n", path));
-		}
+//		}
+/*
 		else if(info->flag.a == true)
 		{
-			if((ft_strcmp(path, ".") == 0) || (ft_strcmp(path, "..") == 0))
-			{
+//			if((ft_strcmp(path, ".") == 0) || (ft_strcmp(path, "..") == 0))
+//			if(ft_strcmp(path, ".") != 0 && ft_strcmp(path, "..") != 0)
+//			{
 				(info->no_dot_slash == false) && (ft_printf("\n./%s:\n", path));
 				(info->no_dot_slash == true) && (ft_printf("\n%s:\n", path));
-			}
+//			}
 		}
+*/
 	}
 
 //	int len;
 //	len = ft_strlen(path) - 1;
+/*
+// Works. Refactoring and improving the if statment slightly
 	while((dr = readdir(dir)) != NULL)
 	{
 		if(info->flag.a == true)
 			temp_ls = store_file_name(temp_ls, dr->d_name);
 		else if(info->flag.a == false && dr->d_name[0] != '.')
 		{
-//			is_directory(path, dr->d_name, full_path);
-//			temp_ls = store_file_name(temp_ls, full_path);
 			temp_ls = store_file_name(temp_ls, dr->d_name);
 		}
-		else if(info->flag.a == true)
+	}
+*/
+
+	if(info->flag.a == true)
+	{
+		while((dr = readdir(dir)) != NULL)
 		{
-//			if((ft_strcmp(temp_ls->file_name, ".") != 0) && (ft_strcmp(temp_ls->file_name, "..") != 0))
+//			ft_printf(BCYAN"|%s|\n", dr->d_name);
+//			if(ft_strcmp(dr->d_name, ".") != 0 && ft_strcmp(dr->d_name, "..") != 0)
 //			{
+//				ft_printf(BCYAN"|%s|\n", dr->d_name);
 				temp_ls = store_file_name(temp_ls, dr->d_name);
 //			}
 		}
+	}
+	else if(info->flag.a == false)
+	{
+		while((dr = readdir(dir)) != NULL)
+			if(dr->d_name[0] != '.')
+			{
+//				ft_printf(BCYAN"|%s|\n"NC, dr->d_name);
+				temp_ls = store_file_name(temp_ls, dr->d_name);
+			}
 	}
 	merge_sort(&temp_ls);
 
@@ -1257,39 +1352,26 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 	t_ls			*inner_dir;
 //	t_ls			*new_inner_dir;
 	struct	stat	meta;
+	char	*ref_str;
 
 	inner_dir = NULL;	
 	if(temp_ls != NULL && temp_ls->file_name && info->skip_print == false)
 		print_file_name(temp_ls, info);
 
-//	if(temp_ls != NULL)
-//	{
+
 	while(temp_ls != NULL)
 	{
-//		if((ft_strcmp(temp_ls->file_name, ".") == 0) || (ft_strcmp(temp_ls->file_name, "..") == 0))
-//			temp_ls = temp_ls->next;
-		if(stat(temp_ls->file_name, &meta) == 0 && S_ISDIR(meta.st_mode))
+		ref_str = temp_ls->file_name;
+		if(ft_strcmp(ref_str, ".") != 0 && ft_strcmp(ref_str, "..") != 0)
 		{
-//			ft_printf(BGREEN"----Entering start_recursive_call----\n"NC);
-			if(info->flag.a == true)
+			if(stat(ref_str, &meta) == 0 && S_ISDIR(meta.st_mode))
 			{
-//				if(ft_strcmp(temp_ls->file_name, ".") && ft_strcmp(temp_ls->file_name, ".."))
-//				{
-				if((ft_strcmp(temp_ls->file_name, ".") != 0) && (ft_strcmp(temp_ls->file_name, "..") != 0))
-				{
-					inner_dir = store_file_recursively(info, temp_ls->file_name);
-					info->skip_print = false;
-				}
-//				}
-			}
-			else if(info->flag.a == false && temp_ls->file_name[0] != '.')
-			{
-				inner_dir = store_file_recursively(info, temp_ls->file_name);
 				info->skip_print = false;
-			}
-//			ft_printf(BRED"|%s|\n"NC, temp_ls->file_name);
-			if(inner_dir != NULL)
-			{
+				if(info->flag.a == false && ref_str[0] != '.')
+					inner_dir = store_file_recursively(info, ref_str);
+				else if(info->flag.a == true)
+					inner_dir = store_file_recursively(info, ref_str);
+				if(inner_dir != NULL)
 				{
 					start_recursive_call(inner_dir, info);
 					delete_list_file_name(&inner_dir);
@@ -1298,6 +1380,48 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 		}
 		temp_ls = temp_ls->next;
 	}
+/*
+	while(temp_ls != NULL)
+	{
+
+//			temp_ls = temp_ls->next;
+		if(ft_strcmp(temp_ls->file_name, ".") != 0 && ft_strcmp(temp_ls->file_name, "..") != 0)
+		{
+			if(stat(temp_ls->file_name, &meta) == 0 && S_ISDIR(meta.st_mode))
+			{
+//				ft_printf(BGREEN"----Entering start_recursive_call----\n"NC);
+
+				if(info->flag.a == true)
+				{
+//					if(ft_strcmp(temp_ls->file_name, ".") && ft_strcmp(temp_ls->file_name, ".."))
+//					{
+//					if(ft_strcmp(temp_ls->file_name, ".") != 0 && ft_strcmp(temp_ls->file_name, "..") != 0)
+//					{
+					ft_printf(BYELLOW"|%s|\n"NC, temp_ls->file_name);
+					inner_dir = store_file_recursively(info, temp_ls->file_name);
+					info->skip_print = false;
+//					}
+//					}
+				}
+				else if(info->flag.a == false && temp_ls->file_name[0] != '.')
+				{
+					inner_dir = store_file_recursively(info, temp_ls->file_name);
+					info->skip_print = false;
+				}
+//				ft_printf(BRED"|%s|\n"NC, temp_ls->file_name);
+				if(inner_dir != NULL)
+				{
+//					if(ft_strcmp(temp_ls->file_name, ".") != 0 && ft_strcmp(temp_ls->file_name, "..") != 0)
+					{
+						start_recursive_call(inner_dir, info);
+						delete_list_file_name(&inner_dir);
+					}
+				}
+			}
+		}
+		temp_ls = temp_ls->next;
+	}
+*/
 //	}
 //	while(inner_dir)
 //	{
@@ -1672,6 +1796,8 @@ t_ls *store_root_files(t_ls *ls, t_info *info, char *dir_path_str)
 	dir = opendir(dir_path_str);
 	if(dir == NULL)
 		return(ls);
+/*
+// Works, refactoring
 	while((data = readdir(dir)) != NULL)
 	{
 		if(info->flag.a == true)
@@ -1680,6 +1806,14 @@ t_ls *store_root_files(t_ls *ls, t_info *info, char *dir_path_str)
 //		if(ft_strcmp(data->d_name, ".") && ft_strcmp(data->d_name, ".."))
 			ls = store_file_name(ls, data->d_name);
 	}
+*/
+	if(info->flag.a == true)
+		while((data = readdir(dir)) != NULL)
+			ls = store_file_name(ls, data->d_name);
+	else if(info->flag.a == false)
+		while((data = readdir(dir)) != NULL)
+			if(data->d_name[0] != '.')
+				ls = store_file_name(ls, data->d_name);
 	if(dir != NULL)
 		closedir(dir);
 	merge_sort(&ls);
@@ -2268,7 +2402,7 @@ void padding_and_blocks_total(t_ls *ls, int *pad_nlink, int *pad_size)
 
 /*
 ** stat(2) is an incredibly powerful functions that provides information about
-** a filepath. However, it is not good at determining a symbolike link.
+** a filepath. However, it is not good at determining a symbolik link.
 ** 
 ** In order to know if a file is a symoblik link, lstat(2) is used instead.
 ** man 2 stat and man 2 lstat has some really good information and it also
@@ -2320,7 +2454,7 @@ void print_file_name(t_ls *ls, t_info *info)
 //		link_str[0] = 0;
 		if(ls->slash_index >= 0)
 			ft_substring(str, ls->file_name, ls->slash_index);
-		else if(ls->slash_index < 0)
+		else if(ls->slash_index <= 0)
 			ft_strcpy(str, ls->file_name);
 		if(info->flag.l == true)
 		{
