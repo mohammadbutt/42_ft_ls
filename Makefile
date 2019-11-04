@@ -6,7 +6,7 @@
 #    By: mbutt <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 15:35:11 by mbutt             #+#    #+#              #
-#    Updated: 2019/11/01 22:22:34 by mbutt            ###   ########.fr        #
+#    Updated: 2019/11/04 14:19:07 by mbutt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CC = gcc
 #CFLAGS = -Wall -Wextra -Werror -I. -c
 CFLAGS = -I. -c -g
 WFLAGS = -Wall -Wextra -Werror
-DEBUG = -fsanitize=address -ggdb
+DEBUG = #-fsanitize=address -ggdb
 
 SRC = *.c
 OBJ = *.o

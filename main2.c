@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/03 22:56:30 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/04 14:18:03 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2832,7 +2832,7 @@ int main(int argc, char *argv[])
 		delete_list_file_name(&ls);
 //		free(ls);	
 //	free_double_array(info.argv);
-//	while(1);
+	while(1);
 
 	return(0);
 
