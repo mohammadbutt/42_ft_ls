@@ -31,11 +31,11 @@ First line of the output `ls -l` gives a total. This total is file system blocks
 Below is a table and format of `ls -l author` and `./ft_ls -l author`
 
 
-|Permission|st_nlink|owner id| group owner id |size in bytes |month, date, time modified  |file name|
-|----------|--------|--------|----------------|--------------|----------------------------|---------|
-|Permission|st_nlink|st_uid  |        st_gid  |   st_size    |st_ctimespec.tv_sec         |d_name   |
-|          |   ✔    |   ✔    |         ✔      |     ✔        |       ✔                    |      ✔  |
-|-rw-r--r--|    1   |  mbutt |   2018_october |       6      | Sep 18 15:35               |  author |
+|Permission|st_nlink|owner id| group owner id |size in bytes |month, date, time modified  |file name                    |
+|----------|--------|--------|----------------|--------------|----------------------------|-----------------------------|
+|Permission|st_nlink|st_uid  |        st_gid  |   st_size    |st_ctimespec.tv_sec         |d_name under dirent struct   |
+|    ✔     |   ✔    |   ✔    |         ✔      |     ✔        |       ✔                    |      ✔                      |
+|-rw-r--r--|    1   |  mbutt |   2018_october |       6      | Sep 18 15:35               |  author                     |
 
 
 #### Optional/Bonus Flags:
