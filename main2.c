@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/04 23:51:40 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/05 00:04:07 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -404,7 +404,7 @@ t_ls	*sorted_merge_invalid_file_name(t_ls *a, t_ls *b)
 		return(b);
 	else if(b == NULL)
 		return(a);
-	if(ft_strcmp(a->invalid_file_name, b->invalid_file_name) <= 0)
+	if(ft_strcmp(a->file_name, b->file_name) <= 0)
 	{
 		result = a;
 		result->next = sorted_merge_invalid_file_name(a->next, b);
@@ -536,7 +536,8 @@ void process_invalid_file(t_ls *ls, t_info *info)
 //	ft_printf("info->vari.i|%d|\n", info->var.i);
 	if(ls != NULL)
 	{
-		merge_sort(&ls, info); // Can create one sepeate merge_sort for invalid
+//		merge_sort(&ls, info); // Can create one sepeate merge_sort for invalid
+		merge_sort_invalid_file_name(&ls);
 		print_invalid_file_name(ls);
 		delete_list_file_name(&ls);
 		info->print_path_name = true;
