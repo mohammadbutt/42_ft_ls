@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/04 23:06:27 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/04 23:14:24 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,57 @@ t_ls *sorted_merge_dir_reverse(t_ls *a, t_ls *b)
 	return(result);
 }
 
+t_ls *sorted_merge_dir_time(t_ls *a, t_ls *b);
+t_ls *sorted_merge_dir_time_nano_second(t_ls *a, t_ls *b)
+{
+	t_ls *result;
+	struct stat meta1;
+	struct stat meta2;
+
+	result = NULL;
+	lstat(a->dir_path, &meta1);
+	lstat(b->dir_path, &meta2);
+	if(meta1.st_mtimespec.tv_nsec > meta2.st_mtimespec.tv_nsec)
+	{
+		result = a;
+		result->next = sorted_merge_dir_time(a->next, b);
+	}
+	else
+	{
+		result = b;
+		result->next = sorted_merge_dir_time(a, b->next);
+	}
+	return(result);
+}
+
+t_ls *sorted_merge_dir_time(t_ls *a, t_ls *b)
+{
+	struct stat meta1;
+	struct stat meta2;
+	t_ls *result;
+
+	result = NULL;
+	if(a == NULL)
+		return(b);
+	else if(b == NULL)
+		return(a);
+	lstat(a->dir_path, &meta1);
+	lstat(b->dir_path, &meta2);
+	if(meta1.st_mtimespec.tv_sec > meta2.st_mtimespec.tv_sec)
+	{
+		result = a;
+		result->next = sorted_merge_dir_time(a->next, b);
+	}
+	else if(meta1.st_mtimespec.tv_sec == meta2.st_mtimespec.tv_sec)
+		result = sorted_merge_dir_time_nano_second(a, b);
+	else
+	{
+		result = b;
+		result->next = sorted_merge_dir_time(a, b->next);
+	}
+	return(result);
+}
+
 void	merge_sort_dir(t_ls **head_ref)
 {
 	t_ls *head;
@@ -255,8 +306,9 @@ void	merge_sort_dir(t_ls **head_ref)
 	front_back_split(head, &a, &b);
 	merge_sort_dir(&a);
 	merge_sort_dir(&b);
-	*head_ref = sorted_merge_dir(a, b);
+//	*head_ref = sorted_merge_dir(a, b);
 //	*head_ref = sorted_merge_dir_reverse(a, b);
+	*head_ref = sorted_merge_dir_time(a, b);
 }
 
 t_ls	*store_valid_dir(t_ls *ls, char *dir_path_str)
