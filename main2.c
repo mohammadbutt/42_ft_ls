@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/04 17:09:57 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/04 21:47:25 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -830,10 +830,19 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 //	if((ft_strcmp(path, ".") != 0) && (ft_strcmp(path, "..") != 0))
 	if(path)
 	{
+		ft_printf(BYELLOW"Comes here\n"NC);
+		ft_printf(BBLUE"i:|%d|\n", i);
+		ft_printf(BBLUE"j:|%d|\n", j);
 		while(path[j])
 			full_path[i++] = path[j++];
-		if(full_path[i] != '/')
+		ft_printf("|%s|\n", full_path);
+		if(full_path[i - 1] != '/')
 			full_path[i++] = '/';
+		ft_printf("|%s|\n", full_path);
+		full_path[i] = '\0';
+		ft_printf("|%s|\n", full_path);
+		ft_printf(BBLUE"i:|%d|\n", i);
+		ft_printf(BBLUE"j:|%d|\n", j);
 	}
 //	(full_path[i] != '/') && (full_path[i++] = '/'); // Commenting this to use below
 	reset_i = i;
@@ -845,7 +854,7 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 
 		if(ft_strcmp(ref_str, ".") == 0 || ft_strcmp(ref_str, "..") == 0)
 		{
-//			ft_printf(BWHITE"ENTERS 2\n");
+			ft_printf(BCYAN"%s\n"NC, ref_str);
 			new_ls = store_file_name_with_index(new_ls, ref_str, 0);
 //			ft_strcpy(full_path, ref_str);
 //			while(ref_str[j])
@@ -857,10 +866,11 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 		}
 		else
 		{
-//			ft_printf(BRED"enters 1\n"NC);
 			while(ref_str[j])
 				full_path[i++] = ref_str[j++];
 			full_path[i] = '\0';
+
+			ft_printf(BCYAN"%s\n"NC, full_path);
 			new_ls = store_file_name_with_index(new_ls, full_path, reset_i);
 		}
 
@@ -2230,14 +2240,14 @@ void owner_and_group_column(struct stat meta)
 
 
 
-//	ft_printf(BGREEN"---Enters owner_and_group_column---\n"NC);
+	ft_printf(BGREEN"---Enters owner_and_group_column---\n"NC);
 	
 	if(getpwuid(meta.st_uid)->pw_name)
 		ft_printf("%s  ", getpwuid(meta.st_uid)->pw_name);
-//	ft_printf(BGREEN"---Got user name in owner_and_group_column---\n"NC);
+	ft_printf(BGREEN"---Got user name in owner_and_group_column---\n"NC);
 	if(getgrgid(meta.st_gid)->gr_name)
 		ft_printf("%s  ", getgrgid(meta.st_gid)->gr_name);
-//	ft_printf(BGREEN"---Finished with owner_and_group_column---\n"NC);
+	ft_printf(BGREEN"---Finished with owner_and_group_column---\n"NC);
 
 
 
@@ -2339,19 +2349,11 @@ void month_date_time_column(struct stat meta)
 //		int size_padding)
 void	long_file_listing(struct stat meta, char *file_name, t_info *info)
 {
-//	int pad_size;
-//	int pad_nlink;
-
-//	pad_size = info->pad_size;
-
 	permission_column(meta, file_name);
 	link_column(meta, info->pad_nlink);
-//	link_column(meta, link_padding);
-	owner_and_group_column(meta);
-//	size_column(meta, size_padding);
+//	owner_and_group_column(meta);
 	size_column(meta, info->pad_size);
 	month_date_time_column(meta);
-
 }
 
 int get_link_padding(t_ls *ls)
@@ -2409,6 +2411,7 @@ void padding_and_blocks_total(t_ls *ls, int *pad_nlink, int *pad_size)
 	total = 0;
 	while(ls)
 	{
+		ft_printf(BGREEN"%s\n"NC, ls->file_name);
 		stat(ls->file_name, &meta);
 		total = total + meta.st_blocks;
 //		nlink_numlen = ft_numlen(meta.st_nlink, FT_DECIMAL);
@@ -2455,14 +2458,28 @@ void print_file_name(t_ls *ls, t_info *info)
 //	size_padding = 0;
 //	ft_printf("slash_index: |%d|\n", ls->slash_index);
 	str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
+	if(str == NULL)
+		return;
+	ft_printf("info->var.i:           |%d|\n", info->var.i);
+	ft_printf("info->var.temp_i:      |%d|\n", info->var.temp_i);
+	ft_printf("info->var.valid_dir:   |%d|\n", info->var.valid_dir);
+	ft_printf("info->var.new_line:    |%d|\n", info->var.new_line);
+	ft_printf("info->var.double_break:|%d|\n", info->var.double_break);
+	ft_printf("info->var.str_len:     |%d|\n", info->var.str_len);
+
+	ft_printf("info->skip_print:      |%d|\n", info->skip_print);
+	ft_printf("info->print_path_name: |%d|\n", info->print_path_name);
+	ft_printf("info->no_dot_slash:    |%d|\n", info->no_dot_slash);
+	ft_printf("info->pad_size:        |%d|\n", info->pad_size);	
+	ft_printf("info->pad_nlink:       |%d|\n", info->pad_nlink);
+	ft_printf("info->total_blocks:    |%d|\n", info->total_blocks);
+
+
 	if(info->flag.l == true)
 	{
 		link_str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
-//		padding_and_blocks_total(ls, &link_padding, &size_padding);
 		padding_and_blocks_total(ls, &info->pad_nlink, &info->pad_size);
 	}
-//	ft_printf("nlink_padding:|%d|\n", link_padding);
-//	ft_printf("size_padding:|%d|\n", size_padding);
 
 //	get_total_for_long_listing(ls);
 //	link_padding = get_link_padding(ls);
@@ -2615,6 +2632,32 @@ t_ls *sorted_merge_reverse(t_ls *a, t_ls *b)
 	return(result);
 }
 
+
+
+t_ls *sorted_merge_time(t_ls *a, t_ls *b);
+//t_ls *sorted_merge_time_ns(struct stat meta1, struct stat meta2, t_ls *a, t_ls *b)
+t_ls *sorted_merge_time_nano_second(t_ls *a, t_ls *b)
+{
+	t_ls *result;
+	struct stat meta1;
+	struct stat meta2;
+
+	result = NULL;
+	lstat(a->file_name, &meta1);
+	lstat(b->file_name, &meta2);
+	if(meta1.st_mtimespec.tv_nsec > meta2.st_mtimespec.tv_nsec)
+	{
+		result = a;
+		result->next = sorted_merge_time(a->next, b);
+	}
+	else
+	{
+		result = b;
+		result->next = sorted_merge_time(a, b->next);
+	}
+	return(result);
+}
+
 t_ls *sorted_merge_time(t_ls *a, t_ls *b)//, struct stat meta1, struct stat meta2)
 {
 	struct stat meta1;
@@ -2636,6 +2679,7 @@ t_ls *sorted_merge_time(t_ls *a, t_ls *b)//, struct stat meta1, struct stat meta
 	}
 	else if(meta1.st_mtimespec.tv_sec == meta2.st_mtimespec.tv_sec)
 	{
+//		result = sorted_merge_time_nano_second(a, b);
 		if(meta1.st_mtimespec.tv_nsec > meta2.st_mtimespec.tv_nsec)
 		{
 			result = a;
@@ -2646,7 +2690,6 @@ t_ls *sorted_merge_time(t_ls *a, t_ls *b)//, struct stat meta1, struct stat meta
 			result = b;
 			result->next = sorted_merge_time(a, b->next);
 		}
-
 	}
 	else
 	{
