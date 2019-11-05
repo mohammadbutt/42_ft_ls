@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/04 23:18:09 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/04 23:34:54 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1452,7 +1452,13 @@ t_ls	*store_dir_path_regular(t_ls *temp_ls, t_info *info)
 		dir = opendir(info->argv[info->var.i]);
 		if(stat(info->argv[info->var.i], &meta) == 0)
 			if(S_ISDIR(meta.st_mode) == 1)
-				temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
+				temp_ls = store_file_name(temp_ls, info->argv[info->var.i]);
+
+// replacing store_valid_dir with store_file_name
+
+
+//				temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
+//
 //		ft_printf("|%d|", stat(info->argv[info->var.i], &meta));
 //		ft_printf("|%d|", S_ISDIR(meta.st_mode));
 //		ft_printf("|%s|\n", info->argv[info->var.i]);
@@ -1483,6 +1489,8 @@ t_ls *store_dir_path_recurssion(t_ls *temp_ls, t_info *info)
 
 //void print_recursively_stored_dir(t_ls *ls, t_info *info, char *current_dir);
 
+/*
+// Replacing this to use file_name inatead of temp_ls->dir_path
 void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 {
 	while(temp_ls)
@@ -1490,6 +1498,19 @@ void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 		(info->var.new_line == true) && (ft_printf("\n"));
 		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->dir_path));
 		single_argument(ls, info, temp_ls->dir_path);
+		info->var.new_line = true;
+		temp_ls = temp_ls->next;
+	}
+}
+*/
+
+void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
+{
+	while(temp_ls)
+	{
+		(info->var.new_line == true) && (ft_printf("\n"));
+		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->file_name));
+		single_argument(ls, info, temp_ls->file_name);
 		info->var.new_line = true;
 		temp_ls = temp_ls->next;
 	}
@@ -1535,9 +1556,11 @@ void process_dir_valid(t_ls *ls, t_info *info)
 	if(info->flag.uppercase_r == false)
 	{
 		temp_ls = store_dir_path_regular(temp_ls, info);
-		merge_sort_dir(&temp_ls);
+		merge_sort(&temp_ls);
+//		merge_sort_dir(&temp_ls);
 		files_from_stored_dir_path(ls, temp_ls, info);
-		delete_list_dir_path(&temp_ls);
+		delete_list_file_name(&temp_ls);
+//		delete_list_dir_path(&temp_ls);
 	}
 	else if(info->flag.uppercase_r == true)
 	{
