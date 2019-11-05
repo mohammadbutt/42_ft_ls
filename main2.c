@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/04 21:47:25 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/04 23:06:27 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -806,45 +806,24 @@ char *is_directory(char *parent, char *name, char final_path[])
 */
 t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 {
-//	char full_path[_POSIX_PATH_MAX];
-//	int	path_len;
 	char *full_path;
 	int i;
 	int j;
 	int reset_i;
 	char *ref_str;
 	
-//	ft_printf(BGREEN"---------Enters append_slash-------\n", NC);
-//	path_len = ft_strlen(path) - 1;
-//	if(ft_strcmp(temp_ls->file_name, ".") && ft_strcmp(temp_ls->file_name, ".."))
-//		return(NULL);
 	full_path = malloc(sizeof(char) * (_POSIX_PATH_MAX));
-//	full_path = malloc(sizeof(char) * (ft_strlen(path) + 1));
 	i = 0;
 	j = 0;
 	reset_i = 0;
-//	new_ls->slash_index = 0;
-//	ft_strcpy(full_path, path);
-//	(full_path[path_len] != '/') && (ft_strcat(full_path, "/"));
 	full_path[0] = 0;
-//	if((ft_strcmp(path, ".") != 0) && (ft_strcmp(path, "..") != 0))
 	if(path)
 	{
-		ft_printf(BYELLOW"Comes here\n"NC);
-		ft_printf(BBLUE"i:|%d|\n", i);
-		ft_printf(BBLUE"j:|%d|\n", j);
 		while(path[j])
 			full_path[i++] = path[j++];
-		ft_printf("|%s|\n", full_path);
-		if(full_path[i - 1] != '/')
-			full_path[i++] = '/';
-		ft_printf("|%s|\n", full_path);
+		(full_path[i - 1] != '/') && (full_path[i++] = '/');
 		full_path[i] = '\0';
-		ft_printf("|%s|\n", full_path);
-		ft_printf(BBLUE"i:|%d|\n", i);
-		ft_printf(BBLUE"j:|%d|\n", j);
 	}
-//	(full_path[i] != '/') && (full_path[i++] = '/'); // Commenting this to use below
 	reset_i = i;
 	while(temp_ls && temp_ls->file_name)
 	{
@@ -854,110 +833,17 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 
 		if(ft_strcmp(ref_str, ".") == 0 || ft_strcmp(ref_str, "..") == 0)
 		{
-			ft_printf(BCYAN"%s\n"NC, ref_str);
 			new_ls = store_file_name_with_index(new_ls, ref_str, 0);
-//			ft_strcpy(full_path, ref_str);
-//			while(ref_str[j])
-//			{
-//				full_path[j] = ref_str[j];
-//				j++;
-//			}
-//			full_path[j] = '\0';
 		}
 		else
 		{
 			while(ref_str[j])
 				full_path[i++] = ref_str[j++];
 			full_path[i] = '\0';
-
-			ft_printf(BCYAN"%s\n"NC, full_path);
 			new_ls = store_file_name_with_index(new_ls, full_path, reset_i);
 		}
-
-/*
-//		if(ft_strcmp(ref_str, ".") != 0 && ft_strcmp(ref_str, "..") != 0)
-//		{
-			ft_printf(BRED"enters 1\n"NC);
-			while(ref_str[j])
-				full_path[i++] = ref_str[j++];
-			full_path[i] = '\0';
-//		}
-
-		else if(ft_strcmp(ref_str, ".") == 0 || ft_strcmp(ref_str, "..") == 0)
-		{
-			ft_printf(BWHITE"ENTERS 2\n");
-			while(ref_str[j])
-			{
-				full_path[j] = ref_str[j];
-				j++;
-			}
-			full_path[j] = '\0';
-		}
-*/
-//		new_ls = store_file_name(new_ls, full_path);
-//		ft_printf("reset_i|%d|\n", reset_i);
-//		new_ls = store_file_name_with_index(new_ls, full_path, reset_i);
 		temp_ls = temp_ls->next;
 	}
-//	new_ls->slash_index = i;
-/*
-	while(temp_ls)
-	{
-		i = reset_i;
-//		i = new_ls->slash_index;
-		j = 0;
-		if(temp_ls->file_name)
-//		if((ft_strcmp(temp_ls->file_name, ".")) && (ft_strcmp(temp_ls->file_name, "..")))
-			while(temp_ls->file_name[j])
-			{
-				if((ft_strcmp(temp_ls->file_name, ".") != 0) && ft_strcmp(temp_ls->file_name, "..") != 0)
-				{
-					full_path[i++] = temp_ls->file_name[j++];
-//					full_path[i] = '\0';
-				}
-				else
-				{
-					full_path[j] = temp_ls->file_name[j];
-					j++;
-				}
-			}
-		if(i >= 0)
-	   		full_path[i] = '\0';
-		else
-			full_path[j] = '\0';
-//		new_ls = store_file_name(new_ls, full_path);
-//		ft_printf("reset_i|%d|\n", reset_i);
-		new_ls = store_file_name_with_index(new_ls, full_path, reset_i);
-		temp_ls = temp_ls->next;
-	}
-*/
-
-
-/*
- deprecated because improved it by retaining index
-	while(temp_ls)
-	{
-//		ft_strcpy(full_path, path);
-//		(full_path[path_len] != '/') && (ft_strcat(full_path, "/"));
-//		ft_strcat(full_path, temp_ls->file_name);
-//		new_ls = store_file_name(new_ls, full_path);
-//		temp_ls = temp_ls->next;
-
-	}
-*/
-/*
-	while(temp_ls)
-	{
-		if(path)
-			while(path)
-				full_path[i++] = path[j++];
-		(full_path[i] != '/') && (full_path[i] = "/");
-		if(temp_ls->file_name)
-			while(temp_ls->file_name)
-				full_path[i]
-	}
-*/
-//	if (full_path != NULL)
 	free(full_path);
 	return(new_ls);
 }
@@ -2240,14 +2126,14 @@ void owner_and_group_column(struct stat meta)
 
 
 
-	ft_printf(BGREEN"---Enters owner_and_group_column---\n"NC);
+//	ft_printf(BGREEN"---Enters owner_and_group_column---\n"NC);
 	
 	if(getpwuid(meta.st_uid)->pw_name)
 		ft_printf("%s  ", getpwuid(meta.st_uid)->pw_name);
-	ft_printf(BGREEN"---Got user name in owner_and_group_column---\n"NC);
+//	ft_printf(BGREEN"---Got user name in owner_and_group_column---\n"NC);
 	if(getgrgid(meta.st_gid)->gr_name)
 		ft_printf("%s  ", getgrgid(meta.st_gid)->gr_name);
-	ft_printf(BGREEN"---Finished with owner_and_group_column---\n"NC);
+//	ft_printf(BGREEN"---Finished with owner_and_group_column---\n"NC);
 
 
 
@@ -2351,7 +2237,7 @@ void	long_file_listing(struct stat meta, char *file_name, t_info *info)
 {
 	permission_column(meta, file_name);
 	link_column(meta, info->pad_nlink);
-//	owner_and_group_column(meta);
+	owner_and_group_column(meta);
 	size_column(meta, info->pad_size);
 	month_date_time_column(meta);
 }
@@ -2411,7 +2297,7 @@ void padding_and_blocks_total(t_ls *ls, int *pad_nlink, int *pad_size)
 	total = 0;
 	while(ls)
 	{
-		ft_printf(BGREEN"%s\n"NC, ls->file_name);
+//		ft_printf(BGREEN"%s\n"NC, ls->file_name);
 		stat(ls->file_name, &meta);
 		total = total + meta.st_blocks;
 //		nlink_numlen = ft_numlen(meta.st_nlink, FT_DECIMAL);
@@ -2460,21 +2346,6 @@ void print_file_name(t_ls *ls, t_info *info)
 	str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
 	if(str == NULL)
 		return;
-	ft_printf("info->var.i:           |%d|\n", info->var.i);
-	ft_printf("info->var.temp_i:      |%d|\n", info->var.temp_i);
-	ft_printf("info->var.valid_dir:   |%d|\n", info->var.valid_dir);
-	ft_printf("info->var.new_line:    |%d|\n", info->var.new_line);
-	ft_printf("info->var.double_break:|%d|\n", info->var.double_break);
-	ft_printf("info->var.str_len:     |%d|\n", info->var.str_len);
-
-	ft_printf("info->skip_print:      |%d|\n", info->skip_print);
-	ft_printf("info->print_path_name: |%d|\n", info->print_path_name);
-	ft_printf("info->no_dot_slash:    |%d|\n", info->no_dot_slash);
-	ft_printf("info->pad_size:        |%d|\n", info->pad_size);	
-	ft_printf("info->pad_nlink:       |%d|\n", info->pad_nlink);
-	ft_printf("info->total_blocks:    |%d|\n", info->total_blocks);
-
-
 	if(info->flag.l == true)
 	{
 		link_str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
@@ -2664,7 +2535,6 @@ t_ls *sorted_merge_time(t_ls *a, t_ls *b)//, struct stat meta1, struct stat meta
 	struct stat meta2;
 	t_ls *result;
 
-
 	result = NULL;
 	if(a == NULL)
 		return(b);
@@ -2679,17 +2549,7 @@ t_ls *sorted_merge_time(t_ls *a, t_ls *b)//, struct stat meta1, struct stat meta
 	}
 	else if(meta1.st_mtimespec.tv_sec == meta2.st_mtimespec.tv_sec)
 	{
-//		result = sorted_merge_time_nano_second(a, b);
-		if(meta1.st_mtimespec.tv_nsec > meta2.st_mtimespec.tv_nsec)
-		{
-			result = a;
-			result->next = sorted_merge_time(a->next, b);
-		}
-		else
-		{
-			result = b;
-			result->next = sorted_merge_time(a, b->next);
-		}
+		result = sorted_merge_time_nano_second(a, b);
 	}
 	else
 	{
