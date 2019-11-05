@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/04 23:34:54 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/04 23:51:40 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -536,7 +536,7 @@ void process_invalid_file(t_ls *ls, t_info *info)
 //	ft_printf("info->vari.i|%d|\n", info->var.i);
 	if(ls != NULL)
 	{
-		merge_sort(&ls);
+		merge_sort(&ls, info); // Can create one sepeate merge_sort for invalid
 		print_invalid_file_name(ls);
 		delete_list_file_name(&ls);
 		info->print_path_name = true;
@@ -592,7 +592,7 @@ void	process_valid_file(t_ls *ls, t_info *info)
 //	}
 	if(ls != NULL)
 	{
-		merge_sort(&ls);
+		merge_sort(&ls, info);
 		print_file_name(ls, info);
 //		delete_list(&ls);
 		delete_list_file_name(&ls);
@@ -994,7 +994,7 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 				temp_ls = store_file_name(temp_ls, dr->d_name);
 			}
 	}
-	merge_sort(&temp_ls);
+	merge_sort(&temp_ls, info);
 
 //	print_stored_file_names(temp_ls);
 
@@ -1556,7 +1556,7 @@ void process_dir_valid(t_ls *ls, t_info *info)
 	if(info->flag.uppercase_r == false)
 	{
 		temp_ls = store_dir_path_regular(temp_ls, info);
-		merge_sort(&temp_ls);
+		merge_sort(&temp_ls, info);
 //		merge_sort_dir(&temp_ls);
 		files_from_stored_dir_path(ls, temp_ls, info);
 		delete_list_file_name(&temp_ls);
@@ -1565,7 +1565,7 @@ void process_dir_valid(t_ls *ls, t_info *info)
 	else if(info->flag.uppercase_r == true)
 	{
 		temp_ls = store_dir_path_recurssion(temp_ls, info);
-		merge_sort(&temp_ls);
+		merge_sort(&temp_ls, info);
 		start_recursive_call(temp_ls, info);
 		delete_list_file_name(&temp_ls);
 	}
@@ -1810,7 +1810,7 @@ t_ls *store_root_files(t_ls *ls, t_info *info, char *dir_path_str)
 				ls = store_file_name(ls, data->d_name);
 	if(dir != NULL)
 		closedir(dir);
-	merge_sort(&ls);
+	merge_sort(&ls, info);
 	return(ls);
 }
 
@@ -2655,7 +2655,7 @@ void front_back_split(t_ls *source, t_ls **front_ref, t_ls **back_ref)
 	slow->next = NULL;
 }
 
-void	merge_sort(t_ls **head_ref)
+void	merge_sort(t_ls **head_ref, t_info *info)
 {
 	t_ls *head;
 	t_ls *a;
@@ -2667,11 +2667,16 @@ void	merge_sort(t_ls **head_ref)
 	if(head == NULL || head->next == NULL)
 		return;
 	front_back_split(head, &a, &b);
-	merge_sort(&a);
-	merge_sort(&b);
-//	*head_ref = sorted_merge(a, b);
-//	*head_ref = sorted_merge_reverse(a, b);
-	*head_ref = sorted_merge_time(a, b);
+	merge_sort(&a, info);
+	merge_sort(&b, info);
+	if(info->flag.r == false && info->flag.t == false)
+		*head_ref = sorted_merge(a, b);
+	else if(info->flag.r == true && info->flag.t == false)
+		*head_ref = sorted_merge_reverse(a, b);
+	else if(info->flag.t == true && info->flag.r == false)
+		*head_ref = sorted_merge_time(a, b);
+//	else if(info->flag.t == true && info->flag.r == true)
+//		*head_ref = sorted_merge_time_reverse(a,b);
 }
 
 /*
@@ -2737,7 +2742,7 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 	if(dir != NULL)
 	{
 		closedir(dir);
-		merge_sort(&ls);
+		merge_sort(&ls, info);
 //		if(info->flag.l == true && ls != NULL)
 		if(ls != NULL)
 			new_ls = append_slash(new_ls, ls, dir_path_str);
@@ -2780,7 +2785,7 @@ void	multiple_argument(t_ls *ls, t_info *info, char *dir_path_str)
 	if(dir != NULL)
 	{
 		closedir(dir);
-		merge_sort(&ls);
+		merge_sort(&ls, info);
 //	count = get_count(ls); // Will be used later when alligning columns
 		print_file_name(ls, info);
 		multiple_argument(ls, info, dir_path_str);

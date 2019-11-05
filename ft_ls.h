@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/04 21:10:01 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/04 23:50:34 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -157,7 +157,7 @@ t_ls	*append(t_ls *head, char *file_name);
 void	print_file_name(t_ls *ls, t_info *info);
 t_ls	*sorted_merge(t_ls *a, t_ls *b);
 void	front_back_split(t_ls *source, t_ls **front_ref, t_ls **back_ref);
-void	merge_sort(t_ls **head_ref);
+void	merge_sort(t_ls **head_ref, t_info *info);
 int		get_count(t_ls *ls);
 bool	flag_status(t_info *info);
 void	print_file_name(t_ls *ls, t_info *info); // Will be used after the list is sorted
