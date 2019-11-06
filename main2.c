@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/05 18:51:16 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/05 19:29:49 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1475,10 +1475,15 @@ void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 
 void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 {
+	int number_of_nodes;
+
+	number_of_nodes = get_count(temp_ls);
 	while(temp_ls)
 	{
 		(info->var.new_line == true) && (write(1, "\n", 1));
-		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->file_name));
+//		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->file_name));
+//		(get_count(temp_ls) == 2)
+		(number_of_nodes == 2) && (ft_printf("%s:\n", temp_ls->file_name));
 		single_argument(ls, info, temp_ls->file_name);
 		info->var.new_line = true;
 		temp_ls = temp_ls->next;
