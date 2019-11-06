@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/05 00:04:07 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/05 16:15:05 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -995,38 +995,16 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 				temp_ls = store_file_name(temp_ls, dr->d_name);
 			}
 	}
-	merge_sort(&temp_ls, info);
+//	merge_sort(&temp_ls, info);
+//	// Commenting this because if a file is going to
+//	be sorted by time then it needs to have a full path with slash appended to
+//	it. Just having the file name does not give meta information.
 
-//	print_stored_file_names(temp_ls);
-
-/*
-	if(dir != NULL)
-		closedir(dir);
-	if(temp_ls)
-		new_ls = append_slash(new_ls, temp_ls, path);
-*/
 	(dir != NULL) && (closedir(dir));
-//	ft_printf(BGREEN"---Enters store_file_recursively---\n");
-	(temp_ls != NULL) && (new_ls = append_slash(new_ls, temp_ls, path));
+	(temp_ls != NULL) && (new_ls = append_slash(new_ls, temp_ls, path));	
 	delete_list_file_name(&temp_ls);
-//	delete_list(&temp_ls);
-//	append_slash(&temp_ls)
+	merge_sort(&new_ls, info);
 
-//	while(temp_ls)
-//	{
-//		full_path[0] = 0;
-//		ft_strcpy(full_path, path);
-//		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-//		ft_strcat(full_path, dr->d_name);
-//		temp_ls = store_file_name(temp_ls, full_path);
-
-//	}
-//	single_argument(temp_ls, info, full_path);
-//	if(temp_ls != NULL)
-//		merge_sort(&temp_ls);
-//	printf("segimprove\n");
-//	printf("========Does it come here========\n");
-//	return(temp_ls);
 	return(new_ls);
 }
 /*
@@ -1548,27 +1526,28 @@ void files_from_stored_dir_path_recurssion(t_ls *temp_ls, t_info *info)
 */
 void process_dir_valid(t_ls *ls, t_info *info)
 {
-	t_ls			*temp_ls;
+	t_ls			*temp_ls_dir;
+
 //	char			*current_dir_path;
 
-	temp_ls = NULL;
+	temp_ls_dir = NULL;
 //	current_dir_path = info->argv[info->var.i];
 //	if(flag_status(info) == false)
 	if(info->flag.uppercase_r == false)
 	{
-		temp_ls = store_dir_path_regular(temp_ls, info);
-		merge_sort(&temp_ls, info);
+		temp_ls_dir = store_dir_path_regular(temp_ls_dir, info);
+		merge_sort(&temp_ls_dir, info);
 //		merge_sort_dir(&temp_ls);
-		files_from_stored_dir_path(ls, temp_ls, info);
-		delete_list_file_name(&temp_ls);
+		files_from_stored_dir_path(ls, temp_ls_dir, info);
+		delete_list_file_name(&temp_ls_dir);
 //		delete_list_dir_path(&temp_ls);
 	}
 	else if(info->flag.uppercase_r == true)
 	{
-		temp_ls = store_dir_path_recurssion(temp_ls, info);
-		merge_sort(&temp_ls, info);
-		start_recursive_call(temp_ls, info);
-		delete_list_file_name(&temp_ls);
+		temp_ls_dir = store_dir_path_recurssion(temp_ls_dir, info);
+		merge_sort(&temp_ls_dir, info);
+		start_recursive_call(temp_ls_dir, info);
+		delete_list_file_name(&temp_ls_dir);
 	}
 /*
 		while(temp_ls)
@@ -1869,8 +1848,12 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 //		printf("info->argc:|%d|\n", info->argc);
 		else if(i == 2 && info->argc == 2 && flag_status(info) == true)
 		{
-			if(info->flag.a == true && info->flag.uppercase_r == false)
+			if(info->flag.uppercase_r == false)
 				single_argument(ls, info, ".");
+//			if(info->flag.a == true && info->flag.uppercase_r == false)
+//				single_argument(ls, info, ".");
+/*
+// Seems unnecessary
 			else if(info->flag.l == true && info->flag.uppercase_r == false)
 			{
 				temp_ls = store_root_files(temp_ls, info, ".");
@@ -1878,7 +1861,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 				delete_list_file_name(&temp_ls);
 		//		single_argument(ls, info, ".");
 			}
-
+*/
 			else if(info->flag.uppercase_r == true)
 				{
 //					print_recursively_stored_dir(ls, info, ".");
@@ -2579,10 +2562,9 @@ t_ls *sorted_merge_reverse(t_ls *a, t_ls *b)
 	return(result);
 }
 
-
-
 t_ls *sorted_merge_time(t_ls *a, t_ls *b);
-//t_ls *sorted_merge_time_ns(struct stat meta1, struct stat meta2, t_ls *a, t_ls *b)
+
+
 t_ls *sorted_merge_time_nano_second(t_ls *a, t_ls *b)
 {
 	t_ls *result;
@@ -2605,10 +2587,13 @@ t_ls *sorted_merge_time_nano_second(t_ls *a, t_ls *b)
 	return(result);
 }
 
-t_ls *sorted_merge_time(t_ls *a, t_ls *b)//, struct stat meta1, struct stat meta2)
+
+t_ls *sorted_merge_time(t_ls *a, t_ls *b)
 {
 	struct stat meta1;
 	struct stat meta2;
+//	struct timespec last_modified1;
+//	struct timespec last_modified2;
 	t_ls *result;
 
 	result = NULL;
@@ -2618,6 +2603,9 @@ t_ls *sorted_merge_time(t_ls *a, t_ls *b)//, struct stat meta1, struct stat meta
 		return(a);
 	lstat(a->file_name, &meta1);
 	lstat(b->file_name, &meta2);
+//	last_modified1 = meta1.st_mtimespec;
+//	last_modified2 = meta2.st_mtimespec;
+//  if(last_modified1.tv_sec > last_modified2.tv_sec)
 	if(meta1.st_mtimespec.tv_sec > meta2.st_mtimespec.tv_sec)
 	{
 		result = a;
@@ -2634,6 +2622,73 @@ t_ls *sorted_merge_time(t_ls *a, t_ls *b)//, struct stat meta1, struct stat meta
 	}
 	return(result);
 }
+
+t_ls *sorted_merge_time_reverse(t_ls *a, t_ls *b);
+
+t_ls *sorted_merge_time_reverse_nano_second(t_ls *a, t_ls *b)
+{
+	t_ls *result;
+	struct stat meta1;
+	struct stat meta2;
+
+	result = NULL;
+	lstat(a->file_name, &meta1);
+	lstat(b->file_name, &meta2);
+	if(meta1.st_mtimespec.tv_nsec < meta2.st_mtimespec.tv_nsec)
+	{
+		result = a;
+		result->next = sorted_merge_time_reverse(a->next, b);
+//		result = b;
+//		result->next = sorted_merge_time_reverse(a, b->next);
+
+	}
+	else
+	{
+		result = b;
+		result->next = sorted_merge_time_reverse(a, b->next);
+//		result = a;
+//		result->next = sorted_merge_time_reverse(a->next, b);
+
+	}
+	return(result);
+}
+
+t_ls *sorted_merge_time_reverse(t_ls *a, t_ls *b)
+{
+	struct stat meta1;
+	struct stat meta2;
+	t_ls *result;
+
+	result = NULL;
+	if(a == NULL)
+		return(b);
+	else if(b == NULL)
+		return(a);
+	lstat(a->file_name, &meta1);
+	lstat(b->file_name, &meta2);
+	if(meta1.st_mtimespec.tv_sec < meta2.st_mtimespec.tv_sec)
+	{
+		result = a;
+		result->next = sorted_merge_time_reverse(a->next, b);
+//		result = b;
+//		result->next = sorted_merge_time_reverse(a, b->next);
+
+	}
+	else if(meta1.st_mtimespec.tv_sec == meta2.st_mtimespec.tv_sec)
+	{
+		result = sorted_merge_time_reverse_nano_second(a, b);
+	}
+	else
+	{
+		result = b;
+		result->next = sorted_merge_time_reverse(a, b->next);
+//		result = a;
+//		result->next = sorted_merge_time_reverse(a->next, b);
+
+	}
+	return(result);
+}
+
 
 void front_back_split(t_ls *source, t_ls **front_ref, t_ls **back_ref)
 {
@@ -2670,14 +2725,16 @@ void	merge_sort(t_ls **head_ref, t_info *info)
 	front_back_split(head, &a, &b);
 	merge_sort(&a, info);
 	merge_sort(&b, info);
+//	ft_printf("info->flag.t|%d|\n", info->flag.t);
+//	ft_printf("info->flag.r|%d|\n", info->flag.r);
 	if(info->flag.r == false && info->flag.t == false)
 		*head_ref = sorted_merge(a, b);
 	else if(info->flag.r == true && info->flag.t == false)
 		*head_ref = sorted_merge_reverse(a, b);
 	else if(info->flag.t == true && info->flag.r == false)
 		*head_ref = sorted_merge_time(a, b);
-//	else if(info->flag.t == true && info->flag.r == true)
-//		*head_ref = sorted_merge_time_reverse(a,b);
+	else if(info->flag.t == true && info->flag.r == true)
+		*head_ref = sorted_merge_time_reverse(a,b);
 }
 
 /*
@@ -2743,11 +2800,12 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 	if(dir != NULL)
 	{
 		closedir(dir);
-		merge_sort(&ls, info);
+//		merge_sort(&ls, info);
 //		if(info->flag.l == true && ls != NULL)
 		if(ls != NULL)
 			new_ls = append_slash(new_ls, ls, dir_path_str);
 		delete_list_file_name(&ls);
+		merge_sort(&new_ls, info);
 		print_file_name(new_ls, info);
 		delete_list_file_name(&new_ls);
 
