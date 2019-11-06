@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/05 16:15:05 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/05 18:51:16 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -936,28 +936,14 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 		ft_permission_denied(path + find_last_slash(path));
 		return(NULL);
 	}
-	else if(info->skip_print == false || info->print_path_name == true)
+	else if(info->skip_print == false )//|| info->print_path_name == true)
 	{
-//		if(ft_strcmp(path, ".") && ft_strcmp(path, ".."))
-//		{
-//		if(info->flag.a == false)// && path[0] != '.')
-//		{
-//			ft_printf(BRED"\n|%s|\n"NC, path);
 			(info->no_dot_slash == false) && (ft_printf("\n./%s:\n", path));
 			(info->no_dot_slash == true) && (ft_printf("\n%s:\n", path));
-//		}
-/*
-		else if(info->flag.a == true)
-		{
-//			if((ft_strcmp(path, ".") == 0) || (ft_strcmp(path, "..") == 0))
-//			if(ft_strcmp(path, ".") != 0 && ft_strcmp(path, "..") != 0)
-//			{
-				(info->no_dot_slash == false) && (ft_printf("\n./%s:\n", path));
-				(info->no_dot_slash == true) && (ft_printf("\n%s:\n", path));
-//			}
-		}
-*/
 	}
+	else if(info->print_path_name == true)
+		ft_printf("%s:\n", path);
+//	else if (info->print)
 
 //	int len;
 //	len = ft_strlen(path) - 1;
@@ -1306,7 +1292,10 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 
 	inner_dir = NULL;	
 	if(temp_ls != NULL && temp_ls->file_name && info->skip_print == false)
+	{
+//		ft_printf("Comes here\n");
 		print_file_name(temp_ls, info);
+	}
 
 
 	while(temp_ls != NULL)
@@ -1316,11 +1305,12 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 		{
 			if(stat(ref_str, &meta) == 0 && S_ISDIR(meta.st_mode))
 			{
-				info->skip_print = false;
+//				info->skip_print = false;
 				if(info->flag.a == false && ref_str[0] != '.')
 					inner_dir = store_file_recursively(info, ref_str);
 				else if(info->flag.a == true)
 					inner_dir = store_file_recursively(info, ref_str);
+				info->skip_print = false;
 				if(inner_dir != NULL)
 				{
 					start_recursive_call(inner_dir, info);
@@ -1487,7 +1477,7 @@ void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 {
 	while(temp_ls)
 	{
-		(info->var.new_line == true) && (ft_printf("\n"));
+		(info->var.new_line == true) && (write(1, "\n", 1));
 		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->file_name));
 		single_argument(ls, info, temp_ls->file_name);
 		info->var.new_line = true;
@@ -1544,8 +1534,17 @@ void process_dir_valid(t_ls *ls, t_info *info)
 	}
 	else if(info->flag.uppercase_r == true)
 	{
+//		ft_printf(BGREEN"Comes inside this"NC);
+		info->var.new_line = false;
 		temp_ls_dir = store_dir_path_recurssion(temp_ls_dir, info);
 		merge_sort(&temp_ls_dir, info);
+		
+		if (get_count(temp_ls_dir) == 2)
+			info->print_path_name = true;
+		else
+			info->print_path_name = false;
+//		ft_printf("|%d|\n", info->print_path_name);
+//		ft_printf("|%d|\n", info->skip_print);
 		start_recursive_call(temp_ls_dir, info);
 		delete_list_file_name(&temp_ls_dir);
 	}
@@ -1892,7 +1891,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 // Put it back on if something breaks
 	if	(i < info->argc)
 		{
-//			ft_printf(BGREEN"\n----Comes inside this if statement---\n"NC);
+//			ft_printf(BGREEN"----Comes inside this if statement---"NC);
 			info->skip_print = true;
 			info->no_dot_slash = true;
 			info->var.temp_i = i;
@@ -2738,8 +2737,9 @@ void	merge_sort(t_ls **head_ref, t_info *info)
 }
 
 /*
-** Get count function calculates how many nodes/ files and folder there are in a
-** given directory.
+** Get count function calculates how many nodes there are, used to determine
+** if there are 2 nodes in a linked list, then it breaks and returns count
+** if the count is 2 then path will be printed.
 */
 
 int get_count(t_ls *ls)
@@ -2752,6 +2752,8 @@ int get_count(t_ls *ls)
 		{
 			ls = ls->next;
 			count++;
+			if (count == 2)
+				break;
 		}
 	return(count);
 }
