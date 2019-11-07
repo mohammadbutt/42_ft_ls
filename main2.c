@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 19:51:08 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 20:12:47 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,90 +50,6 @@ void ft_permission_denied(char *str)
 	ft_printf("ft_ls: ");
 	perror(str);
 }
-
-t_ls	*store_file_name(t_ls *ls, char *file_name)
-{
-	if(ls == NULL)
-		ls = create(file_name);
-	else
-		ls = append(ls, file_name);
-	return(ls);
-}
-
-t_ls	*create(char *valid_file_path_str)
-{
-	t_ls *new_node;
-
-	new_node = malloc(sizeof(t_ls));
-//	new_node = NULL;
-	if(new_node == NULL)
-		exit(EXIT_SUCCESS);
-	new_node->file_name = ft_strdup(valid_file_path_str);
-	new_node->next = NULL;
-	return(new_node);
-}
-
-t_ls *append(t_ls *head, char *valid_file_path_str)
-{
-	t_ls *cursor;
-	t_ls *new_node;
-
-	cursor = head;
-	while(cursor->next != NULL)
-		cursor = cursor->next;
-	new_node = create(valid_file_path_str);
-	cursor->next = new_node;
-	return(head);
-}
-
-// Storing file names in a linked list with slash index
-
-t_ls	*create_with_index(char *valid_file_path_str, int index)
-{
-	t_ls *new_node;
-
-	new_node = malloc(sizeof(t_ls));
-	if(new_node == NULL)
-		exit(EXIT_SUCCESS);
-	new_node->file_name = ft_strdup(valid_file_path_str);
-	new_node->slash_index = index;
-	new_node->next = NULL;
-	return(new_node);
-}
-
-t_ls *append_with_index(t_ls *head, char *valid_file_path_str, int index)
-{
-	t_ls *cursor;
-	t_ls *new_node;
-
-	cursor = head;
-	while(cursor->next != NULL)
-		cursor = cursor->next;
-	new_node = create_with_index(valid_file_path_str, index);
-	cursor->next = new_node;
-	return(head);
-}
-
-
-t_ls	*store_file_name_with_index(t_ls *ls, char *file_name, int index)
-{
-	if(ls == NULL)
-		ls = create_with_index(file_name, index);
-	else
-		ls = append_with_index(ls, file_name, index);
-	return(ls);
-}
-
-t_ls	*store_invalid_file_name(t_ls *ls,  char *invalid_path_str)
-{
-
-	if(ls == NULL)
-		ls = create_list_for_invalid(invalid_path_str);
-	else
-		ls = append_list_for_invalid(ls, invalid_path_str);
-	return(ls);
-}
-
 
 void print_invalid_file_name(t_ls *ls)
 {
@@ -819,38 +735,6 @@ void	initialize_info_values(t_info *info)
 {
 	ft_bzero(&info->flag, sizeof(info->flag));
 }
-
-/*
-** Linked List functions just to store file and folder names when argc is 1
-** ./ft_ls
-*/
-t_ls	*create_list_for_invalid(char *invalid_dir_path_str)
-{
-	t_ls *new_node;
-
-	new_node = malloc(sizeof(t_ls));
-	if(new_node == NULL)
-		exit(EXIT_SUCCESS);
-
-	new_node->invalid_file_name = ft_strdup(invalid_dir_path_str);
-	new_node->next = NULL;
-	return(new_node);
-}
-
-t_ls *append_list_for_invalid(t_ls *head, char *invalid_dir_path_str)
-{
-	t_ls *cursor;
-	t_ls *new_node;
-
-	cursor = head;
-	while(cursor->next != NULL)
-		cursor = cursor->next;
-	new_node = create_list_for_invalid(invalid_dir_path_str);
-	cursor->next = new_node;
-	return(head);
-}
-
-
 /*
 ** Function print_file_name will print contents, files and folders, of the
 ** current directory.

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 19:50:05 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 20:06:38 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -152,6 +152,22 @@ t_ls *sorted_merge_time_nano_second_reverse(t_ls *a, t_ls *b);
 
 t_ls	*sorted_merge_invalid_file_name(t_ls *a, t_ls *b);
 void	merge_sort_invalid_file_name(t_ls **head_ref);
+
+/*
+** ---------------------------store_file_name.c---------------------------------
+*/
+
+t_ls *store_file_name(t_ls *ls, char *file_name);
+t_ls *create(char *valid_file_path);
+t_ls *append(t_ls *head, char *valid_file_path);
+
+/*
+** --------------------------- store_file_name_with_index.c---------------------
+*/
+
+t_ls *store_file_name_with_index(t_ls *ls, char *file_name, int index);
+t_ls *create_with_index(char * valid_file_path, int index);
+t_ls *append_with_index(t_ls *head, char *valid_file_path, int index);
 
 
 //int		is_flag_valid(char c);
