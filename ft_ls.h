@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 16:49:02 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 18:32:10 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -119,10 +119,20 @@ typedef struct s_info
 ** Function Prototypes---------------------------------------------------------
 */
 
-//int		is_flag_valid(char c);
+/*
+** -------------------------ls_collect_flags.c---------------------------------
+*/
+
 bool	is_flag_valid(char c);
-//void	ls_collect_flag(t_ls *ls, char c);
 void	ls_collect_flags(t_info *info, char c);
+void	handle_improper_usage_of_dash(t_ls *ls, t_info *info);
+bool	flag_status(t_info *info);
+
+
+//int		is_flag_valid(char c);
+//bool	is_flag_valid(char c);
+//void	ls_collect_flag(t_ls *ls, char c);
+//void	ls_collect_flags(t_info *info, char c);
 //void	ls_start_parsing(t_ls *ls, int argument_count, char **str);
 void	ls_start_parsing(t_ls *ls, t_info *info);
 //void	process_dir(t_ls *ls, t_info **info, int argument_count, char **str);
