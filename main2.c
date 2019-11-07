@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 18:55:12 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 19:36:03 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1186,19 +1186,12 @@ void file_is_link(char *link_str, char *ls_file_name, char *str)
 
 void print_file_name(t_ls *ls, t_info *info)
 {
-//	t_info		info;
 	struct stat meta;
 	char *str;
 	char *link_str;
-//	int link_padding;
-//	int size_padding;
 	
 	info->pad_size = 0;
 	info->pad_nlink = 0;
-//	info.total_blocks = 0;
-//	link_padding = 0;
-//	size_padding = 0;
-//	ft_printf("slash_index: |%d|\n", ls->slash_index);
 	str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
 	if(str == NULL)
 		return;
@@ -1207,310 +1200,36 @@ void print_file_name(t_ls *ls, t_info *info)
 		link_str = malloc(sizeof(char) * (_POSIX_PATH_MAX));
 		padding_and_blocks_total(ls, &info->pad_nlink, &info->pad_size);
 	}
-
-//	get_total_for_long_listing(ls);
-//	link_padding = get_link_padding(ls);
-//	size_padding = get_size_padding(ls);
 	while(ls)
 	{
 
 		lstat(ls->file_name, &meta);
-//		ft_printf(BGREEN"\nls->file_name|%s|\n"NC, ls->file_name);
-//		ft_printf(BBLUE"------------------1------------------------\n"NC);
-//		ft_printf("sizeof:|%ld|\n", sizeof(str));
 		str[0] = 0;
-//		ft_printf(BBLUE"-------------------2------------------------\n"NC);
-//		link_str[0] = 0;
 		if(ls->slash_index >= 0)
 			ft_substring(str, ls->file_name, ls->slash_index);
 		else if(ls->slash_index <= 0)
 			ft_strcpy(str, ls->file_name);
 		if(info->flag.l == true)
-		{
-//			long_file_listing(meta, ls->file_name, link_padding, size_padding);
-//			long_file_listing(meta, ls->file_name, info->pad_nlink, info->pad_size);
 			long_file_listing(meta, ls->file_name, info);
-		}
-
-//		lstat(ls->file_name, &ls->stat);
-//		long_file_listing(ls->stat, ls->file_name, link_padding, size_padding);
-
-
-
-//		ft_printf("------|%s|---\n", ls->file_name);
-
-/*
-		ft_printf("|%d|", meta.st_size); 5th column
-		ft_printf("|%d|", meta.st_blocks); Use this to get total
-		ft_printf("|%s|", getpwuid(meta.st_uid)->pw_name); Owner
-		ft_printf("|%s|", getgrgid(meta.st_gid)->gr_name); Group_id
-		ft_printf("|%s|", ctime(&meta.st_ctimespec.tv_sec)); // Date time
-		ft_printf((S_ISDIR(meta.st_mode)) ? "d": "-");
-		permission[i++] = (S_ISDIR(meta.st_mode)) ? 'd' : '-';
-		mode = meta.st_mode;
-
-		permission[i++] = permission_file_type(meta.st_mode);
-		permission[i++] = (meta.st_mode & S_IRUSR) ? 'r' : '-';
-		permission[i++] = (meta.st_mode & S_IWUSR) ? 'w' : '-';
-		permission[i++] = (meta.st_mode & S_IXUSR) ? 'x' : '-';
-		permission[i++] = (meta.st_mode & S_IRGRP) ? 'r' : '-';
-		permission[i++] = (meta.st_mode & S_IWGRP) ? 'w' : '-';
-		permission[i++] = (meta.st_mode & S_IXGRP) ? 'x' : '-';
-		permission[i++] = (meta.st_mode & S_IROTH) ? 'r' : '-';
-		permission[i++] = (meta.st_mode & S_IWOTH) ? 'w' : '-';
-		permission[i++] = (meta.st_mode & S_IXOTH) ? 'x' : '-';
-		permission[i] = '\0';
-		ft_printf("%s  ", permission);
-*/
 		if(S_ISLNK(meta.st_mode) && info->flag.l == true)
-		{
 			file_is_link(link_str, ls->file_name, str);
-//			ft_bzero(link_str, _POSIX_PATH_MAX);
-//			readlink(ls->file_name, link_str, _POSIX_PATH_MAX);
-//			ft_printf("%s -> %s\n", str, link_str);
-		}
 		else if(info->flag.uppercase_g == true)
 		{
 			if(S_ISDIR(meta.st_mode))
-			{
 				ft_printf(BLUE"%s\n"NC, str);
-			}
 			else if(meta.st_mode & S_IXUSR)
 				ft_printf(RED"%s\n"NC, str);
 			else
 				ft_printf("%s\n", str);
 		}
 		else
-		{
 			ft_printf("%s\n", str);
-		}
 		ls = ls->next;
 	}
 
 	free(str);
-//	ft_printf(BWHITE"\ninfo->flag.a|%d|\n", info->flag.a);
 	if(info->flag.l == true)
 		free(link_str);
-}
-
-t_ls	*sorted_merge(t_ls *a, t_ls *b)
-{
-	t_ls *result;
-
-	result = NULL;
-	if(a == NULL)
-		return(b);
-	else if(b == NULL)
-		return(a);
-	if(ft_strcmp(a->file_name, b->file_name) <= 0)
-//	if(ft_strcmp(a->file_name, b->file_name) < 0)
-	{
-		result = a;
-		result->next = sorted_merge(a->next, b);
-	}
-	else
-	{
-		result = b;
-		result->next = sorted_merge(a, b->next);
-	}
-	return(result);
-}
-
-t_ls *sorted_merge_reverse(t_ls *a, t_ls *b)
-{
-	t_ls *result;
-
-	result = NULL;
-	if(a == NULL)
-		return(b);
-	else if(b == NULL)
-		return(a);
-	if(ft_strcmp(b->file_name, a->file_name) > 0)
-	{
-		result = b;
-		result->next = sorted_merge_reverse(a, b->next);
-	}
-	else
-	{
-		result = a;
-		result->next = sorted_merge_reverse(a->next, b);
-	}
-	return(result);
-}
-
-t_ls *sorted_merge_time(t_ls *a, t_ls *b);
-
-
-t_ls *sorted_merge_time_nano_second(t_ls *a, t_ls *b)
-{
-	t_ls *result;
-	struct stat meta1;
-	struct stat meta2;
-
-	result = NULL;
-	lstat(a->file_name, &meta1);
-	lstat(b->file_name, &meta2);
-	if(meta1.st_mtimespec.tv_nsec > meta2.st_mtimespec.tv_nsec)
-	{
-		result = a;
-		result->next = sorted_merge_time(a->next, b);
-	}
-	else
-	{
-		result = b;
-		result->next = sorted_merge_time(a, b->next);
-	}
-	return(result);
-}
-
-
-t_ls *sorted_merge_time(t_ls *a, t_ls *b)
-{
-	struct stat meta1;
-	struct stat meta2;
-//	struct timespec last_modified1;
-//	struct timespec last_modified2;
-	t_ls *result;
-
-	result = NULL;
-	if(a == NULL)
-		return(b);
-	else if(b == NULL)
-		return(a);
-	lstat(a->file_name, &meta1);
-	lstat(b->file_name, &meta2);
-//	last_modified1 = meta1.st_mtimespec;
-//	last_modified2 = meta2.st_mtimespec;
-//  if(last_modified1.tv_sec > last_modified2.tv_sec)
-	if(meta1.st_mtimespec.tv_sec > meta2.st_mtimespec.tv_sec)
-	{
-		result = a;
-		result->next = sorted_merge_time(a->next, b);
-	}
-	else if(meta1.st_mtimespec.tv_sec == meta2.st_mtimespec.tv_sec)
-	{
-		result = sorted_merge_time_nano_second(a, b);
-	}
-	else
-	{
-		result = b;
-		result->next = sorted_merge_time(a, b->next);
-	}
-	return(result);
-}
-
-t_ls *sorted_merge_time_reverse(t_ls *a, t_ls *b);
-
-t_ls *sorted_merge_time_reverse_nano_second(t_ls *a, t_ls *b)
-{
-	t_ls *result;
-	struct stat meta1;
-	struct stat meta2;
-
-	result = NULL;
-	lstat(a->file_name, &meta1);
-	lstat(b->file_name, &meta2);
-	if(meta1.st_mtimespec.tv_nsec < meta2.st_mtimespec.tv_nsec)
-	{
-		result = a;
-		result->next = sorted_merge_time_reverse(a->next, b);
-//		result = b;
-//		result->next = sorted_merge_time_reverse(a, b->next);
-
-	}
-	else
-	{
-		result = b;
-		result->next = sorted_merge_time_reverse(a, b->next);
-//		result = a;
-//		result->next = sorted_merge_time_reverse(a->next, b);
-
-	}
-	return(result);
-}
-
-t_ls *sorted_merge_time_reverse(t_ls *a, t_ls *b)
-{
-	struct stat meta1;
-	struct stat meta2;
-	t_ls *result;
-
-	result = NULL;
-	if(a == NULL)
-		return(b);
-	else if(b == NULL)
-		return(a);
-	lstat(a->file_name, &meta1);
-	lstat(b->file_name, &meta2);
-	if(meta1.st_mtimespec.tv_sec < meta2.st_mtimespec.tv_sec)
-	{
-		result = a;
-		result->next = sorted_merge_time_reverse(a->next, b);
-//		result = b;
-//		result->next = sorted_merge_time_reverse(a, b->next);
-
-	}
-	else if(meta1.st_mtimespec.tv_sec == meta2.st_mtimespec.tv_sec)
-	{
-		result = sorted_merge_time_reverse_nano_second(a, b);
-	}
-	else
-	{
-		result = b;
-		result->next = sorted_merge_time_reverse(a, b->next);
-//		result = a;
-//		result->next = sorted_merge_time_reverse(a->next, b);
-
-	}
-	return(result);
-}
-
-
-void front_back_split(t_ls *source, t_ls **front_ref, t_ls **back_ref)
-{
-	t_ls *fast;
-	t_ls *slow;
-	slow = source;
-	fast = source->next;
-
-	while(fast != NULL)
-	{
-		fast = fast->next;
-		if(fast != NULL)
-		{
-			slow = slow->next;
-			fast = fast->next;
-		}
-	}
-	*front_ref = source;
-	*back_ref = slow->next;
-	slow->next = NULL;
-}
-
-void	merge_sort(t_ls **head_ref, t_info *info)
-{
-	t_ls *head;
-	t_ls *a;
-	t_ls *b;
-//	struct stat meta1;
-//	struct stat meta2;
-
-	head = *head_ref;
-	if(head == NULL || head->next == NULL)
-		return;
-	front_back_split(head, &a, &b);
-	merge_sort(&a, info);
-	merge_sort(&b, info);
-//	ft_printf("info->flag.t|%d|\n", info->flag.t);
-//	ft_printf("info->flag.r|%d|\n", info->flag.r);
-	if(info->flag.r == false && info->flag.t == false)
-		*head_ref = sorted_merge(a, b);
-	else if(info->flag.r == true && info->flag.t == false)
-		*head_ref = sorted_merge_reverse(a, b);
-	else if(info->flag.t == true && info->flag.r == false)
-		*head_ref = sorted_merge_time(a, b);
-	else if(info->flag.t == true && info->flag.r == true)
-		*head_ref = sorted_merge_time_reverse(a,b);
 }
 
 /*

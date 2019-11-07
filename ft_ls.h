@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 18:35:29 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 19:35:13 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -116,17 +116,35 @@ typedef struct s_info
 }					t_info;
 
 /*
-** Function Prototypes---------------------------------------------------------
+** Function Prototypes----------------------------------------------------------
 */
 
 /*
-** -------------------------ls_collect_flags.c---------------------------------
+** -------------------------ls_collect_flags.c----------------------------------
 */
 
 bool	is_flag_valid(char c);
 void	ls_collect_flags(t_info *info, char c);
 void	handle_improper_usage_of_dash(t_ls *ls, t_info *info);
 bool	flag_status(t_info *info);
+
+/*
+** --------------------------merge_sort_alpha.c---------------------------------
+*/
+
+t_ls	*sorted_merge_alpha(t_ls *a, t_ls *b);
+t_ls	*sorted_merge_alpha_reverse(t_ls *a, t_ls *b);
+void	front_back_split(t_ls *source, t_ls **font_ref, t_ls **back_ref);
+void	merge_sort(t_ls **head_ref, t_info *info);
+
+/*
+** --------------------------merge_sort_time.c----------------------------------
+*/
+
+t_ls *sorted_merge_time_nano_second(t_ls *a, t_ls *b);
+t_ls *sorted_merge_time(t_ls *a, t_ls *b);
+t_ls *sorted_merge_time_reverse(t_ls *a, t_ls *b);
+t_ls *sorted_merge_time_nano_second_reverse(t_ls *a, t_ls *b);
 
 
 //int		is_flag_valid(char c);
