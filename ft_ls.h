@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/07 00:53:31 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 01:04:46 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -258,6 +258,18 @@ void format_and_print(t_ls *ls, t_info *info, char *str, char *link_str);
 void print_file_name(t_ls *ls, t_info *info);
 void print_uppercase_g(char *str, struct stat meta);
 void print_uppercase_g(char *str, struct stat meta);
+
+/*
+** -------------------------------------formatting.c----------------------------
+*/
+
+char	*ft_substring(char *dest, char *source, int start);
+char	*ft_substr_start_end(char *dest, char *source, int start, int end);
+void	get_total_for_long_listing(t_ls *ls);
+void	file_is_link(char *link_str, char *ls_file_name, char *str);
+int		get_count(t_ls *ls);
+
+
 
 
 void file_is_link(char *link_str, char *ls_file_name, char *str);
