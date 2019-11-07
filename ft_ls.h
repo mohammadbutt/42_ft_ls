@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/07 01:04:46 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 01:18:08 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -239,7 +239,7 @@ void 	two_arguments(t_ls *ls, t_ls *temp_ls, t_info *info, char *path);
 void 	more_than_two_arguments(t_ls *ls, t_info *info, int i);
 void 	ls_start_parsing(t_ls *ls, t_info *info);
 void 	merge_delete_append_slash(t_ls *ls, t_info *info, char *dir_path_str);
-void	dinsle_argument(t_ls *ls, t_info *info, char *dir_path_str);
+void	sinsle_argument(t_ls *ls, t_info *info, char *dir_path_str);
 
 /*
 ** -----------------------------------append_slash.c----------------------------
@@ -269,6 +269,13 @@ void	get_total_for_long_listing(t_ls *ls);
 void	file_is_link(char *link_str, char *ls_file_name, char *str);
 int		get_count(t_ls *ls);
 
+/*
+**	------------------------------------------main.c----------------------------
+*/
+
+void	initialize_t_info_struct_variables(t_info *info);
+t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
+int		main(int argc, char *argv[]);
 
 
 
