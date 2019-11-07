@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 20:12:47 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 20:28:11 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,19 +101,14 @@ void process_invalid_file(t_ls *ls, t_info *info)
 			ls = store_file_name(ls, arg_str[i]);
 		i++;
 	}
-
-//	ft_printf("i:|%s|\n", i);
-//	ft_printf("info->vari.i|%d|\n", info->var.i);
 	if(ls != NULL)
 	{
-//		merge_sort(&ls, info); // Can create one sepeate merge_sort for invalid
 		merge_sort_invalid_file_name(&ls);
 		print_invalid_file_name(ls);
 		delete_list_file_name(&ls);
 		info->print_path_name = true;
 		info->no_dot_slash = true;
 	}
-//	ft_printf("Does it come here\n");
 }
 
 /*
@@ -143,29 +138,14 @@ void	process_valid_file(t_ls *ls, t_info *info)
 	i = info->var.i;
 	while(i < arg_count)
 	{
-//		if((stat(arg_str[i], &meta) == 0) && (opendir(arg_str[i]) == NULL))
-//			if(S_ISREG(meta.st_mode))
-//	If below if statement breaks, replace it with the above if statement
 		if((stat(arg_str[i], &meta) == 0) && (S_ISREG(meta.st_mode)))
 			ls = store_file_name(ls, arg_str[i]);
 		i++;
 	}
-//	if(ls != NULL)
-//	{
-//		info->var.new_line = true;
-//		info->print_path_name = true;
-//		info->no_dot_slash = true;
-//	}
-//	else if(ls == NULL)
-//	{
-//		info->var.new_line = false;
-//		info->print_path_name = false;
-//	}
 	if(ls != NULL)
 	{
 		merge_sort(&ls, info);
 		print_file_name(ls, info);
-//		delete_list(&ls);
 		delete_list_file_name(&ls);
 		info->var.new_line = true;
 		info->print_path_name = true;
@@ -192,7 +172,7 @@ void	process_valid_file(t_ls *ls, t_info *info)
 ** -1 mean it is an invalid file.
 ** _POSIX_PATH_MAX can store upto 256 characters
 */
-
+/*
 void delete_list_file_name(t_ls **head_ref)
 {
 	t_ls *current_node;
@@ -212,7 +192,7 @@ void delete_list_file_name(t_ls **head_ref)
 	}
 	*head_ref = NULL;
 }
-
+*/
 
 int		start_recursive_call(t_ls *temp_ls, t_info *info);
 t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
@@ -459,7 +439,6 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 ** 	if(stat(info->argv[info->var.i], &meta) == 0)
 **		if(S_ISDIR(meta.st_mode) == 1)
 **			temp_ls = store_valid_dir(temp);
-** This if statement 
 */
 
 
@@ -512,8 +491,6 @@ void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 	while(temp_ls)
 	{
 		(info->var.new_line == true) && (write(1, "\n", 1));
-//		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->file_name));
-//		(get_count(temp_ls) == 2)
 		(number_of_nodes == 2) && (ft_printf("%s:\n", temp_ls->file_name));
 		single_argument(ls, info, temp_ls->file_name);
 		info->var.new_line = true;
@@ -527,23 +504,16 @@ void process_dir_valid(t_ls *ls, t_info *info)
 {
 	t_ls			*temp_ls_dir;
 
-//	char			*current_dir_path;
-
 	temp_ls_dir = NULL;
-//	current_dir_path = info->argv[info->var.i];
-//	if(flag_status(info) == false)
 	if(info->flag.uppercase_r == false)
 	{
 		temp_ls_dir = store_dir_path_regular(temp_ls_dir, info);
 		merge_sort(&temp_ls_dir, info);
-//		merge_sort_dir(&temp_ls);
 		files_from_stored_dir_path(ls, temp_ls_dir, info);
 		delete_list_file_name(&temp_ls_dir);
-//		delete_list_dir_path(&temp_ls);
 	}
 	else if(info->flag.uppercase_r == true)
 	{
-//		ft_printf(BGREEN"Comes inside this"NC);
 		info->var.new_line = false;
 		temp_ls_dir = store_dir_path_recurssion(temp_ls_dir, info);
 		merge_sort(&temp_ls_dir, info);
@@ -552,8 +522,6 @@ void process_dir_valid(t_ls *ls, t_info *info)
 			info->print_path_name = true;
 		else
 			info->print_path_name = false;
-//		ft_printf("|%d|\n", info->print_path_name);
-//		ft_printf("|%d|\n", info->skip_print);
 		start_recursive_call(temp_ls_dir, info);
 		delete_list_file_name(&temp_ls_dir);
 	}
@@ -579,28 +547,14 @@ void process_dir_valid(t_ls *ls, t_info *info)
 
 void	process_dir(t_ls *ls, t_info *info)
 {
-//ft_printf("cp1\n");
 	info->var.new_line = false;
 	info->print_path_name = false;
-//	info->no_dot_slash = false;
 	info->var.i = info->var.temp_i;
 	process_invalid_file(ls, info);
-
-//ft_printf("cp2\n");
 	info->var.i = info->var.temp_i;
 	process_valid_file(ls, info);
-
-//ft_printf("cp3\n");
-
 	info->var.i = info->var.temp_i;
 	process_dir_valid(ls, info);
-
-//	if(info->flag.uppercase_r == true)
-//	{
-//		while()
-//	}
-//ft_printf("cp4\n");
-//	exit(EXIT_SUCCESS);
 }
 
 
@@ -782,8 +736,6 @@ void get_total_for_long_listing(t_ls *ls)
 	{
 		stat(ls->file_name, &meta);
 		total = total + meta.st_blocks;
-//		ft_printf(BCYAN"%d "NC, meta.st_blocks); // These need to be removed
-//		ft_printf(BCYAN"%s \n"NC, ls->file_name);  // These need to be removed
 		ls = ls->next;
 	}
 	ft_printf("total %d\n", total);
@@ -819,7 +771,6 @@ char 	extended_attributes(char *file_name)
 
 	xattr = 0;
 	xattr = listxattr(file_name, NULL, 0, XATTR_NOFOLLOW);
-//	(xattr < 0) && (xattr = 0);
 	if(xattr > 0)
 		character = '@';
 	else
@@ -834,7 +785,6 @@ void permission_column(struct stat meta, char *file_name)
 	char permission[12];
 
 	i = 0;
-//	extended_character = extended_attributes(meta, file_name);
 	extended_character = extended_attributes(file_name);
 	permission[i++] = permission_file_type(meta.st_mode);
 	permission[i++] = (meta.st_mode & S_IRUSR) ? 'r' : '-';
@@ -858,27 +808,10 @@ void link_column(struct stat meta, int pad_nlink)
 
 void owner_and_group_column(struct stat meta)
 {
-//	char *owner_name;
-//	char *group_name;
-
-//	owner_name = getpwuid(meta.st_uid)->pw_name;
-//	group_name = getgrgid(meta.st_gid)->gr_name;
-
-
-
-//	ft_printf(BGREEN"---Enters owner_and_group_column---\n"NC);
-	
 	if(getpwuid(meta.st_uid)->pw_name)
 		ft_printf("%s  ", getpwuid(meta.st_uid)->pw_name);
-//	ft_printf(BGREEN"---Got user name in owner_and_group_column---\n"NC);
 	if(getgrgid(meta.st_gid)->gr_name)
 		ft_printf("%s  ", getgrgid(meta.st_gid)->gr_name);
-//	ft_printf(BGREEN"---Finished with owner_and_group_column---\n"NC);
-
-
-
-//	printf("%s  ", owner_name);
-//	printf("%s  ", group_name);
 }
 
 

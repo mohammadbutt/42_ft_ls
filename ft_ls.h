@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 20:06:38 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 20:30:07 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -168,6 +168,24 @@ t_ls *append(t_ls *head, char *valid_file_path);
 t_ls *store_file_name_with_index(t_ls *ls, char *file_name, int index);
 t_ls *create_with_index(char * valid_file_path, int index);
 t_ls *append_with_index(t_ls *head, char *valid_file_path, int index);
+
+/*
+** ------------------------------- delete_linked_list.c-------------------------
+*/
+
+void delete_list_file_name(t_ls **head_ref);
+
+/*
+** ----------------------------process_dir_valid.c------------------------------
+*/
+
+
+/*
+** ----------------------process_valid_and_invalid_file.c-----------------------
+*/
+
+
+
 
 
 //int		is_flag_valid(char c);
