@@ -6,7 +6,7 @@
 #    By: mbutt <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/18 15:35:11 by mbutt             #+#    #+#              #
-#    Updated: 2019/11/06 14:59:52 by mbutt            ###   ########.fr        #
+#    Updated: 2019/11/07 01:27:08 by mbutt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,12 +24,12 @@ WFLAGS = -Wall -Wextra -Werror
 DEBUG = -fsanitize=address -g #-ggdb
 #DEBUG = -fsanitize=undefined
 
-SRC = *.c
+SRC = ft_ls_src/*.c
 OBJ = *.o
 #OBJ = $(SRC:.c=.o)
 
-FT_PRINTF_DIR = ft_printf/
-FT_PRINTF_STATIC = ft_printf/libftprintf.a
+FT_PRINTF_DIR = ft_ls_src/ft_printf/
+FT_PRINTF_STATIC = ft_ls_src/ft_printf/libftprintf.a
 
 all: $(NAME)
 
@@ -41,12 +41,12 @@ $(NAME):
 	@echo "${GREEN}Generated ft_ls succesfully.${NC}"	
 
 clean:
-	make clean -C ft_printf/
+	make clean -C ft_ls_src/ft_printf/
 	/bin/rm -rf $(OBJ)
 	@echo "${ORANGE}Removed object files for ft_ls.${NC}"
 
 fclean:
-	make fclean -C ft_printf/
+	make fclean -C ft_ls_src/ft_printf/
 	/bin/rm -rf $(NAME) $(OBJ)
 	@echo "${ORANGE}Removed obect files for ft_ls.${NC}"
 	@echo "${YELLOW}Removed ft_ls.${NC}"
