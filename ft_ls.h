@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 22:42:25 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 22:56:58 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -220,6 +220,16 @@ int get_link_padding(t_ls *ls);
 int get_size_padding(t_ls *ls);
 int find_max(int num1, int num2);
 void padding_and_blocks_total(t_ls *ls, int *pad_nlink, int *pad_size);
+
+/*
+** ------------------long_file_listing_permission_column.c----------------------
+*/
+
+char permission_file_type(int file_mode);
+char extended_attributes(char *file_name);
+void permission_column(struct stat meta, char *file_name);
+
+
 
 
 
