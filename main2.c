@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/05 19:29:49 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 18:00:35 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,15 @@ void ls_collect_flags(t_info *info, char c)
 		info->flag.r = true;
 	else if(c == 'R')
 		info->flag.uppercase_r = true;
+	else if(c == 'G')
+		info->flag.uppercase_g = true;
 }
 
 
 void ft_exit_illegal_option(char c)
 {
 	ft_printf("ft_ls: illegal option -- %c\n", c);
-	ft_printf("usage: ft_ls [-latrR] [file ...]\n");
+	ft_printf("usage: ft_ls [-latrRG] [file ...]\n");
 	exit(EXIT_SUCCESS);
 }
 
@@ -117,14 +119,14 @@ void ft_exit_illegal_option(char c)
 ** then ls will not show contents of that folder. perror will print a message
 ** saying ... permission denied.
 */
-
+/*
 void ft_exit_no_dir(char *str)
 {
 	ft_printf("ft_ls: ");
 	perror(str);
 	exit(EXIT_SUCCESS);
 }
-
+*/
 void ft_permission_denied(char *str)
 {
 	ft_printf("ft_ls: ");
@@ -199,6 +201,7 @@ void ls_start_parsing(t_info *info, int argument_count, char **str)
 }
 */
 // Below functions are created to handle dir -R flag
+/*
 t_ls *sorted_merge_dir(t_ls *a, t_ls *b)
 {
 	t_ls *result;
@@ -220,7 +223,8 @@ t_ls *sorted_merge_dir(t_ls *a, t_ls *b)
 	}
 	return(result);
 }
-
+*/
+/*
 t_ls *sorted_merge_dir_reverse(t_ls *a, t_ls *b)
 {
 	t_ls *result;
@@ -242,7 +246,8 @@ t_ls *sorted_merge_dir_reverse(t_ls *a, t_ls *b)
 	}
 	return(result);
 }
-
+*/
+/*
 t_ls *sorted_merge_dir_time(t_ls *a, t_ls *b);
 t_ls *sorted_merge_dir_time_nano_second(t_ls *a, t_ls *b)
 {
@@ -265,7 +270,8 @@ t_ls *sorted_merge_dir_time_nano_second(t_ls *a, t_ls *b)
 	}
 	return(result);
 }
-
+*/
+/*
 t_ls *sorted_merge_dir_time(t_ls *a, t_ls *b)
 {
 	struct stat meta1;
@@ -293,7 +299,8 @@ t_ls *sorted_merge_dir_time(t_ls *a, t_ls *b)
 	}
 	return(result);
 }
-
+*/
+/*
 void	merge_sort_dir(t_ls **head_ref)
 {
 	t_ls *head;
@@ -319,7 +326,7 @@ t_ls	*store_valid_dir(t_ls *ls, char *dir_path_str)
 		ls = append_list_for_dir(ls, dir_path_str);
 	return(ls);
 }
-
+*/
 t_ls	*store_file_name(t_ls *ls, char *file_name)
 {
 	if(ls == NULL)
@@ -696,7 +703,7 @@ int	store_dir_recursively(t_ls *temp_ls, t_info *info, char *path)
 	return(0);
 }
 */
-
+/*
 void	free_inner_dir(t_ls *ls)
 {
 	t_ls *temp_ls;
@@ -714,7 +721,8 @@ void	free_inner_dir(t_ls *ls)
 		ls = temp_ls;
 	}
 }
-
+*/
+/*
 void	delete_list(t_ls **head_ref)
 {
 	t_ls *current_node;
@@ -731,7 +739,7 @@ void	delete_list(t_ls **head_ref)
 	}
 	*head_ref = NULL;
 }
-
+*/
 void delete_list_file_name(t_ls **head_ref)
 {
 	t_ls *current_node;
@@ -751,7 +759,7 @@ void delete_list_file_name(t_ls **head_ref)
 	}
 	*head_ref = NULL;
 }
-
+/*
 void	delete_list_dir_path(t_ls **head_ref)
 {
 	t_ls *current_node;
@@ -767,7 +775,7 @@ void	delete_list_dir_path(t_ls **head_ref)
 	}
 	*head_ref = NULL;
 }
-
+*/
 int		start_recursive_call(t_ls *temp_ls, t_info *info);
 t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
 
@@ -904,6 +912,7 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 /*
 ** Just to test how file_names are stored in the linked list.
 */
+/*
 void print_stored_file_names(t_ls *ls)
 {
 	while(ls)
@@ -912,7 +921,7 @@ void print_stored_file_names(t_ls *ls)
 		ls = ls->next;
 	}
 }
-
+*/
 t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 {
 	struct dirent	*dr;
@@ -1700,6 +1709,8 @@ bool	flag_status(t_info *info)
 		return(true);
 	else if(info->flag.r == true || info->flag.uppercase_r == true)
 		return(true);
+	else if(info->flag.uppercase_g == true)
+		return(true);
 	return(false);
 }
 
@@ -1929,6 +1940,7 @@ void	initialize_info_values(t_info *info)
 
 
 // Below functions are created to handle dir for -R flag
+/*
 t_ls	*create_list_for_dir(char *dir_path_str)
 {
 	t_ls *new_node;
@@ -1953,7 +1965,7 @@ t_ls	*append_list_for_dir(t_ls *head, char *dir_path_str)
 	cursor->next = new_node;
 	return(head);
 }
-
+*/
 // Above functions are created to handle dir for -R flag
 
 t_ls	*create_list_for_invalid(char *invalid_dir_path_str)
@@ -2419,7 +2431,9 @@ void print_file_name(t_ls *ls, t_info *info)
 //	link_padding = get_link_padding(ls);
 //	size_padding = get_size_padding(ls);
 	while(ls)
-	{	
+	{
+
+		lstat(ls->file_name, &meta);
 //		ft_printf(BGREEN"\nls->file_name|%s|\n"NC, ls->file_name);
 //		ft_printf(BBLUE"------------------1------------------------\n"NC);
 //		ft_printf("sizeof:|%ld|\n", sizeof(str));
@@ -2432,7 +2446,6 @@ void print_file_name(t_ls *ls, t_info *info)
 			ft_strcpy(str, ls->file_name);
 		if(info->flag.l == true)
 		{
-			lstat(ls->file_name, &meta);
 //			long_file_listing(meta, ls->file_name, link_padding, size_padding);
 //			long_file_listing(meta, ls->file_name, info->pad_nlink, info->pad_size);
 			long_file_listing(meta, ls->file_name, info);
@@ -2475,8 +2488,21 @@ void print_file_name(t_ls *ls, t_info *info)
 //			readlink(ls->file_name, link_str, _POSIX_PATH_MAX);
 //			ft_printf("%s -> %s\n", str, link_str);
 		}
-		else
+		else if(info->flag.uppercase_g == true)
+		{
+			if(S_ISDIR(meta.st_mode))
+			{
+				ft_printf(BLUE"%s\n"NC, str);
+			}
+			else if(meta.st_mode & S_IXUSR)
+				ft_printf(RED"%s\n"NC, str);
+			else
 				ft_printf("%s\n", str);
+		}
+		else
+		{
+			ft_printf("%s\n", str);
+		}
 		ls = ls->next;
 	}
 
@@ -2836,6 +2862,7 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 **
 */
 
+/*
 void	multiple_argument(t_ls *ls, t_info *info, char *dir_path_str)
 {
 	struct dirent	*data;
@@ -2860,6 +2887,7 @@ void	multiple_argument(t_ls *ls, t_info *info, char *dir_path_str)
 	}
 
 }
+*/
 
 /*
 ** **ft_double_strdup takes the number of arguments and the a 2D array to create

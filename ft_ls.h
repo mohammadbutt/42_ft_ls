@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/04 23:50:34 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 16:49:02 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -49,7 +49,7 @@
 ** multiply 86,400 with 182.5 days(6 months) is equal to 15,768,000.
 */
 
-# define VALID_FLAG "latrR"
+# define VALID_FLAG "latrRG" // Added G
 # define FT_PATH_MAX 1024
 # define SIX_MONTH 15768000
 
@@ -64,6 +64,8 @@ typedef struct s_ls_flag
 	bool t;// : 1;
 	bool r;// : 1;
 	bool uppercase_r;// : 1;
+	bool uppercase_g;
+	bool uppercase_a;
 }	t_ls_flag;
 
 /*
