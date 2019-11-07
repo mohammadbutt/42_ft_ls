@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 22:24:32 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 22:32:22 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 ** illegal option message.
 */
 
+/*
 void ft_exit_illegal_option(char c)
 {
 	ft_printf("ft_ls: illegal option -- %c\n", c);
@@ -33,7 +34,7 @@ void	ls_collect_flag_and_illegal_option(t_info *info, int i, int j)
 		ft_exit_illegal_option(info->argv[i][j]);
 }
 
-
+*/
 /*
 ** perror will handle following errors:
 ** 1. No such file or directory - Currently only works with directory. Need to
@@ -44,12 +45,16 @@ void	ls_collect_flag_and_illegal_option(t_info *info, int i, int j)
 ** saying ... permission denied.
 */
 
-
+/*
 void ft_permission_denied(char *str)
 {
 	ft_printf("ft_ls: ");
 	perror(str);
 }
+*/
+
+
+
 
 void print_invalid_file_name(t_ls *ls)
 {
@@ -136,29 +141,7 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 	free(full_path);
 	return(new_ls);
 }
-/*
-int	set_up_environment_to_collect_flags(t_info *info, int i, int j)
-{
-	while(i < info->argc)
-	{
-		info->var.str_len = ft_strlen(info->argv[i]);
-		while(j < info->var.str_len)
-		{
-			if(info->argv[i][0] == '-')
-			{
-				(j == 0) && (j = 1);
-				ls_collect_flag_and_illegal_option(info, i ,j);
-			}
-			else if(info->argv[i][0] != '-')
-				return(i);
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-	return(i);
-}
-*/
+
 void	initialize_t_info_struct_variables(t_info *info)
 {
 	ft_bzero(&info->flag, sizeof(info->flag));

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 22:26:40 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 22:35:00 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -203,6 +203,14 @@ t_ls	*sotre_inner_recursive_files(t_ls *temp_ls, t_info *info, DIR *dir);
 t_ls	*store_file_recursively(t_info *info, char *path);
 void	handle_inner_dir(t_ls *inner_dir, t_info *info, char *ref_str);
 int		start_recursive_call(t_ls *temp_ls, t_info *info);
+
+/*
+** -------------------------usage_and_permission_denied.c-----------------------
+*/
+
+void	ft_exit_illegal_option(char c);
+void	ls_collect_flag_and_illegal_option(t_info *info, int i, int j);
+void	ft_permission_denied(char *str);
 
 
 t_ls *append_slash(t_ls *new_ls, t_ls *temp_ls, char *path);
