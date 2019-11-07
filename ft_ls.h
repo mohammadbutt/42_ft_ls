@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 23:56:08 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 00:24:14 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -241,6 +241,13 @@ void 	ls_start_parsing(t_ls *ls, t_info *info);
 void 	merge_delete_append_slash(t_ls *ls, t_info *info, char *dir_path_str);
 void	dinsle_argument(t_ls *ls, t_info *info, char *dir_path_str);
 
+/*
+** -----------------------------------append_slash.c----------------------------
+*/
+
+int		find_last_slash(char *file_path_woth_slash);
+t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path);
+t_ls	*get_new_ls(t_ls *new_ls, t_ls *temp_ls, char *full_path, int flash_i);
 
 
 void initialize_t_info_struct_variables(t_info *info);

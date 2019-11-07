@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 23:56:38 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 00:25:18 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,76 +27,6 @@ void print_invalid_file_name(t_ls *ls)
 	}
 }
 t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
-
-
-/*
-** function find_last_slash, returns the index of the last slash that occurs in
-** a file path.
-** Functions is used in permission denied case, so slashes can be truncated
-** from the beginning of the file path, so just the name is returned.
-*/
-
-int find_last_slash(char *file_path_with_slash)
-{
-	int len;
-
-	len = 0;
-	len = ft_strlen(file_path_with_slash) - 1;
-
-	if(len <= 0)
-		return(0);
-	while(len)
-	{
-		if(file_path_with_slash[len] == '/')
-			return(len + 1);
-		len--;
-	}
-	return(0);
-}
-
-t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
-{
-	char *full_path;
-	int i;
-	int j;
-	int reset_i;
-	char *ref_str;
-	
-	full_path = malloc(sizeof(char) * (_POSIX_PATH_MAX));
-	i = 0;
-	j = 0;
-	reset_i = 0;
-	full_path[0] = 0;
-	if(path)
-	{
-		while(path[j])
-			full_path[i++] = path[j++];
-		(full_path[i - 1] != '/') && (full_path[i++] = '/');
-		full_path[i] = '\0';
-	}
-	reset_i = i;
-	while(temp_ls && temp_ls->file_name)
-	{
-		ref_str = temp_ls->file_name;
-		i = reset_i;
-		j = 0;
-
-		if(ft_strcmp(ref_str, ".") == 0 || ft_strcmp(ref_str, "..") == 0)
-		{
-			new_ls = store_file_name_with_index(new_ls, ref_str, 0);
-		}
-		else
-		{
-			while(ref_str[j])
-				full_path[i++] = ref_str[j++];
-			full_path[i] = '\0';
-			new_ls = store_file_name_with_index(new_ls, full_path, reset_i);
-		}
-		temp_ls = temp_ls->next;
-	}
-	free(full_path);
-	return(new_ls);
-}
 
 void	initialize_t_info_struct_variables(t_info *info)
 {
@@ -129,54 +59,6 @@ t_ls *store_root_files(t_ls *ls, t_info *info, char *dir_path_str)
 	merge_sort(&ls, info);
 	return(ls);
 }
-/*
-void	ls_start_parsing(t_ls *ls, t_info *info)
-{
-	t_ls			*temp_ls;
-	int				i;
-	int				j;
-	char			current;
-
-	i = 1;
-	j = 1;
-	current = info->argv[i][0];
-	temp_ls = NULL;
-
-	
-	initialize_t_info_struct_variables(info);
-	if((current != '-') || (current == '-' && info->argv[i][1] == '\0'))
-		handle_improper_usage_of_dash(ls, info);
-	else if(info->argv[i][0] == '-' && info->argv[i][1] != '\0')
-	{
-		i = set_up_environment_to_collect_flags(info, i, j);
-		if(i == info->argc && (flag_status(info) == false))
-		{
-			single_argument(ls, info, ".");
-		}
-		else if(i == 2 && info->argc == 2 && flag_status(info) == true)
-		{
-			if(info->flag.uppercase_r == false)
-				single_argument(ls, info, ".");
-			else if(info->flag.uppercase_r == true)
-				{					
-					temp_ls = store_root_files(temp_ls, info, ".");
-					info->skip_print = false;
-					start_recursive_call(temp_ls, info);
-					delete_list_file_name(&temp_ls);
-				}
-			return;
-		}
-		else if (i < info->argc)
-		{
-				info->skip_print = true;
-				info->no_dot_slash = true;
-				info->var.temp_i = i;
-				process_dir(ls, info);
-		}
-
-	}
-}
-*/
 void	initialize_info_values(t_info *info)
 {
 	ft_bzero(&info->flag, sizeof(info->flag));
