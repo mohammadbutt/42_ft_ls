@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/07 15:21:17 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/29 19:02:00 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 02:01:53 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@
 # define FT_TWO_KILOBYTE 2048
 # define FT_FOUR_KILOBYTE 4096
 # define FT_32_KILOBYTE 32768
-//# define FT_MEMORY FT_ONE_MEGABYTE
 # define FT_MEMORY FT_FOUR_KILOBYTE
 # define FT_VALID_TYPE "cspdiouxXfb%"
 # define FT_HEX 16

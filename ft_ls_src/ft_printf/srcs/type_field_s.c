@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 22:57:44 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/29 23:24:17 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 02:12:45 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,30 +64,17 @@ void	s_append_buffer(t_printf *pr, char *str, int repeat)
 void	collect_s(t_printf *pr)
 {
 	char	*ts;
-//	char	s[pr->width_field + ft_abs(pr->precision_field) + FT_MEMORY];
 	char	*s;
 	int		repeat;
-	int		width;
-	int		precision;
+	int		w;
+	int		p;
 
-	width = pr->width_field;
-	precision = pr->precision_field;
+	w = pr->width_field;
+	p = pr->precision_field;
 	repeat = 0;
 	ts = va_arg(pr->arguments, char *);
-//	printf("|%s|", ts);
-	s = malloc(sizeof(char) * ((ft_strlen(ts)) + width + 1 + ft_abs(precision)));
-//	if(s != NULL)
-//	{
-//		printf("----------------Memory allocation failed------------\n");
-//		return;
-//	}
-//	printf("|%s|", s);
-
+	s = malloc(sizeof(char) * ((ft_strlen(ts)) + w + 1 + ft_abs(p)));
 	s[0] = 0;
-//	width = pr->width_field;
-//	precision = pr->precision_field;
-//	repeat = 0;
-//	ts = va_arg(pr->arguments, char *);
 	if (ts == NULL)
 		ts = "(null)";
 	if (pr->precision_field > 0)

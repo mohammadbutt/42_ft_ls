@@ -6,25 +6,24 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/11 15:50:22 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/22 21:25:08 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 02:07:45 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_libft.h"
 
 /*
-int	ft_strlen(char *str)
-{
-	int i;
-
-	i = 0;
-	if(str)
-		while(str[i])
-			i++;
-	return(i);
-}
+**int	ft_strlen(char *str)
+**{
+**	int i;
+**
+**	i = 0;
+**	if(str)
+**		while(str[i])
+**			i++;
+**	return(i);
+**}
 */
-
 
 int				ft_strlen(char *str)
 {

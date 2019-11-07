@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/08 12:54:07 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/29 19:08:23 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 02:01:14 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ int		ft_printf_driver(va_list args, const char *str)
 		}
 		else
 			pr.buffer[pr.buffer_i++] = pr.string[pr.i];
-//		if (pr.buffer_i >= FT_32_KILOBYTE) // Changing it from 32kb to 1kb. 
-//			refresh_buffer(&pr);
 		if (pr.buffer_i >= FT_ONE_KILOBYTE)
 			refresh_buffer(&pr);
 		pr.i++;

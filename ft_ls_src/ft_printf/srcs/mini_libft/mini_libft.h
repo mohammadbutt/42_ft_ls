@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/09 15:50:24 by mbutt             #+#    #+#             */
-/*   Updated: 2019/10/22 21:22:23 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 02:06:33 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,6 @@ void				ft_putstr(char *str);
 */
 
 int					ft_strcmp(const char *str1, const char *str2);
-
-//char				*ft_strdup(const char *s1);
 char				*ft_strdup(char *str1);
 
 #endif
