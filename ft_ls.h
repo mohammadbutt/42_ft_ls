@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 22:56:58 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 23:10:24 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -222,17 +222,19 @@ int find_max(int num1, int num2);
 void padding_and_blocks_total(t_ls *ls, int *pad_nlink, int *pad_size);
 
 /*
-** ------------------long_file_listing_permission_column.c----------------------
+** ------------------------------------long_file_listing.c----------------------
 */
 
 char permission_file_type(int file_mode);
 char extended_attributes(char *file_name);
 void permission_column(struct stat meta, char *file_name);
+void month_date_time_column(struct stat meta);
+void long_file_listing(struct stat meta, char *file_name, t_info *info);
 
 
 
 
-
+char *ft_substr_start_end(char *dest, char *source, int start, int end);
 t_ls *append_slash(t_ls *new_ls, t_ls *temp_ls, char *path);
 void ft_permission_denied(char *str);
 int	find_last_slash(char *file_path_with_slash);
