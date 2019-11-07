@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/07 00:25:18 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 00:31:16 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_ls *store_root_files(t_ls *ls, t_info *info, char *dir_path_str)
 	merge_sort(&ls, info);
 	return(ls);
 }
+
 void	initialize_info_values(t_info *info)
 {
 	ft_bzero(&info->flag, sizeof(info->flag));
@@ -130,7 +131,7 @@ void file_is_link(char *link_str, char *ls_file_name, char *str)
 	readlink(ls_file_name, link_str, _POSIX_PATH_MAX);
 	ft_printf("%s -> %s\n", str, link_str);
 }
-
+/*
 void print_file_name(t_ls *ls, t_info *info)
 {
 	struct stat meta;
@@ -178,7 +179,7 @@ void print_file_name(t_ls *ls, t_info *info)
 	if(info->flag.l == true)
 		free(link_str);
 }
-
+*/
 /*
 ** Get count function calculates how many nodes there are, used to determine
 ** if there are 2 nodes in a linked list, then it breaks and returns count
