@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 20:30:07 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 21:55:10 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -179,14 +179,34 @@ void delete_list_file_name(t_ls **head_ref);
 ** ----------------------------process_dir_valid.c------------------------------
 */
 
+t_ls	*store_dir_path(t_ls *temp_ls, t_info *info);
+void	files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info);
+void	process_dir_valid(t_ls *ls, t_info *info);
+void	process_dir(t_ls *ls, t_info *info);
+
 
 /*
 ** ----------------------process_valid_and_invalid_file.c-----------------------
 */
 
+void	process_invalid_file(t_ls *ls, t_info *info);
+void	process_valid_file(t_ls *ls, t_info *info);
 
 
+/*
+** -----------------------ls_recursive_call.c-----------------------------------
+*/
 
+void	print_dir_path_for_recursion(t_info *info, char *path);
+t_ls	*sotre_inner_recursive_files(t_ls *temp_ls, t_info *info, DIR *dir);
+t_ls	*store_file_recursively(t_info *info, char *path);
+void	handle_inner_dir(t_ls *inner_dir, t_info *info, char *ref_str);
+int		start_recursive_call(t_ls *temp_ls, t_info *info);
+
+
+t_ls *append_slash(t_ls *new_ls, t_ls *temp_ls, char *path);
+void ft_permission_denied(char *str);
+int	find_last_slash(char *file_path_with_slash);
 
 //int		is_flag_valid(char c);
 //bool	is_flag_valid(char c);

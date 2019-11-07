@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 20:28:11 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 21:59:23 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ void print_invalid_file_name(t_ls *ls)
 */
 
 
-void	delete_list_file_name(t_ls **head_ref);
-
+//void	delete_list_file_name(t_ls **head_ref);
+/*
 void process_invalid_file(t_ls *ls, t_info *info)
 {
 	struct stat		meta;
@@ -110,7 +110,7 @@ void process_invalid_file(t_ls *ls, t_info *info)
 		info->no_dot_slash = true;
 	}
 }
-
+*/
 /*
 ** In function process_valid_file.
 ** If a directory/folder has permission denied, it will still be able to go
@@ -124,8 +124,8 @@ void process_invalid_file(t_ls *ls, t_info *info)
 **
 ** if((stat(arg_str[i], &meta) == 0) && (S_ISREG(meta.st_mode))); 
 */
-void	delete_list_file_name(t_ls **head_ref);
-
+//void	delete_list_file_name(t_ls **head_ref);
+/*
 void	process_valid_file(t_ls *ls, t_info *info)
 {
 	struct stat		meta;
@@ -152,6 +152,9 @@ void	process_valid_file(t_ls *ls, t_info *info)
 		info->no_dot_slash = true;
 	}
 }
+*/
+
+
 
 /*
 ** 1. stat(dirent->d_name, &stat) has to be called first
@@ -172,29 +175,8 @@ void	process_valid_file(t_ls *ls, t_info *info)
 ** -1 mean it is an invalid file.
 ** _POSIX_PATH_MAX can store upto 256 characters
 */
-/*
-void delete_list_file_name(t_ls **head_ref)
-{
-	t_ls *current_node;
-	t_ls *next_node;
 
-	current_node = *head_ref;
-//	if(current == NULL)
-//		return;
-	while(current_node != NULL)
-	{
-		next_node = current_node->next;
-		if(current_node->file_name)
-			free(current_node->file_name);
-		if(current_node)
-			free(current_node);
-		current_node = next_node;
-	}
-	*head_ref = NULL;
-}
-*/
-
-int		start_recursive_call(t_ls *temp_ls, t_info *info);
+//int		start_recursive_call(t_ls *temp_ls, t_info *info);
 t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
 
 
@@ -268,27 +250,21 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 	return(new_ls);
 }
 
-
+/*
 t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 {
 	struct dirent	*dr;
-//	struct stat		meta;
 	DIR *dir;
-//	char full_path[_POSIX_PATH_MAX];
 	t_ls *temp_ls;
 	t_ls *new_ls;
 
 	temp_ls = NULL;
 	new_ls = NULL;
-//	ft_printf(BGREEN"|%s|\n"NC, path);
 
-//	if(ft_strcmp(path, ".") != 0 && ft_strcmp(path, "..") != 0)
-//		return(new_ls);
 	if((dir = opendir(path)) == NULL)
 	{
 		(info->no_dot_slash == false) && (ft_printf(BRED"\n./%s\n"NC, path));
 		(info->no_dot_slash == true) && (ft_printf(BRED"\n%s\n"NC, path));
-//		ft_permission_denied(path);
 		ft_permission_denied(path + find_last_slash(path));
 		return(NULL);
 	}
@@ -299,48 +275,17 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 	}
 	else if(info->print_path_name == true)
 		ft_printf("%s:\n", path);
-//	else if (info->print)
-
-//	int len;
-//	len = ft_strlen(path) - 1;
-/*
-// Works. Refactoring and improving the if statment slightly
-	while((dr = readdir(dir)) != NULL)
-	{
-		if(info->flag.a == true)
-			temp_ls = store_file_name(temp_ls, dr->d_name);
-		else if(info->flag.a == false && dr->d_name[0] != '.')
-		{
-			temp_ls = store_file_name(temp_ls, dr->d_name);
-		}
-	}
-*/
-
 	if(info->flag.a == true)
 	{
 		while((dr = readdir(dir)) != NULL)
-		{
-//			ft_printf(BCYAN"|%s|\n", dr->d_name);
-//			if(ft_strcmp(dr->d_name, ".") != 0 && ft_strcmp(dr->d_name, "..") != 0)
-//			{
-//				ft_printf(BCYAN"|%s|\n", dr->d_name);
 				temp_ls = store_file_name(temp_ls, dr->d_name);
-//			}
-		}
 	}
 	else if(info->flag.a == false)
 	{
 		while((dr = readdir(dir)) != NULL)
 			if(dr->d_name[0] != '.')
-			{
-//				ft_printf(BCYAN"|%s|\n"NC, dr->d_name);
 				temp_ls = store_file_name(temp_ls, dr->d_name);
-			}
 	}
-//	merge_sort(&temp_ls, info);
-//	// Commenting this because if a file is going to
-//	be sorted by time then it needs to have a full path with slash appended to
-//	it. Just having the file name does not give meta information.
 
 	(dir != NULL) && (closedir(dir));
 	(temp_ls != NULL) && (new_ls = append_slash(new_ls, temp_ls, path));	
@@ -349,7 +294,7 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 
 	return(new_ls);
 }
-
+*/
 /*
 ** I had initially decided to store the inner directories on stack as below:
 ** char full_path[_POSIX_PATH_MAX]
@@ -377,29 +322,16 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 ** for ./ft_ls -R skip_first_print is set to false because in that case, root
 ** files and directories need to be printed.
 */
-
-//int		start_recursive_call(t_ls *temp_ls, t_info *info);
 /*
-t_ls	*store_inner_dir(char *file_path)
-{
-	char 
-}
-*/
 int		start_recursive_call(t_ls *temp_ls, t_info *info)
 {
 	t_ls			*inner_dir;
-//	t_ls			*new_inner_dir;
 	struct	stat	meta;
 	char	*ref_str;
 
 	inner_dir = NULL;	
 	if(temp_ls != NULL && temp_ls->file_name && info->skip_print == false)
-	{
-//		ft_printf("Comes here\n");
 		print_file_name(temp_ls, info);
-	}
-
-
 	while(temp_ls != NULL)
 	{
 		ref_str = temp_ls->file_name;
@@ -407,7 +339,6 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 		{
 			if(stat(ref_str, &meta) == 0 && S_ISDIR(meta.st_mode))
 			{
-//				info->skip_print = false;
 				if(info->flag.a == false && ref_str[0] != '.')
 					inner_dir = store_file_recursively(info, ref_str);
 				else if(info->flag.a == true)
@@ -424,6 +355,8 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 	}
 	return(0);
 }
+*/
+
 /*
 ** info->var.i = i
 ** info->argv = arg_string
@@ -441,32 +374,8 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 **			temp_ls = store_valid_dir(temp);
 */
 
-
 /*
-** Functions store_dir_path_regular and store_dir_path_for_recurssion
-** are really similar. The only difference is:
-** 1. store_dir_path_without_flag stores directory in linked list in dir_path.
-** 2. store_dir_path_for_recurssion stores directory in linked list in file_name
-*/
-t_ls	*store_dir_path_regular(t_ls *temp_ls, t_info *info)
-{
-	struct stat meta;
-	DIR 	*dir;
-
-//	while((info->var.i < info->argc) && (info->flag.uppercase_r == false))
-	while(info->var.i < info->argc)
-	{
-		dir = opendir(info->argv[info->var.i]);
-		if(stat(info->argv[info->var.i], &meta) == 0)
-			if(S_ISDIR(meta.st_mode) == 1)
-				temp_ls = store_file_name(temp_ls, info->argv[info->var.i]);
-		(dir != NULL) && (closedir(dir));
-		info->var.i++;
-	}
-	return(temp_ls);
-}
-
-t_ls *store_dir_path_recurssion(t_ls *temp_ls, t_info *info)
+t_ls *store_dir_path(t_ls *temp_ls, t_info *info)
 {
 	struct stat meta;
 	DIR	*dir;
@@ -483,6 +392,7 @@ t_ls *store_dir_path_recurssion(t_ls *temp_ls, t_info *info)
 	return(temp_ls);
 }
 
+
 void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 {
 	int number_of_nodes;
@@ -497,27 +407,28 @@ void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 		temp_ls = temp_ls->next;
 	}
 }
+*/
 
-int start_recursive_call(t_ls *temp_ls, t_info *info);
 
+
+//int start_recursive_call(t_ls *temp_ls, t_info *info);
+
+/*
 void process_dir_valid(t_ls *ls, t_info *info)
 {
 	t_ls			*temp_ls_dir;
 
 	temp_ls_dir = NULL;
+	temp_ls_dir = store_dir_path(temp_ls_dir, info);
+	merge_sort(&temp_ls_dir, info);
 	if(info->flag.uppercase_r == false)
 	{
-		temp_ls_dir = store_dir_path_regular(temp_ls_dir, info);
-		merge_sort(&temp_ls_dir, info);
 		files_from_stored_dir_path(ls, temp_ls_dir, info);
 		delete_list_file_name(&temp_ls_dir);
 	}
 	else if(info->flag.uppercase_r == true)
 	{
 		info->var.new_line = false;
-		temp_ls_dir = store_dir_path_recurssion(temp_ls_dir, info);
-		merge_sort(&temp_ls_dir, info);
-		
 		if (get_count(temp_ls_dir) == 2)
 			info->print_path_name = true;
 		else
@@ -526,7 +437,7 @@ void process_dir_valid(t_ls *ls, t_info *info)
 		delete_list_file_name(&temp_ls_dir);
 	}
 }
-
+*/
 
 /*
 ** function process_dir does the below three things and the order matters.
@@ -545,6 +456,7 @@ void process_dir_valid(t_ls *ls, t_info *info)
 ** can be printed.
 */
 
+/*
 void	process_dir(t_ls *ls, t_info *info)
 {
 	info->var.new_line = false;
@@ -556,7 +468,7 @@ void	process_dir(t_ls *ls, t_info *info)
 	info->var.i = info->var.temp_i;
 	process_dir_valid(ls, info);
 }
-
+*/
 
 int	set_up_environment_to_collect_flags(t_info *info, int i, int j)
 {
