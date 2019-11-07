@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 22:44:15 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 22:44:57 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -357,7 +357,6 @@ void	long_file_listing(struct stat meta, char *file_name, t_info *info)
 	size_column(meta, info->pad_size);
 	month_date_time_column(meta);
 }
-
 
 /*
 ** stat(2) is an incredibly powerful functions that provides information about
