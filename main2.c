@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 23:12:03 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 23:56:38 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ t_ls *store_root_files(t_ls *ls, t_info *info, char *dir_path_str)
 	merge_sort(&ls, info);
 	return(ls);
 }
-
+/*
 void	ls_start_parsing(t_ls *ls, t_info *info)
 {
 	t_ls			*temp_ls;
@@ -166,7 +166,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 				}
 			return;
 		}
-		if (i < info->argc)
+		else if (i < info->argc)
 		{
 				info->skip_print = true;
 				info->no_dot_slash = true;
@@ -176,7 +176,7 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 
 	}
 }
-
+*/
 void	initialize_info_values(t_info *info)
 {
 	ft_bzero(&info->flag, sizeof(info->flag));
@@ -317,48 +317,6 @@ int get_count(t_ls *ls)
 				break;
 		}
 	return(count);
-}
-
-/*
-** if statement:
-** if(data->d_name[0] != '.') -> will help ignore hidden files which begin with
-** '.', dot, '..', and dot dot.
-** And then it will start storing names of all files and folders in a linked
-** list, and as mentioned earlier, but ignore hidden files which begin with '.'
-*/
-
-// Works trying to add stat to this
-void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
-{
-	struct dirent	*data;
-	DIR				*dir;
-	t_ls 			*new_ls;
-
-	new_ls = NULL;
-	dir = opendir(dir_path_str);
-	if(dir == NULL)
-		ft_permission_denied(dir_path_str);
-	else if(dir != NULL)
-	{
-		while((data = readdir(dir)) != NULL)
-		{
-			if(info->flag.a == true)
-				ls = store_file_name_with_index(ls, data->d_name, 0);
-			else if(info->flag.a == false && data->d_name[0] != '.')
-				ls = store_file_name_with_index(ls, data->d_name, 0);
-		}
-	}
-
-	if(dir != NULL)
-	{
-		closedir(dir);
-		if(ls != NULL)
-			new_ls = append_slash(new_ls, ls, dir_path_str);
-		delete_list_file_name(&ls);
-		merge_sort(&new_ls, info);
-		print_file_name(new_ls, info);
-		delete_list_file_name(&new_ls);
-	}
 }
 
 int main(int argc, char *argv[])

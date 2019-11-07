@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 23:10:24 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 23:56:08 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -231,9 +231,20 @@ void permission_column(struct stat meta, char *file_name);
 void month_date_time_column(struct stat meta);
 void long_file_listing(struct stat meta, char *file_name, t_info *info);
 
+/*
+** ----------------------------------------ls_parsing.c-------------------------
+*/
+
+void 	two_arguments(t_ls *ls, t_ls *temp_ls, t_info *info, char *path);
+void 	more_than_two_arguments(t_ls *ls, t_info *info, int i);
+void 	ls_start_parsing(t_ls *ls, t_info *info);
+void 	merge_delete_append_slash(t_ls *ls, t_info *info, char *dir_path_str);
+void	dinsle_argument(t_ls *ls, t_info *info, char *dir_path_str);
 
 
 
+void initialize_t_info_struct_variables(t_info *info);
+t_ls *store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
 char *ft_substr_start_end(char *dest, char *source, int start, int end);
 t_ls *append_slash(t_ls *new_ls, t_ls *temp_ls, char *path);
 void ft_permission_denied(char *str);
