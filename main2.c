@@ -6,102 +6,11 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 18:32:12 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 18:55:12 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-/*
-** is_flag_valid takes a character and compares it with VALID_FLAG string,
-** "latrR", if the character appears then it's valid and returns 1, if the
-** character does nor appear in VALID_FLAG, "latrR", then the character is
-** invalid and will return 0.
-** Return Values: true for valid. false for invalid
-*/
-/*
-bool is_flag_valid(char c)
-{
-	int i;
-
-	i = 0;
-	while(VALID_FLAG[i])
-	{
-		if(VALID_FLAG[i] == c)
-			return(true);
-		i++;
-	}
-	return(false);
-}
-
-void ls_collect_flags(t_info *info, char c)
-{
-	if(c == 'l')
-		info->flag.l = true;
-	else if(c == 'a')
-		info->flag.a = true;
-	else if(c == 't')
-		info->flag.t = true;
-	else if(c == 'r')
-		info->flag.r = true;
-	else if(c == 'R')
-		info->flag.uppercase_r = true;
-	else if(c == 'G')
-		info->flag.uppercase_g = true;
-}
-*/
-/*
-** Function handle_improper_usage_of_dash handles the edge cases with dash.
-** 1. If the 0th character of the 1st argument is not a '-', dash.
-** 2. If the 0th character of the 1st argument is a '-', dash, but 1st character
-** is '\0', which means '-', dash, is the only chracter present.
-** Below are some of the commands it will handle:
-** ./ft_ls abc
-** If abc folder does not exist, it will print:
-** "ft_ls: abc: No such file or directory"
-**
-** ./ft_ls abc
-** If abc folder exists it will will print contents of that folder.
-** 
-** ./ft_ls
-** It will print contents of the current/root directory.
-**
-** For the second if statement:
-** ./ft_ls -
-** It will print conetns of the folder if there is a directory named '-'. But
-** if a directory does not exist with the name of '-', then it will print the
-** following message.
-** ft_ls: -: No such file or directory
-*/
-/*
-void	handle_improper_usage_of_dash(t_ls *ls, t_info *info)
-{
-	int i;
-	
-	i = 1;
-	if(info->argv[i][0] != '-')
-		process_dir(ls, info);
-	else if(info->argv[i][0] == '-' && info->argv[i][1] == '\0')
-		process_dir(ls, info);
-}
-*/
-/*
-** Function flag status returns 1 or true if one of the flags are active.
-** If there are no flags, then it returns false or 0.
-*/
-/*
-bool	flag_status(t_info *info)
-{
-	if(info->flag.l == true || info->flag.a == true || info->flag.t == true)
-		return(true);
-	else if(info->flag.r == true || info->flag.uppercase_r == true)
-		return(true);
-	else if(info->flag.uppercase_g == true)
-		return(true);
-	return(false);
-}
-*/
-// ------- Above makes one file ----------
 
 /*
 ** If a flag is not valid at any point. The program will end and by giving the
@@ -134,214 +43,14 @@ void	ls_collect_flag_and_illegal_option(t_info *info, int i, int j)
 ** then ls will not show contents of that folder. perror will print a message
 ** saying ... permission denied.
 */
-/*
-void ft_exit_no_dir(char *str)
-{
-	ft_printf("ft_ls: ");
-	perror(str);
-	exit(EXIT_SUCCESS);
-}
-*/
+
+
 void ft_permission_denied(char *str)
 {
 	ft_printf("ft_ls: ");
 	perror(str);
 }
-/*
-void	ft_no_dir(char *dir_path_str)
-{
-	ft_printf("ft_ls: ");
-	perror(dir_path_str);
-}
-*/
-/*
-void ls_start_parsing(t_info *info, int argument_count, char **str)
-{
-	int i;
-	int j;
-	DIR *directory;
-//	struct dirent *dir_struct;
-//	char str2[1024];
-	struct stat fileinfo;
-//	char str2[1024];
 
-	i = 1;
-	j = 0;
-	
-	while(i < argument_count)
-	{
-		if(str[i][j] != '-')
-		{
-
-			directory = opendir(str[i]);
-//			ft_printf("CP1\n");
-//			dir_struct = malloc(sizeof(directory));
-//			ft_printf("CP2\n");
-//			if(dir_struct == NULL)
-//				ft_exit_no_dir(str[i]);
-
-
-			directory = opendir(str[i]);
-			stat(str[i], &fileinfo);
-			ft_printf("%s\n", str[i]);
-			return;
-
-//			if(directory == NULL)
-//				ft_exit_no_dir(str[i]);
-//			else
-//				dir_struct = readdir(directory);
-		}
-		j++;
-		while(str[i][j])
-		{
-			if (is_flag_valid(str[i][j]) == 0)
-			{
-				ft_exit(str[i][j]);
-//				ft_printf("Useage: Invalid flag2\n");
-//				return;
-			}
-			else if(is_flag_valid(str[i][j]) == 1)
-			{
-//				ft_printf("Does it come here\n");
-//				ft_printf("Valid:|%c|\n",str[i][j]);
-				ls_collect_flags(info, str[i][j]);
-//				ls_collect_flags(ls, str[i][j]);
-//				printf("flag.l|%d|\n", ls->flags.l);
-			}
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-}
-*/
-// Below functions are created to handle dir -R flag
-/*
-t_ls *sorted_merge_dir(t_ls *a, t_ls *b)
-{
-	t_ls *result;
-
-	result = NULL;
-	if(a == NULL)
-		return(b);
-	else if(b == NULL)
-		return(a);
-	if(ft_strcmp(a->dir_path, b->dir_path) <= 0)
-	{
-		result = a;
-		result->next = sorted_merge_dir(a->next, b);
-	}
-	else
-	{
-		result = b;
-		result->next = sorted_merge_dir(a, b->next);
-	}
-	return(result);
-}
-*/
-/*
-t_ls *sorted_merge_dir_reverse(t_ls *a, t_ls *b)
-{
-	t_ls *result;
-
-	result = NULL;
-	if(a == NULL)
-		return(b);
-	else if(b == NULL)
-		return(a);
-	if(ft_strcmp(b->dir_path, a->dir_path) > 0)
-	{
-		result = b;
-		result->next = sorted_merge_dir_reverse(a, b->next);
-	}
-	else
-	{
-		result = a;
-		result->next = sorted_merge_dir_reverse(a->next, b);
-	}
-	return(result);
-}
-*/
-/*
-t_ls *sorted_merge_dir_time(t_ls *a, t_ls *b);
-t_ls *sorted_merge_dir_time_nano_second(t_ls *a, t_ls *b)
-{
-	t_ls *result;
-	struct stat meta1;
-	struct stat meta2;
-
-	result = NULL;
-	lstat(a->dir_path, &meta1);
-	lstat(b->dir_path, &meta2);
-	if(meta1.st_mtimespec.tv_nsec > meta2.st_mtimespec.tv_nsec)
-	{
-		result = a;
-		result->next = sorted_merge_dir_time(a->next, b);
-	}
-	else
-	{
-		result = b;
-		result->next = sorted_merge_dir_time(a, b->next);
-	}
-	return(result);
-}
-*/
-/*
-t_ls *sorted_merge_dir_time(t_ls *a, t_ls *b)
-{
-	struct stat meta1;
-	struct stat meta2;
-	t_ls *result;
-
-	result = NULL;
-	if(a == NULL)
-		return(b);
-	else if(b == NULL)
-		return(a);
-	lstat(a->dir_path, &meta1);
-	lstat(b->dir_path, &meta2);
-	if(meta1.st_mtimespec.tv_sec > meta2.st_mtimespec.tv_sec)
-	{
-		result = a;
-		result->next = sorted_merge_dir_time(a->next, b);
-	}
-	else if(meta1.st_mtimespec.tv_sec == meta2.st_mtimespec.tv_sec)
-		result = sorted_merge_dir_time_nano_second(a, b);
-	else
-	{
-		result = b;
-		result->next = sorted_merge_dir_time(a, b->next);
-	}
-	return(result);
-}
-*/
-/*
-void	merge_sort_dir(t_ls **head_ref)
-{
-	t_ls *head;
-	t_ls *a;
-	t_ls *b;
-
-	head = *head_ref;
-	if(head == NULL || head->next == NULL)
-		return;
-	front_back_split(head, &a, &b);
-	merge_sort_dir(&a);
-	merge_sort_dir(&b);
-//	*head_ref = sorted_merge_dir(a, b);
-//	*head_ref = sorted_merge_dir_reverse(a, b);
-	*head_ref = sorted_merge_dir_time(a, b);
-}
-
-t_ls	*store_valid_dir(t_ls *ls, char *dir_path_str)
-{
-	if(ls == NULL)
-		ls = create_list_for_dir(dir_path_str);
-	else
-		ls = append_list_for_dir(ls, dir_path_str);
-	return(ls);
-}
-*/
 t_ls	*store_file_name(t_ls *ls, char *file_name)
 {
 	if(ls == NULL)
@@ -490,34 +199,6 @@ void print_invalid_file_name(t_ls *ls)
 		ls = ls->next;
 	}
 }
-/*
-void process_dir_invalid(t_ls *ls, t_info *info)
-{
-	struct dirent	*data;
-	DIR				*dir;
-	char			**arg_str;
-	int				arg_count;
-	int 			i;
-
-	arg_str = info->argv;
-	arg_count = info->argc;
-	i = info->var.i;
-	while(i < arg_count)
-	{
-		dir = opendir(arg_str[i]);
-		if(dir == NULL)
-			ls = store_invalid_file_name(ls, arg_str[i]);
-		(dir != NULL) && (closedir(dir));
-		i++;
-	}
-	if(ls != NULL)
-	{
-		merge_sort_invalid_file_name(&ls);
-		print_invalid_file_name(ls);
-		delete_list(&ls);
-	}
-}
-*/
 
 /*
 ** process_dir_invalid will process invalid files names
@@ -626,34 +307,6 @@ void	process_valid_file(t_ls *ls, t_info *info)
 }
 
 /*
-t_ls	*recursive_for_reference(t_ls *temp_ls, t_info *info, char *path)
-{
-	struct dirent	*dr;
-	struct stat		meta;
-	DIR *dir;
-	char full_path[_POSIX_PATH_MAX];
-
-	if((dir = opendir(path)) == NULL)
-		return(temp_ls);
-	while((dr = readdir(dir)) != NULL)
-	{
-		ft_strcpy(full_path, path);
-		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-		ft_strcat(full_path, dr->d_name);
-		if((stat(full_path, &meta) == 0) && (S_ISDIR(meta.st_mode) == 1))
-		{
-			if(dr->d_name[0] != '.')
-			{
-				temp_ls = store_valid_dir(temp_ls, full_path);
-				recursive_for_reference(temp_ls, info, full_path);
-			}
-		}
-	}
-	closedir(dir);
-	return(temp_ls);
-}
-*/
-/*
 ** 1. stat(dirent->d_name, &stat) has to be called first
 ** 2. S_ISDIR(stat.st_mode) is used to idetify if a given file is directory.
 ** Since the above order matters: in the below if statement stat has to appear
@@ -673,88 +326,6 @@ t_ls	*recursive_for_reference(t_ls *temp_ls, t_info *info, char *path)
 ** _POSIX_PATH_MAX can store upto 256 characters
 */
 
-
-//t_ls *store_dir_recursively(char *path, t_ls *temp_ls, t_info *info)
-/*
-int	store_dir_recursively(t_ls *temp_ls, t_info *info, char *path)
-{
-	struct dirent	*dr;
-	struct stat		meta;
-	DIR *dir;
-	char full_path[_POSIX_PATH_MAX];
-
-//	if((dir = opendir(path)) == NULL)
-//		return(1);
-//	while(((dr = readdir(dir)) != NULL) && (temp_ls))
-	while(temp_ls)
-	{
-		if((dir = opendir(path)) == NULL)
-			return(1);
-		while((dr = readdir(dir)) != NULL)
-
-		dr = readdir(dir);
-		ft_strcpy(full_path, path);
-		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-		ft_strcat(full_path, dr->d_name);
-		if((stat(full_path, &meta) == 0) && (S_ISDIR(meta.st_mode) == 1))
-		{
-			if(dr->d_name[0] != '.')
-			{
-
-//				temp_ls = store_valid_dir(temp_ls, full_path);  // Changing
-//				store_dir_recursively(temp_ls, info, full_path); // Changing
-				temp_ls = store_file_name(temp_ls, temp_ls->file_name);
-				merge_sort(&temp_ls);
-//				single_argument(temp_ls, info, full_path);
-				single_argument(temp_ls, info, temp_ls->file_name);
-//				store_dir_recursively(temp_ls, info, temp_ls->file_name);
-				delete_list(&temp_ls);
-			}
-		}
-		temp_ls = temp_ls->next;
-	}
-	if(dir != NULL)
-		closedir(dir);
-	return(0);
-}
-*/
-/*
-void	free_inner_dir(t_ls *ls)
-{
-	t_ls *temp_ls;
-
-//	if(ls == NULL)
-//		return;
-	while(ls != NULL)
-	{
-		if(ls->file_name)
-			free(ls->file_name);
-		if(ls->dir_path)
-			free(ls->dir_path);
-		temp_ls = ls->next;
-		free(ls);
-		ls = temp_ls;
-	}
-}
-*/
-/*
-void	delete_list(t_ls **head_ref)
-{
-	t_ls *current_node;
-	t_ls *next_node;
-
-	current_node = *head_ref;
-//	if(current == NULL)
-//		return;
-	while(current_node != NULL)
-	{
-		next_node = current_node->next;
-		free(current_node);
-		current_node = next_node;
-	}
-	*head_ref = NULL;
-}
-*/
 void delete_list_file_name(t_ls **head_ref)
 {
 	t_ls *current_node;
@@ -774,23 +345,8 @@ void delete_list_file_name(t_ls **head_ref)
 	}
 	*head_ref = NULL;
 }
-/*
-void	delete_list_dir_path(t_ls **head_ref)
-{
-	t_ls *current_node;
-	t_ls *next_node;
 
-	current_node = *head_ref;
-	while(current_node != NULL)
-	{
-		next_node = current_node->next;
-		free(current_node->dir_path);
-		free(current_node);
-		current_node = next_node;
-	}
-	*head_ref = NULL;
-}
-*/
+
 int		start_recursive_call(t_ls *temp_ls, t_info *info);
 t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
 
@@ -821,65 +377,6 @@ int find_last_slash(char *file_path_with_slash)
 	return(0);
 }
 
-/*
-** is_directory returns 1 if a file path is a directory. If file path is not a
-** directory, it returns a 0.
-*/
-
-/*
-int is_directory(char *parent, char *name)
-{
-	DIR *dir;
-	char final_path[_POSIX_PATH_MAX];
-
-	ft_strcpy(final_path, parent);
-	ft_strcat(final_path, "/");
-	ft_strcat(final_path, name);
-	dir = opendir(final_path);
-	if(dir == NULL)
-		return(0);
-	closedir(dir);
-	return(1);
-}
-*/
-/*
-char *is_directory(char *parent, char *name, char final_path[])
-{
-	DIR *dir;
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-//	char final_path[_POSIX_PATH_MAX];
-
-//	if(parent)
-//	{
-//		while(parent[j])
-//			final_path[i++] = parent[j++];
-//		final_path[i++] = '/';
-//	}
-//	j = 0;
-//	if(name)
-//		while(name[j])
-//			final_path[i++] = name[j++];
-//	final_path[i] = '\0';
-
-
-// Try to optemize the below
-	ft_strcpy(final_path, parent);
-	ft_strcat(final_path, "/");
-	ft_strcat(final_path, name);
-
-	dir = opendir(final_path);
-	if(dir == NULL)
-		return(name);
-//		return(0);
-	closedir(dir);
-	return(final_path);
-//	return(1);
-}
-*/
 t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 {
 	char *full_path;
@@ -924,19 +421,7 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 	return(new_ls);
 }
 
-/*
-** Just to test how file_names are stored in the linked list.
-*/
-/*
-void print_stored_file_names(t_ls *ls)
-{
-	while(ls)
-	{
-		printf("|%s|\n", ls->file_name);
-		ls = ls->next;
-	}
-}
-*/
+
 t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 {
 	struct dirent	*dr;
@@ -1017,261 +502,7 @@ t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
 
 	return(new_ls);
 }
-/*
-// Prints files with Recursion, but speed is slow
-	while((dr = readdir(dir)) != NULL)
-	{
-		if(dr->d_name[0] != '.')
-		{
-			if((is_directory(path, dr->d_name)) == 1)
-			{
-				ft_strcpy(full_path, path);
-				(full_path[len] != '/') && (ft_strcat(full_path, "/"));
-				ft_strcat(full_path, dr->d_name);
-				temp_ls = store_file_name(temp_ls, full_path);
-			}
-			else
-				temp_ls = store_file_name(temp_ls, dr->d_name);
-		}
-	}
-*/
 
-/*
-// Prints all files but appends slashes with file_names
-	int len;
-	len = ft_strlen(path) - 1;
-
-	while((dr = readdir(dir)) != NULL)
-	{
-		if(dr->d_name[0] != '.')
-		{
-				ft_strcpy(full_path, path);
-				(full_path[len] != '/') && (ft_strcat(full_path, "/"));
-				ft_strcat(full_path, dr->d_name);
-				temp_ls = store_file_name(temp_ls, full_path);
-		}
-	}
-*/
-//		if(stat(full_path, &meta) == 0)
-/*
-			if(dr->d_name[0] != '.')
-			{
-				if(S_ISDIR(meta.st_mode) == 1)
-					temp_ls = store_file_name(temp_ls, full_path);
-				else if(S_ISDIR(meta.st_mode) == 0)
-					temp_ls = store_file_name(temp_ls, dr->d_name);
-			}
-*/
-
-
-/*
-	while((dr = readdir(dir)) != NULL)
-	{
-		if((stat(dr->d_name, &meta) == 0) && (dr->d_name[0] != 0))
-		{
-			if(S_ISDIR(meta.st_mode))
-			{
-//			if(dr->d_name[0] != '.')
-//			{
-				full_path[0] = 0;
-				ft_strcpy(full_path, path);
-				(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-				ft_strcat(full_path, dr->d_name);
-				temp_ls= store_file_name(temp_ls, full_path);
-			}
-//			}
-			else
-				temp_ls= store_file_name(temp_ls, dr->d_name);
-		}
-	}
-//	if(dir != NULL)
-//		temp_ls = store_root_files(temp_ls, info, path);
-	
-*/
-/*
-	if(dir != NULL)
-	{
-		full_path[0] = 0;
-		ft_strcpy(full_path, path);
-		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-		ft_strcat(full_path, dr->d_name);
-		single_argument(temp_ls, info, full_path);
-		if(stat(full_path, &meta))
-			if(dr->d_name[0] != '.')
-				temp_ls = store_root_files(temp_ls, info, full_path);
-//		print_file_name(temp_ls);
-	}
-*/
-//	printf("(%s)\n", path);
-//	printf("Comes here1\n");
-//	ft_strcpy(full_path, path);
-//	(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-//	ft_strcat(full_path, dr->d_name);
-
-
-	// 0 means have not found, 1 means found, -1  dont search
-/*
-	while((dr = readdir(dir)) != NULL)
-	{
-		if (dr->d_name[0] != '.')
-		{
-			if(stat(dr->d_name, &meta) == 0)
-			{
-//				if(S_ISDIR(meta.st_mode))
-//				{
-//					printf("Does it ever come here\n\n\n\n");
-//					full_path[0] = 0;
-//					ft_strcpy(full_path, path);
-//					(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-//					ft_strcat(full_path, dr->d_name);
-//					temp_ls= store_file_name(temp_ls, full_path);
-//				}
-				if(S_ISREG(meta.st_mode))
-				{
-//					printf("here2\n\n");
-					temp_ls = store_file_name(temp_ls, dr->d_name);
-				}
-				else
-				{
-					temp_ls = store_file_name(temp_ls, dr->d_name);
-				}
-			}
-		}
-	}
-*/
-	
-/*
-	while((dr = readdir(dir)) != NULL)
-	{
-		if (dr->d_name[0] != '.')
-		{
-//			if(stat(dr->d_name, &meta) == 0)
-//			{
-//				if(S_ISDIR(meta.st_mode))
-//				{
-//					printf("Does it ever come here\n\n\n\n");
-					full_path[0] = 0;
-					ft_strcpy(full_path, path);
-					(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-					ft_strcat(full_path, dr->d_name);
-					temp_ls= store_file_name(temp_ls, full_path);
-//				}
-//				if (S_ISDIR(meta.st_mode))
-//					temp_ls = store_file_name(temp_ls, dr->d_name);
-//			}
-		}
-	}
-*/
-/*
-	while((dr = readdir(dir)) != NULL)
-	{
-		if (dr->d_name[0] != '.')
-			temp_ls = store_file_name(temp_ls, dr->d_name);
-	}
-*/	
-/*	
-	while((dr = readdir(dir)) != NULL)
-	{
-		if(stat(dr->d_name, &meta) == 0 && (S_ISDIR(meta.st_mode) == 1))
-			if(found_dir == 0)
-				found_dir = 1;
-		if(found_dir != 1 && dr->d_name[0] != '.')
-		{
-			if(S_ISDIR(meta.st_mode) == 1) // If it is a folder
-				temp_ls = store_file_name(temp_ls, dr->d_name + find_last_slash(dr->d_name));
-			else
-				temp_ls = store_file_name(temp_ls, dr->d_name);
-		}
-		else if(found_dir == 1 && dr->d_name[0] != '.')
-		{
-			full_path[0] = 0;
-			ft_strcpy(full_path, path);
-			(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-			ft_strcat(full_path, dr->d_name);
-			temp_ls = store_file_name(temp_ls, full_path);
-			found_dir = -1;
-//			found_dir = -1;
-		}
-*/
-//		if(stat(full_path, &meta) == 0)
-/*
-			if(dr->d_name[0] != '.')
-			{
-//				if(S_ISDIR(meta.st_mode) == 1)
-				if(found_dir == 1)
-				{
-					temp_ls = store_file_name(temp_ls, full_path);
-					found_dir = -1;
-				}
-				else
-					temp_ls = store_file_name(temp_ls, dr->d_name);
-			}
-*/
-//				if(S_ISDIR(meta.st_mode) == 1)	// 1 means its a directory
-//					temp_ls = store_file_name(temp_ls, full_path);
-//				else if(S_ISDIR(meta.st_mode) == 0) // 0 means its a file
-//					temp_ls = store_file_name(temp_ls, dr->d_name);
-//				else if(S_ISDIR(meta.st_mode) == 0)
-//					temp_ls = store_file_name(temp_ls, full_path + find_last_slash(full_path));
-//			}
-
-/*
-	while((dr = readdir(dir)) != NULL)
-	{
-//		full_path[0] = 0;
-		ft_strcpy(full_path, path);
-		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-		ft_strcat(full_path, dr->d_name);
-		if(stat(full_path, &meta) == 0)
-			if(dr->d_name[0] != '.')
-			{
-//				if(S_ISDIR(meta.st_mode) == 1)
-					temp_ls = store_file_name(temp_ls, full_path);
-//				else if(S_ISDIR(meta.st_mode) == 0)
-//					temp_ls = store_file_name(temp_ls, full_path + find_last_slash(full_path));
-			}
-	}
-*/
-
-/*
-	while((dr = readdir(dir)) != NULL)
-	{
-		if((stat(dr->name, &meta) == 0) && S_ISDIR(meta.st_mode) == 1)
-		{
-			full_path[0] = 0;
-			ft_strcpy(full_path, path);
-			(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-			ft_strcat(full_path, dr->d_name);
-		}
-//		if(stat(full_path, &meta) == 0)
-			if(dr->d_name[0] != '.')
-			{
-				if(S_ISDIR(meta.st_mode) == 1)
-					temp_ls = store_file_name(temp_ls, full_path);
-				else if(S_ISDIR(meta.st_mode) == 0)
-					temp_ls = store_file_name(temp_ls, dr->d_name);
-			}
-	}
-*/
-/*
-
-		if((stat(dr->d_name, &meta) == 0) && (S_ISDIR(meta.st_mode) == 1))
-		{
-		ft_strcpy(full_path, path);
-		(full_path[ft_strlen(path) - 1] != '/')	&& (ft_strcat(full_path, "/"));
-		}
-		ft_strcat(full_path, dr->d_name);
-//		{
-			if(dr->d_name[0] != '.')
-//			if(ft_strcmp(dr->d_name, ".") && ft_strcmp(dr->d_name, ".."))
-			{
-				temp_ls = store_file_name(temp_ls, dr->d_name);
-//				temp_ls = store_file_name(temp_ls, dr->d_name);
-//				temp_ls = store_file_name(temp_ls, full_path);
-			}
-//		}
-}
-*/
 /*
 ** I had initially decided to store the inner directories on stack as below:
 ** char full_path[_POSIX_PATH_MAX]
@@ -1344,69 +575,6 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info)
 		}
 		temp_ls = temp_ls->next;
 	}
-/*
-	while(temp_ls != NULL)
-	{
-
-//			temp_ls = temp_ls->next;
-		if(ft_strcmp(temp_ls->file_name, ".") != 0 && ft_strcmp(temp_ls->file_name, "..") != 0)
-		{
-			if(stat(temp_ls->file_name, &meta) == 0 && S_ISDIR(meta.st_mode))
-			{
-//				ft_printf(BGREEN"----Entering start_recursive_call----\n"NC);
-
-				if(info->flag.a == true)
-				{
-//					if(ft_strcmp(temp_ls->file_name, ".") && ft_strcmp(temp_ls->file_name, ".."))
-//					{
-//					if(ft_strcmp(temp_ls->file_name, ".") != 0 && ft_strcmp(temp_ls->file_name, "..") != 0)
-//					{
-					ft_printf(BYELLOW"|%s|\n"NC, temp_ls->file_name);
-					inner_dir = store_file_recursively(info, temp_ls->file_name);
-					info->skip_print = false;
-//					}
-//					}
-				}
-				else if(info->flag.a == false && temp_ls->file_name[0] != '.')
-				{
-					inner_dir = store_file_recursively(info, temp_ls->file_name);
-					info->skip_print = false;
-				}
-//				ft_printf(BRED"|%s|\n"NC, temp_ls->file_name);
-				if(inner_dir != NULL)
-				{
-//					if(ft_strcmp(temp_ls->file_name, ".") != 0 && ft_strcmp(temp_ls->file_name, "..") != 0)
-					{
-						start_recursive_call(inner_dir, info);
-						delete_list_file_name(&inner_dir);
-					}
-				}
-			}
-		}
-		temp_ls = temp_ls->next;
-	}
-*/
-//	}
-//	while(inner_dir)
-//	{
-//	if(inner_dir->file_name)
-//		printf("-------|%s|-----\n", inner_dir->file_name);
-//	else
-//		printf("-------|Empty|-------\n\n");
-//		inner_dir = inner_dir->next;
-//	}
-/*
-	if(temp_ls != NULL)
-	{
-		printf("----------Working 2-------\n");
-		print_file_name(temp_ls);
-	}
-	else if(temp_ls == NULL)
-	{
-		printf("<<<<<<<<<<Finished 2>>>>>>>>\n");
-		return(1);
-	}
-*/
 	return(0);
 }
 /*
@@ -1446,17 +614,6 @@ t_ls	*store_dir_path_regular(t_ls *temp_ls, t_info *info)
 		if(stat(info->argv[info->var.i], &meta) == 0)
 			if(S_ISDIR(meta.st_mode) == 1)
 				temp_ls = store_file_name(temp_ls, info->argv[info->var.i]);
-
-// replacing store_valid_dir with store_file_name
-
-
-//				temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
-//
-//		ft_printf("|%d|", stat(info->argv[info->var.i], &meta));
-//		ft_printf("|%d|", S_ISDIR(meta.st_mode));
-//		ft_printf("|%s|\n", info->argv[info->var.i]);
-//		if(S_ISDIR(meta.st_mode))
-//			temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
 		(dir != NULL) && (closedir(dir));
 		info->var.i++;
 	}
@@ -1480,23 +637,6 @@ t_ls *store_dir_path_recurssion(t_ls *temp_ls, t_info *info)
 	return(temp_ls);
 }
 
-//void print_recursively_stored_dir(t_ls *ls, t_info *info, char *current_dir);
-
-/*
-// Replacing this to use file_name inatead of temp_ls->dir_path
-void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
-{
-	while(temp_ls)
-	{
-		(info->var.new_line == true) && (ft_printf("\n"));
-		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->dir_path));
-		single_argument(ls, info, temp_ls->dir_path);
-		info->var.new_line = true;
-		temp_ls = temp_ls->next;
-	}
-}
-*/
-
 void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 {
 	int number_of_nodes;
@@ -1516,33 +656,6 @@ void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
 
 int start_recursive_call(t_ls *temp_ls, t_info *info);
 
-/*
-void files_from_stored_dir_path_recurssion(t_ls *temp_ls, t_info *info)
-{
-//	t_ls *temp_ls_new;
-//	while(temp_ls)
-//	{
-//		(info->var.new_line == true) && (ft_printf("\n"));
-//		(info->argc >= 2) && (ft_printf("%s:\n", temp_ls->file_name));
-		start_recursive_call(temp_ls, info);
-//		temp_ls = temp_ls->next;
-//		(info->var.new_line == true) && (ft_printf("\n"));
-//		(info->argc >= 2) && (ft_printf("%s:\n", (temp_ls->file_name));
-//		temp_ls_new = store_root_files(temp_ls_new, info, temp_ls->file_name);
-//		start_recursive_call(temp_ls_new, info);
-//		if(temp_ls_new)
-//			delete_list_file_name(&temp_ls_new);
-//		info->var.new_line = true;
-//		temp_ls = temp_ls->next;
-//	}
-
-//	while(temp_ls_new)
-//	{
-//		printf("|%s|\n", temp_ls_new->file_name);
-//		temp_ls_new = temp_ls_new->next;
-//	}
-}
-*/
 void process_dir_valid(t_ls *ls, t_info *info)
 {
 	t_ls			*temp_ls_dir;
@@ -1577,62 +690,7 @@ void process_dir_valid(t_ls *ls, t_info *info)
 		start_recursive_call(temp_ls_dir, info);
 		delete_list_file_name(&temp_ls_dir);
 	}
-/*
-		while(temp_ls)
-		{
-			ls = store_root_files(ls, info, temp_ls->file_name);
-			start_recursive_call(ls, info);
-			delete_list_file_name(&ls);
-			temp_ls = temp_ls->next;
-		}
-		delete_list_file_name(&temp_ls);
-*/
-//		printf("Does it come to process_dir_valid\n");
-//		merge_sort_dir(&temp_ls);
-/*
-	else if(flag_status(info) == true)
-	{
-//		temp_ls = store_dir_path_without_flag(temp_ls, info);
-//		merge_sort_dir(&temp_ls);
-//		while(temp_ls)
-//		{
-			print_recursively_stored_dir(ls, info, info->argv[info->var.i]);
-//			temp_ls = temp_ls->next;
-//		}
-//		delete_list(&temp_ls);
-	}
-*/
 }
-/*
-// Adding recurssion;
-void process_dir_valid(t_ls *ls, t_info *info)
-{
-	t_ls			*temp_ls;
-	DIR				*dir;
-
-	temp_ls = NULL;
-	while(info->var.i < info->argc)
-	{
-		dir = opendir(info->argv[info->var.i]);
-		if(dir != NULL)
-			temp_ls = store_valid_dir(temp_ls, info->argv[info->var.i]);
-		(dir != NULL) && (closedir(dir));
-		info->var.i++;
-	}
-	merge_sort_dir(&temp_ls);
-	while(temp_ls)
-	{
-		(info->var.new_line == true) && (ft_printf("\n"));
-		(info->argc > 2) && (ft_printf("%s:\n", temp_ls->dir_path));
-		if(info->flag.uppercase_r == false)
-			single_argument(ls, info, temp_ls->dir_path);
-		info->var.new_line = true;
-		temp_ls = temp_ls->next;
-	}
-	delete_list(&temp_ls);
-}
-*/
-
 
 
 /*
@@ -1712,23 +770,6 @@ void	initialize_t_info_struct_variables(t_info *info)
 	info->total_blocks = 0;
 }
 
-/*
-void	print_recursively_stored_dir(t_ls *ls, t_info *info, char *current_dir)
-{
-	t_ls *temp_ls;
-
-	temp_ls = NULL;
-	single_argument(ls, info, current_dir);
-	write(1, "\n", 1);
-//	temp_ls = store_dir_recursively(temp_ls, info, current_dir);	
-	store_dir_recursively(temp_ls, info, current_dir);
-	merge_sort_dir(&temp_ls);
-	get_files_from_stored_dir_path(ls, temp_ls, info);
-	if(temp_ls != NULL)
-		delete_list(&temp_ls);
-}
-*/
-
 t_ls *store_root_files(t_ls *ls, t_info *info, char *dir_path_str)
 {
 	struct dirent	*data;
@@ -1737,17 +778,6 @@ t_ls *store_root_files(t_ls *ls, t_info *info, char *dir_path_str)
 	dir = opendir(dir_path_str);
 	if(dir == NULL)
 		return(ls);
-/*
-// Works, refactoring
-	while((data = readdir(dir)) != NULL)
-	{
-		if(info->flag.a == true)
-			ls = store_file_name(ls, data->d_name);
-		else if(info->flag.a == false && data->d_name[0] != '.')
-//		if(ft_strcmp(data->d_name, ".") && ft_strcmp(data->d_name, ".."))
-			ls = store_file_name(ls, data->d_name);
-	}
-*/
 	if(info->flag.a == true)
 		while((data = readdir(dir)) != NULL)
 			ls = store_file_name(ls, data->d_name);
@@ -1772,8 +802,10 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	j = 1;
 	current = info->argv[i][0];
 	temp_ls = NULL;
+
 //	ls->slash_index = 0;
 //	ft_printf("ls->slash_index|%d|\n", ls->size_padding);
+	
 	initialize_t_info_struct_variables(info);
 	if((current != '-') || (current == '-' && info->argv[i][1] == '\0'))
 		handle_improper_usage_of_dash(ls, info);
@@ -1788,47 +820,10 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 //			ft_printf("|%d|\n", info->flag.a);
 			single_argument(ls, info, ".");
 		}
-//		else if(i == 2 && info->argc == 2 && info->flag.upp)
-/*
-// Gives directory names recursively // placing this inside process_dir_valid
-		else if(i == info->argc && info->flag.uppercase_r == true)
-		{
-//			ls = store_dir_recursively(".", ls, info);
-			ls = store_dir_recursively(ls, info, ".");
-			merge_sort(&ls);
-			print_file_name(ls);
-		}
-*/
-/*
-	while(ls)
-	{
-		(info->var.new_line == true) && (ft_printf("\n"));
-		(info->argc > 2) && (ft_printf("%s:\n", ls->dir_path));
-		if(info->flag.uppercase_r == false)
-			single_argument(ls, info, ls->dir_path);
-		info->var.new_line = true;
-		ls = ls->next;
-	}
-	delete_list(&ls);
-*/
-//		printf("i:|%d|\n", i);
-//		printf("info->argc:|%d|\n", info->argc);
 		else if(i == 2 && info->argc == 2 && flag_status(info) == true)
 		{
 			if(info->flag.uppercase_r == false)
 				single_argument(ls, info, ".");
-//			if(info->flag.a == true && info->flag.uppercase_r == false)
-//				single_argument(ls, info, ".");
-/*
-// Seems unnecessary
-			else if(info->flag.l == true && info->flag.uppercase_r == false)
-			{
-				temp_ls = store_root_files(temp_ls, info, ".");
-				print_file_name(temp_ls, info);
-				delete_list_file_name(&temp_ls);
-		//		single_argument(ls, info, ".");
-			}
-*/
 			else if(info->flag.uppercase_r == true)
 				{
 //					print_recursively_stored_dir(ls, info, ".");
@@ -1867,17 +862,6 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 		}
 
 	}
-
-/*	
-		while(i < info->argc)
-		{
-			printf("Does it come here?\n");
-			info->var.temp_i = i;
-			process_dir(ls, info);
-			i++;
-		}
-	}
-*/
 }
 
 void	initialize_info_values(t_info *info)
@@ -1889,37 +873,6 @@ void	initialize_info_values(t_info *info)
 ** Linked List functions just to store file and folder names when argc is 1
 ** ./ft_ls
 */
-
-
-// Below functions are created to handle dir for -R flag
-/*
-t_ls	*create_list_for_dir(char *dir_path_str)
-{
-	t_ls *new_node;
-
-	new_node = malloc(sizeof(t_ls));
-	if(new_node == NULL)
-		exit(EXIT_SUCCESS);
-	new_node->dir_path = ft_strdup(dir_path_str);
-	new_node->next = NULL;
-	return(new_node);
-}
-
-t_ls	*append_list_for_dir(t_ls *head, char *dir_path_str)
-{
-	t_ls *cursor;
-	t_ls *new_node;
-
-	cursor = head;
-	while(cursor->next != NULL)
-		cursor = cursor->next;
-	new_node = create_list_for_dir(dir_path_str);
-	cursor->next = new_node;
-	return(head);
-}
-*/
-// Above functions are created to handle dir for -R flag
-
 t_ls	*create_list_for_invalid(char *invalid_dir_path_str)
 {
 	t_ls *new_node;
@@ -1950,72 +903,6 @@ t_ls *append_list_for_invalid(t_ls *head, char *invalid_dir_path_str)
 /*
 ** Function print_file_name will print contents, files and folders, of the
 ** current directory.
-*/
-
-void print_file_name_notes(t_ls *ls)
-{
-//	int i;
-//	char *str;
-
-
-// Good to run this to see data in raw form
-
-/*
-	while(ls)
-	{
-		str = ls->file_name;
-		ft_printf("%s\n", str);
-		ls = ls->next;
-	}
-*/
-
-/*
- Deprecated because len is calculated outside the while loop
-	while(ls)
-	{
-		str = ls->file_name + find_last_slash(ls->file_name);
-		ft_printf("%s\n", str);
-		ls = ls->next;
-	}
-*/
-/*
-// skips slash
-	int file_path_len;
-	file_path_len = 0;
-	if(ls)
-		file_path_len = find_last_slash(ls->file_name);
-
-	while(ls)
-	{
-		str = ls->file_name + file_path_len;
-		ft_printf("%s\n", str);
-		ls = ls->next;
-	}
-*/
-//	int slash_index;
-//	slash_index = ls->slash_index;
-	while(ls)
-	{
-//		str = ls->file_name + ls->slash_index;
-//		ft_printf("%s\n", str);
-		ft_printf("%s\n", ls->file_name + ls->slash_index);
-		ls = ls->next;
-	}
-//	delete_list(&ls);
-}
-/*
-// Original without stat
-void print_file_name(t_ls *ls)
-{
-	char *str;
-
-	while(ls)
-	{
-		str = ls->file_name + ls->slash_index;
-		ft_printf("%s\n", str);
-		ls = ls->next;
-	}
-}
 */
 
 /*
@@ -2131,15 +1018,6 @@ void permission_column(struct stat meta, char *file_name)
 
 void link_column(struct stat meta, int pad_nlink)
 {
-//	int link;
-
-//	link = meta.st_nlink;
-/*
-	if(link <= 9)
-		ft_printf(" %d ", link);
-	else if(link >= 10)
-		ft_printf("%d ", link);
-*/
 	ft_printf("%*d ", pad_nlink, meta.st_nlink);
 }
 
@@ -2201,14 +1079,6 @@ void month_date_time_column(struct stat meta)
 		return;
 	month_date[0] = 0;
 	time_or_year[0] = 0;
-// Just to see what dates are printed below
-//	ft_printf(BBLUE"\natime    |%s|\n"NC, ctime(&meta.st_atimespec.tv_sec));
-//	ft_printf(BBLUE"birthtime|%s|\n"NC, ctime(&meta.st_birthtimespec.tv_sec));
-//	ft_printf(BBLUE"ctime    |%s|\n"NC, ctime(&meta.st_ctimespec.tv_sec));
-//	ft_printf(BBLUE"mtime    |%s|\n"NC, ctime(&meta.st_mtimespec.tv_sec));
-
-
-// Just to see what dates are printed above
 
 	ft_printf("%s ", ft_substr_start_end(month_date, time_str, 4, 6));	
 	if((seconds_since_epoch - last_modified.tv_sec) < SIX_MONTH)
@@ -2219,47 +1089,6 @@ void month_date_time_column(struct stat meta)
 	free(time_or_year);
 }
 
-
-/*
-// Works trying to improve dates to capture year for files that are older than
-// 6 months
-void month_date_time_column(struct stat meta)
-{
-	int skip_day_and_space;
-	char *month_date_time;
-	
-	month_date_time = malloc(sizeof(char) * (32));
-	if(month_date_time == NULL)
-		return;
-	skip_day_and_space = 4;
-	ft_strncpy (month_date_time, ctime(&meta.st_mtimespec.tv_sec), 16);
-
-// Below can be deleted later - For testing puporses to get time
-
-
-	ft_printf(BBLUE"\natime    |%ld|\n"NC, &meta.st_atimespec.tv_sec);
-	ft_printf(BBLUE"\nbirthtime|%ld|\n"NC, &meta.st_birthtimespec.tv_sec);
-	ft_printf(BBLUE"\nctime    |%ld|\n"NC, &meta.st_ctimespec.tv_sec);
-	ft_printf(BBLUE"\nmtime    |%ld|\n"NC, &meta.st_mtimespec.tv_sec);
-
-//	ft_printf(BBLUE"\natime    |%ld|\n"NC, ctime(&meta.st_atimespec.tv_sec));
-//	ft_printf(BBLUE"\nbirthtime|%ld|\n"NC, ctime(&meta.st_birthtimespec.tv_sec));
-//	ft_printf(BBLUE"\nctime    |%ld|\n"NC, ctime(&meta.st_ctimespec.tv_sec));
-//	ft_printf(BBLUE"\nmtime    |%ld|\n"NC, ctime(&meta.st_mtimespec.tv_sec));
-	
-// Above can be deleted later - For testing purposes to get time
-	
-	
-	ft_printf("%s ", month_date_time + skip_day_and_space);	
-//	ft_printf("|%s |", month_date_time + skip_day_and_space);
-
-	free(month_date_time);
-}
-*/
-
-
-//void long_file_listing(struct stat meta, char *file_name, int link_padding,
-//		int size_padding)
 void	long_file_listing(struct stat meta, char *file_name, t_info *info)
 {
 	permission_column(meta, file_name);
@@ -2463,41 +1292,6 @@ void print_file_name(t_ls *ls, t_info *info)
 	if(info->flag.l == true)
 		free(link_str);
 }
-
-
-/*
-void print_file_name(t_ls *ls)
-{
-	struct stat meta;
-	char *str;
-	int i;
-	
-	i = 0;
-	while(ls)
-	{
-		str = ls->file_name;
-		stat(str, &meta);
-		if(S_ISREG(meta.st_mode))
-			ft_printf("%s\n", str);
-		else if(S_ISDIR(meta.st_mode))
-			ft_printf(BRED"%s\n"NC, str);
-		else if(S_ISCHR(meta.st_mode))
-			ft_printf(BGREEN"%s\n"NC, str);
-		else
-			ft_printf(BWHITE"%s\n"NC, str);
-		ls = ls->next;
-	}
-}
-*/
-
-/*
-** Merge Sort
-** Might end up creating one universal merge sort with multiple features to sort
-** with:
-** 1. "lexical".
-** 2. "reverse".
-** 3. "time".
-*/
 
 t_ls	*sorted_merge(t_ls *a, t_ls *b)
 {
@@ -2755,7 +1549,6 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 	struct dirent	*data;
 	DIR				*dir;
 	t_ls 			*new_ls;
-//	int				count;
 
 	new_ls = NULL;
 	dir = opendir(dir_path_str);
@@ -2769,190 +1562,36 @@ void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)
 				ls = store_file_name_with_index(ls, data->d_name, 0);
 			else if(info->flag.a == false && data->d_name[0] != '.')
 				ls = store_file_name_with_index(ls, data->d_name, 0);
-
-
-
-// Works, changing it to use store_file_name_index
-/*
-			if(info->flag.a == true)
-				ls = store_file_name(ls, data->d_name);
-			else if(info->flag.a == false && data->d_name[0] != '.')
-				ls = store_file_name(ls, data->d_name);
-*/
 		}
 	}
 
 	if(dir != NULL)
 	{
 		closedir(dir);
-//		merge_sort(&ls, info);
-//		if(info->flag.l == true && ls != NULL)
 		if(ls != NULL)
 			new_ls = append_slash(new_ls, ls, dir_path_str);
 		delete_list_file_name(&ls);
 		merge_sort(&new_ls, info);
 		print_file_name(new_ls, info);
 		delete_list_file_name(&new_ls);
-
-//		print_file_name(ls, info); // Commenting this to append slash for -l flag
-//		delete_list(&ls);
-//		if(ls && ls->file_name)
-//			delete_list(&ls);
 	}
-//	delete_list(&ls);
 }
 
-/*
-** In multiple_argument, single_argument gets called first and then directoreis
-** will be stored in a linked list and then the function will be called onto
-** itself.
-** Process for storing directories is similar to how files and folders are
-** stored in single_argument function. But multiple_argument function does two
-** addtional things.
-** 1. Stores folders in a linked list.
-** 2. Calls onto itself for recursion.
-**
-*/
-
-/*
-void	multiple_argument(t_ls *ls, t_info *info, char *dir_path_str)
-{
-	struct dirent	*data;
-	DIR				*dir;
-//	int				count;
-
-	dir = opendir(dir_path_str);
-	while((data = readdir(dir)) != NULL)
-	{
-		if(data->d_name[0] != '.')
-			ls = store_file_name(ls, data->d_name);
-	}
-	if(dir != NULL)
-	{
-		closedir(dir);
-		merge_sort(&ls, info);
-//	count = get_count(ls); // Will be used later when alligning columns
-		print_file_name(ls, info);
-		multiple_argument(ls, info, dir_path_str);
-//	process_dir_valid(ls, info); //
-		delete_list(&ls);
-	}
-
-}
-*/
-
-/*
-** **ft_double_strdup takes the number of arguments and the a 2D array to create
-** a 2 dimensional array.
-** This function is used to obtain a 2d string that will be stored in the struct
-** so fewer parameters are passed around
-*/
-
-void free_double_array(char **double_array)
-{
-	int i;
-
-	i = 0;
-
-	if(double_array)
-		while(double_array[i])
-		{
-			free(double_array[i]);
-			i++;
-		}
-	free(double_array);
-//	double_array = NULL;
-}
-
-char **ft_double_strdup(int argc, char **source)
-{
-	char **dest;
-	int i;
-
-	i = 0;
-	ft_printf("dest:|%ld|\n", sizeof(dest));
-	dest = malloc(sizeof (char *) * (argc + 1));
-	ft_printf("dest after malloc:|%ld|\n", sizeof(dest));
-	if (dest == NULL || source == NULL)
-		return (NULL);
-	ft_bzero(dest, argc +1);
-	while (i < argc)
-	{
-		ft_printf("while_loop sizeof(dest[i])|%ld|\n", sizeof(dest[i]));
-		ft_printf("while_loop sizeof(dest)   |%ld|\n", sizeof(dest));
-		dest[i] = ft_strdup(source[i]);
-		i++;
-	}
-	dest[i] = NULL;
-	ft_printf("i:|%d|\n", i);
-	ft_printf("sizeof(dest) right before return|%ld|\n", sizeof(dest));
-	return (dest);
-}
-
-/*
-void	set_info_flag_to_zero(t_info *info)
-{
-//	ft_bzero(&info->flag, sizeof(info->flag));
-	ft_bzero(info, sizeof(info));
-}
-*/
 int main(int argc, char *argv[])
 {
 	t_ls	*ls;
 	t_info	info;
 	
 
-//	ft_printf("sizeof info.argv:|%lu|\n", info.argv);
 	ls = NULL;
-//	ls = malloc(sizeof(t_ls));
-
-//	ft_printf("|%d|\n", ls->slash_index);
-//	set_info_flag_to_zero(&info);
 	ft_bzero(&info, sizeof(&info));
 	info.argc = argc;
 	info.argv = argv;
-
-//	ft_printf(BGREEN"%d\n"NC, info.pad_size);
-//	ft_printf(BGREEN"%d\n"NC, info.total_blocks);
-//	ft_printf(BGREEN"%d\n"NC, info.pad_nlink);
-//	info.argv = ft_double_strdup(argc, argv);
-//	ft_printf("sizeof info.argc:|%lu|\n", info.argc);
-//	ft_printf("sizeof info.argv:|%lu|\n", info.argv);
-	
-//	ft_printf("sizeof info.argv|%ld|\n", info.argv);
-//	ft_printf("sizeof argv|%ld|\n", argv);
-//	ls->slash_index = 0;
-//	info.pad_size = 0;
-//	info.pad_nlink = 0;
-//	info.total_blocks = 0;
-
-//	ft_printf("|%d|\n", ls->slash_index);
-/*
-// To test stored string
-	int i = 0;
-	while(i < argc)
-		printf("|%s|\n", info->argv[i++]);
-	return(0);
-*/
-//	return (-1);
 	if(argc == 1)
-	{
-//		printf("1\n");
 		single_argument(ls, &info, ".");
-
-	}
 	else if(argc > 1)
-	{
-//		printf("2\n");
 		ls_start_parsing(ls, &info);
-	}
-//	if(&ls)
 	if(ls)
 		delete_list_file_name(&ls);
-//		free(ls);	
-//	free_double_array(info.argv);
-//	while(1);
-
 	return(0);
-
 }
