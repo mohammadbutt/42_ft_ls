@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 21:55:10 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 22:26:40 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -127,6 +127,7 @@ bool	is_flag_valid(char c);
 void	ls_collect_flags(t_info *info, char c);
 void	handle_improper_usage_of_dash(t_ls *ls, t_info *info);
 bool	flag_status(t_info *info);
+int		set_up_environment_to_collect_flags(t_info *info, int i, int j);
 
 /*
 ** --------------------------merge_sort_alpha.c---------------------------------
@@ -207,6 +208,7 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info);
 t_ls *append_slash(t_ls *new_ls, t_ls *temp_ls, char *path);
 void ft_permission_denied(char *str);
 int	find_last_slash(char *file_path_with_slash);
+void ls_collect_flag_and_illegal_option(t_info *info, int i, int j);
 
 //int		is_flag_valid(char c);
 //bool	is_flag_valid(char c);

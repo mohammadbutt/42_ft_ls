@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 21:59:23 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 22:24:32 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,124 +59,12 @@ void print_invalid_file_name(t_ls *ls)
 	i = 0;
 	while(ls)
 	{
-//		invalid_str = ls->invalid_file_name;
 		invalid_str = ls->file_name;
 		ft_printf("ft_ls: ");
 		perror(invalid_str);
 		ls = ls->next;
 	}
 }
-
-/*
-** process_dir_invalid will process invalid files names
-** stat is used which takes in the file name and the stat struct and returns a
-** a number.
-** If stat returns 0, it means file exists and it is a valid file.
-** If stat return -1, it means file does not exist and it is an invalid file.
-**
-** Note: Both Valid files and folders will have a value of 0, which is why in
-** function process_valid_file, in the if statement additional statement is
-** included to check if (opendir(file_name_str) == NULL) if it is NULL and it is
-** 0 it means, the selected item will only be a file.
-*/
-
-
-//void	delete_list_file_name(t_ls **head_ref);
-/*
-void process_invalid_file(t_ls *ls, t_info *info)
-{
-	struct stat		meta;
-	int				file_status;
-	char			**arg_str;
-	int				arg_count;
-	int 			i;
-
-	arg_str = info->argv;
-	arg_count = info->argc;
-	i = info->var.i;
-	while(i < arg_count)
-	{
-		file_status = stat(arg_str[i], &meta);
-		if(file_status == -1)
-			ls = store_file_name(ls, arg_str[i]);
-		i++;
-	}
-	if(ls != NULL)
-	{
-		merge_sort_invalid_file_name(&ls);
-		print_invalid_file_name(ls);
-		delete_list_file_name(&ls);
-		info->print_path_name = true;
-		info->no_dot_slash = true;
-	}
-}
-*/
-/*
-** In function process_valid_file.
-** If a directory/folder has permission denied, it will still be able to go
-** through the below if statement
-** 	if((stat(arg_str[i], &meta) == 0) && (opendir(arg_str[i]) == NULL))
-** which is why an additional if statement will be placed:
-** 	if(S_ISREG(meta.st_mode))
-** This if statement will determine if a file is a regular file or not.
-** 
-** The below one liner can also check if its a valid file as well as a directory:
-**
-** if((stat(arg_str[i], &meta) == 0) && (S_ISREG(meta.st_mode))); 
-*/
-//void	delete_list_file_name(t_ls **head_ref);
-/*
-void	process_valid_file(t_ls *ls, t_info *info)
-{
-	struct stat		meta;
-	char			**arg_str;
-	int				arg_count;
-	int 			i;
-
-	arg_str = info->argv;
-	arg_count = info->argc;
-	i = info->var.i;
-	while(i < arg_count)
-	{
-		if((stat(arg_str[i], &meta) == 0) && (S_ISREG(meta.st_mode)))
-			ls = store_file_name(ls, arg_str[i]);
-		i++;
-	}
-	if(ls != NULL)
-	{
-		merge_sort(&ls, info);
-		print_file_name(ls, info);
-		delete_list_file_name(&ls);
-		info->var.new_line = true;
-		info->print_path_name = true;
-		info->no_dot_slash = true;
-	}
-}
-*/
-
-
-
-/*
-** 1. stat(dirent->d_name, &stat) has to be called first
-** 2. S_ISDIR(stat.st_mode) is used to idetify if a given file is directory.
-** Since the above order matters: in the below if statement stat has to appear
-** first:
-** if((stat(full_path, &meta) == 0) && (S_ISDIR(meta.st_mode) == 1))
-**
-** swapping the order of stat with S_ISDIR as shown below will not work:
-** if((S_ISDIR(meta.st_mode) == 1) && (stat(full_path, &meta) == 0))
-**
-** Return Values of (stat(full_path, &meta):
-** 0 for both valid file and directory.
-**
-** Return Values of (S_ISDIR(meta.st_mode):
-** 1 means it is a directory.
-** 0 means it is a file.
-** -1 mean it is an invalid file.
-** _POSIX_PATH_MAX can store upto 256 characters
-*/
-
-//int		start_recursive_call(t_ls *temp_ls, t_info *info);
 t_ls	*store_root_files(t_ls *ls, t_info *info, char *dir_path_str);
 
 
@@ -194,7 +82,6 @@ int find_last_slash(char *file_path_with_slash)
 	len = 0;
 	len = ft_strlen(file_path_with_slash) - 1;
 
-//	ft_printf("find_last_index|%d|\n", len);
 	if(len <= 0)
 		return(0);
 	while(len)
@@ -249,227 +136,7 @@ t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 	free(full_path);
 	return(new_ls);
 }
-
 /*
-t_ls	*store_file_recursively(t_info *info ,char *path) // -> store inner_dir
-{
-	struct dirent	*dr;
-	DIR *dir;
-	t_ls *temp_ls;
-	t_ls *new_ls;
-
-	temp_ls = NULL;
-	new_ls = NULL;
-
-	if((dir = opendir(path)) == NULL)
-	{
-		(info->no_dot_slash == false) && (ft_printf(BRED"\n./%s\n"NC, path));
-		(info->no_dot_slash == true) && (ft_printf(BRED"\n%s\n"NC, path));
-		ft_permission_denied(path + find_last_slash(path));
-		return(NULL);
-	}
-	else if(info->skip_print == false )//|| info->print_path_name == true)
-	{
-			(info->no_dot_slash == false) && (ft_printf("\n./%s:\n", path));
-			(info->no_dot_slash == true) && (ft_printf("\n%s:\n", path));
-	}
-	else if(info->print_path_name == true)
-		ft_printf("%s:\n", path);
-	if(info->flag.a == true)
-	{
-		while((dr = readdir(dir)) != NULL)
-				temp_ls = store_file_name(temp_ls, dr->d_name);
-	}
-	else if(info->flag.a == false)
-	{
-		while((dr = readdir(dir)) != NULL)
-			if(dr->d_name[0] != '.')
-				temp_ls = store_file_name(temp_ls, dr->d_name);
-	}
-
-	(dir != NULL) && (closedir(dir));
-	(temp_ls != NULL) && (new_ls = append_slash(new_ls, temp_ls, path));	
-	delete_list_file_name(&temp_ls);
-	merge_sort(&new_ls, info);
-
-	return(new_ls);
-}
-*/
-/*
-** I had initially decided to store the inner directories on stack as below:
-** char full_path[_POSIX_PATH_MAX]
-** _POSIX_PATH_MAX which allocates 256 bytes, so I decided to find out the total
-** number of files on my current system to get an approximate idea how much
-** memory will be reseverd on stack.
-** running the below command gave me the total number of files at the root:
-** ls -R | wc -l
-** This was 45,238.
-** 45,238 * 256 = 11,580,928.
-** When I allocated this much memory on stack, well it didn't work, but malloc
-** will allow memory allocation of upto INT_MAX, which is 2,147,483,647.
-** Now there are two nice things about malloc in this case:
-** 1. We are able to allocate more memory than stack.
-** 2. Memory allocated using malloc can be used again when it's free, but that's
-** not the case when memory is allocated on stack, when memory is allocated on
-** stack, it can not be freed, the only way would be to reuse that variable
-** that has memory on stack.
-** Ran a few more test. Might be able to store file names on stack.
-** Each occurence can have upto 26,000 recursivce calls.
-** skip_first_print is used because when valid directory names are entered,
-** they get stored in a linked list: to avoid printing the valid directory
-** name right in the beginning skip_first_print is set to true for the first
-** time, but when it enters second recursion false is passed in.
-** for ./ft_ls -R skip_first_print is set to false because in that case, root
-** files and directories need to be printed.
-*/
-/*
-int		start_recursive_call(t_ls *temp_ls, t_info *info)
-{
-	t_ls			*inner_dir;
-	struct	stat	meta;
-	char	*ref_str;
-
-	inner_dir = NULL;	
-	if(temp_ls != NULL && temp_ls->file_name && info->skip_print == false)
-		print_file_name(temp_ls, info);
-	while(temp_ls != NULL)
-	{
-		ref_str = temp_ls->file_name;
-		if(ft_strcmp(ref_str, ".") != 0 && ft_strcmp(ref_str, "..") != 0)
-		{
-			if(stat(ref_str, &meta) == 0 && S_ISDIR(meta.st_mode))
-			{
-				if(info->flag.a == false && ref_str[0] != '.')
-					inner_dir = store_file_recursively(info, ref_str);
-				else if(info->flag.a == true)
-					inner_dir = store_file_recursively(info, ref_str);
-				info->skip_print = false;
-				if(inner_dir != NULL)
-				{
-					start_recursive_call(inner_dir, info);
-					delete_list_file_name(&inner_dir);
-				}
-			}
-		}
-		temp_ls = temp_ls->next;
-	}
-	return(0);
-}
-*/
-
-/*
-** info->var.i = i
-** info->argv = arg_string
-** info->argc = arg_count
-** When storing valid directories, all the directories are stored including the
-** ones that have permission denied.
-** if(dir != NULL)
-**		temp_ls = store_valid_dir(temp)
-** Above if statement will work, but it will not store directories that have
-** permission denied, which is why the below if statement is used to store the
-** directories, including the ones that have permission denied:
-**
-** 	if(stat(info->argv[info->var.i], &meta) == 0)
-**		if(S_ISDIR(meta.st_mode) == 1)
-**			temp_ls = store_valid_dir(temp);
-*/
-
-/*
-t_ls *store_dir_path(t_ls *temp_ls, t_info *info)
-{
-	struct stat meta;
-	DIR	*dir;
-
-	while(info->var.i < info->argc)
-	{
-		dir = opendir(info->argv[info->var.i]);
-		if(stat(info->argv[info->var.i], &meta) == 0)
-			if(S_ISDIR(meta.st_mode) == 1)
-				temp_ls = store_file_name(temp_ls, info->argv[info->var.i]);
-		(dir != NULL) && (closedir(dir));
-		info->var.i++;
-	}
-	return(temp_ls);
-}
-
-
-void files_from_stored_dir_path(t_ls *ls, t_ls *temp_ls, t_info *info)
-{
-	int number_of_nodes;
-
-	number_of_nodes = get_count(temp_ls);
-	while(temp_ls)
-	{
-		(info->var.new_line == true) && (write(1, "\n", 1));
-		(number_of_nodes == 2) && (ft_printf("%s:\n", temp_ls->file_name));
-		single_argument(ls, info, temp_ls->file_name);
-		info->var.new_line = true;
-		temp_ls = temp_ls->next;
-	}
-}
-*/
-
-
-
-//int start_recursive_call(t_ls *temp_ls, t_info *info);
-
-/*
-void process_dir_valid(t_ls *ls, t_info *info)
-{
-	t_ls			*temp_ls_dir;
-
-	temp_ls_dir = NULL;
-	temp_ls_dir = store_dir_path(temp_ls_dir, info);
-	merge_sort(&temp_ls_dir, info);
-	if(info->flag.uppercase_r == false)
-	{
-		files_from_stored_dir_path(ls, temp_ls_dir, info);
-		delete_list_file_name(&temp_ls_dir);
-	}
-	else if(info->flag.uppercase_r == true)
-	{
-		info->var.new_line = false;
-		if (get_count(temp_ls_dir) == 2)
-			info->print_path_name = true;
-		else
-			info->print_path_name = false;
-		start_recursive_call(temp_ls_dir, info);
-		delete_list_file_name(&temp_ls_dir);
-	}
-}
-*/
-
-/*
-** function process_dir does the below three things and the order matters.
-** which is why the functions is split into three parts.
-** 1. process_invalid_file is called to store names of files that do not
-** exist, to store them in a linked list, sort them in lexical order and then
-** invalid file names are printed.
-** 2. process_valid_file is then called to store names of files that are
-** actually valid, these are files they may not have a file extension and may
-** simply just be a file called file_1, or they may have a file extension,
-** such as file_1.c, file_1.o file_1.txt. As long as the file is valid, it is
-** stored in a linked list, sorted via merge sort, and then printed.
-** 3. process_dir_valid is then called to store the names of folders. Names of
-** the folders are stored in a linked list, sorted using merge sort.
-** Then names of sorted folders are passed through so the contents of each folder
-** can be printed.
-*/
-
-/*
-void	process_dir(t_ls *ls, t_info *info)
-{
-	info->var.new_line = false;
-	info->print_path_name = false;
-	info->var.i = info->var.temp_i;
-	process_invalid_file(ls, info);
-	info->var.i = info->var.temp_i;
-	process_valid_file(ls, info);
-	info->var.i = info->var.temp_i;
-	process_dir_valid(ls, info);
-}
-*/
-
 int	set_up_environment_to_collect_flags(t_info *info, int i, int j)
 {
 	while(i < info->argc)
@@ -491,7 +158,7 @@ int	set_up_environment_to_collect_flags(t_info *info, int i, int j)
 	}
 	return(i);
 }
-
+*/
 void	initialize_t_info_struct_variables(t_info *info)
 {
 	ft_bzero(&info->flag, sizeof(info->flag));
@@ -536,8 +203,6 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	current = info->argv[i][0];
 	temp_ls = NULL;
 
-//	ls->slash_index = 0;
-//	ft_printf("ls->slash_index|%d|\n", ls->size_padding);
 	
 	initialize_t_info_struct_variables(info);
 	if((current != '-') || (current == '-' && info->argv[i][1] == '\0'))
@@ -545,12 +210,8 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 	else if(info->argv[i][0] == '-' && info->argv[i][1] != '\0')
 	{
 		i = set_up_environment_to_collect_flags(info, i, j);
-//		ft_printf("flag_status:|%d|\n", flag_status(info));
-//		ft_printf("|%d|\n", i);
-//		ft_printf("|%d|\n", info->argc);
 		if(i == info->argc && (flag_status(info) == false))
 		{
-//			ft_printf("|%d|\n", info->flag.a);
 			single_argument(ls, info, ".");
 		}
 		else if(i == 2 && info->argc == 2 && flag_status(info) == true)
@@ -558,40 +219,20 @@ void	ls_start_parsing(t_ls *ls, t_info *info)
 			if(info->flag.uppercase_r == false)
 				single_argument(ls, info, ".");
 			else if(info->flag.uppercase_r == true)
-				{
-//					print_recursively_stored_dir(ls, info, ".");
-//					temp_ls = store_root_files(temp_ls, info, ".");
-//					print_file_name(temp_ls);
-//					store_dir_recursively(temp_ls, info, ".");
+				{					
 					temp_ls = store_root_files(temp_ls, info, ".");
-//					temp_ls = store_file_name(temp_ls, ".");
-//					print_file_name(temp_ls);
 					info->skip_print = false;
 					start_recursive_call(temp_ls, info);
 					delete_list_file_name(&temp_ls);
-//					delete_list(&temp_ls);
-/*
-					if(temp_ls == NULL)
-					ft_printf("|Successfully deleted all nodes|\n");
-					if(temp_ls != NULL)
-					ft_printf("Left over\n");
-*/
 				}
-//			ft_printf(BRED"\n------Does it come here---------\n");
 			return;
 		}
-
-//		ft_printf("i:|%i|\n", i);
-//		ft_printf("info->argc:|%i|\n", info->argc);
-
-// Put it back on if something breaks
-	if	(i < info->argc)
+		if (i < info->argc)
 		{
-//			ft_printf(BGREEN"----Comes inside this if statement---"NC);
-			info->skip_print = true;
-			info->no_dot_slash = true;
-			info->var.temp_i = i;
-			process_dir(ls, info);
+				info->skip_print = true;
+				info->no_dot_slash = true;
+				info->var.temp_i = i;
+				process_dir(ls, info);
 		}
 
 	}

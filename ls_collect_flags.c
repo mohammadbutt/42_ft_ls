@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 19:12:00 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 19:12:07 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 22:28:27 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,26 @@ bool	flag_status(t_info *info)
 	else if (info->flag.uppercase_g == true)
 		return (true);
 	return (false);
+}
+
+int		set_up_environment_to_collect_flags(t_info *info, int i, int j)
+{
+	while (i < info->argc)
+	{
+		info->var.str_len = ft_strlen(info->argv[i]);
+		while (j < info->var.str_len)
+		{
+			if (info->argv[i][0] == '-')
+			{
+				(j == 0) && (j = 1);
+				ls_collect_flag_and_illegal_option(info, i, j);
+			}
+			else if (info->argv[i][0] != '-')
+				return (i);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	return (i);
 }
