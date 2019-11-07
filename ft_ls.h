@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 19:35:13 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 19:50:05 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -145,6 +145,13 @@ t_ls *sorted_merge_time_nano_second(t_ls *a, t_ls *b);
 t_ls *sorted_merge_time(t_ls *a, t_ls *b);
 t_ls *sorted_merge_time_reverse(t_ls *a, t_ls *b);
 t_ls *sorted_merge_time_nano_second_reverse(t_ls *a, t_ls *b);
+
+/*
+** --------------------------merge_sort_invalid_file.c--------------------------
+*/
+
+t_ls	*sorted_merge_invalid_file_name(t_ls *a, t_ls *b);
+void	merge_sort_invalid_file_name(t_ls **head_ref);
 
 
 //int		is_flag_valid(char c);

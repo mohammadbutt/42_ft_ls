@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 19:36:03 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 19:51:08 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,55 +123,6 @@ t_ls	*store_file_name_with_index(t_ls *ls, char *file_name, int index)
 		ls = append_with_index(ls, file_name, index);
 	return(ls);
 }
-
-// Above functions are created to handle dir -R flag
-
-t_ls	*sorted_merge_invalid_file_name(t_ls *a, t_ls *b)
-{
-	t_ls *result;
-
-	result = NULL;
-	if(a == NULL)
-		return(b);
-	else if(b == NULL)
-		return(a);
-	if(ft_strcmp(a->file_name, b->file_name) <= 0)
-	{
-		result = a;
-		result->next = sorted_merge_invalid_file_name(a->next, b);
-	}
-	else
-	{
-		result = b;
-		result->next = sorted_merge_invalid_file_name(a, b->next);
-	}
-	return(result);
-}
-
-/*
-** Only one merge sort is created because invalid files are always sorted in
-** lexical order regardless of what flags there are.
-*/
-
-void	merge_sort_invalid_file_name(t_ls **head_ref)
-{
-	t_ls *head;
-	t_ls *a;
-	t_ls *b;
-
-	head = *head_ref;
-	if(head == NULL || head->next == NULL)
-		return;
-	front_back_split(head, &a, &b);
-	merge_sort_invalid_file_name(&a);
-	merge_sort_invalid_file_name(&b);
-	*head_ref = sorted_merge_invalid_file_name(a, b);
-}
-
-/*
-** Only one merge sort is created because invalid files are always sorted in
-** lexical order regardless of what flags there are.
-*/
 
 t_ls	*store_invalid_file_name(t_ls *ls,  char *invalid_path_str)
 {
@@ -1153,16 +1104,10 @@ void padding_and_blocks_total(t_ls *ls, int *pad_nlink, int *pad_size)
 	total = 0;
 	while(ls)
 	{
-//		ft_printf(BGREEN"%s\n"NC, ls->file_name);
 		stat(ls->file_name, &meta);
 		total = total + meta.st_blocks;
-//		nlink_numlen = ft_numlen(meta.st_nlink, FT_DECIMAL);
-//		(nlink_numlen > nlink_pad) && (nlink_pad = nlink_numlen);
 		*pad_nlink = find_max(ft_numlen(meta.st_nlink, FT_DECIMAL), *pad_nlink);
 		*pad_size = find_max(ft_numlen(meta.st_size, FT_DECIMAL), *pad_size);
-//		size_numlen = ft_numlen(meta.st_size, FT_DECIMAL);
-//		(size_numlen > size_pad) && (size_pad = size_numlen);
-
 		ls = ls->next;
 	}
 	ft_printf("total %d\n", total);
