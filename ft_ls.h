@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 21:19:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 22:35:00 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 22:42:25 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_LS_H
@@ -211,6 +211,16 @@ int		start_recursive_call(t_ls *temp_ls, t_info *info);
 void	ft_exit_illegal_option(char c);
 void	ls_collect_flag_and_illegal_option(t_info *info, int i, int j);
 void	ft_permission_denied(char *str);
+
+/*
+** ---------------------------- padding_and_blocks_totals.c---------------------
+*/
+
+int get_link_padding(t_ls *ls);
+int get_size_padding(t_ls *ls);
+int find_max(int num1, int num2);
+void padding_and_blocks_total(t_ls *ls, int *pad_nlink, int *pad_size);
+
 
 
 t_ls *append_slash(t_ls *new_ls, t_ls *temp_ls, char *path);

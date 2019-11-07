@@ -6,55 +6,11 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 17:59:19 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 22:32:22 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/06 22:44:15 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-/*
-** If a flag is not valid at any point. The program will end and by giving the
-** illegal option message.
-*/
-
-/*
-void ft_exit_illegal_option(char c)
-{
-	ft_printf("ft_ls: illegal option -- %c\n", c);
-	ft_printf("usage: ft_ls [-latrRG] [file ...]\n");
-	exit(EXIT_SUCCESS);
-}
-
-
-void	ls_collect_flag_and_illegal_option(t_info *info, int i, int j)
-{
-	if(is_flag_valid(info->argv[i][j]) == true)
-		ls_collect_flags(info, info->argv[i][j]);
-	else if(is_flag_valid(info->argv[i][j]) == false)
-		ft_exit_illegal_option(info->argv[i][j]);
-}
-
-*/
-/*
-** perror will handle following errors:
-** 1. No such file or directory - Currently only works with directory. Need to
-** make it work with files.
-** 2. Permission denied.
-** If a folder has permission denied via chmod 000 folder_name or file_name,
-** then ls will not show contents of that folder. perror will print a message
-** saying ... permission denied.
-*/
-
-/*
-void ft_permission_denied(char *str)
-{
-	ft_printf("ft_ls: ");
-	perror(str);
-}
-*/
-
-
-
 
 void print_invalid_file_name(t_ls *ls)
 {
@@ -402,69 +358,6 @@ void	long_file_listing(struct stat meta, char *file_name, t_info *info)
 	month_date_time_column(meta);
 }
 
-int get_link_padding(t_ls *ls)
-{
-	struct stat meta;
-	int padding;
-	int numlen;
-
-	padding = 0;
-	numlen = 0;
-	while (ls)
-	{
-		lstat(ls->file_name, &meta);
-		numlen = ft_numlen(meta.st_nlink, FT_DECIMAL);
-		(numlen > padding) && (padding = numlen);
-		ls = ls->next;
-	}
-	return(padding);
-}
-
-int get_size_padding(t_ls *ls)
-{
-	struct stat meta;
-	int padding;
-	int numlen;
-
-	padding = 0;
-	numlen = 0;
-	while(ls)
-	{
-		lstat(ls->file_name, &meta);
-		numlen = ft_numlen(meta.st_size, FT_DECIMAL);
-		(numlen > padding) && (padding = numlen);
-		ls = ls->next;
-	}
-	return(padding);
-}
-
-int find_max(int num1, int num2)
-{
-	if(num1 > num2)
-		return(num1);
-	return(num2);
-}
-
-void padding_and_blocks_total(t_ls *ls, int *pad_nlink, int *pad_size)
-{
-	struct stat meta;
-	int numlen_nlink;
-	int numlen_size;
-	int total;
-
-	numlen_nlink = 0;
-	numlen_size = 0;
-	total = 0;
-	while(ls)
-	{
-		stat(ls->file_name, &meta);
-		total = total + meta.st_blocks;
-		*pad_nlink = find_max(ft_numlen(meta.st_nlink, FT_DECIMAL), *pad_nlink);
-		*pad_size = find_max(ft_numlen(meta.st_size, FT_DECIMAL), *pad_size);
-		ls = ls->next;
-	}
-	ft_printf("total %d\n", total);
-}
 
 /*
 ** stat(2) is an incredibly powerful functions that provides information about
