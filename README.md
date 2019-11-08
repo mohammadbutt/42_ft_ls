@@ -42,7 +42,9 @@ make
 # Project Summary
 
 ### Parsing - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_parsing.c)
-When the user runs the program and there in only argument that is `./ft_ls` then the program calls onto the function `void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)` which takes in three parameters, ls struct, info struct and the directory path shows the files of the current directory listed in a column format.
+When the user runs the program and there in only argument that is `./ft_ls` then the program calls onto the function `void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)` which takes in three parameters, ls struct, info struct and the directory path. single_argument calls onto opendir(3), opendir takes in the path of a directory. If a directory has permission denied, then the program will print the name of the directory and then display "permission denied". If a directory is valid, then readdir is used with dirent struct to open the directory and read the contents of the directory one at a time, the contents of the directory are stored in a linked list and then a slash is appended at the end of the file and the new string and the index of the slash are stored in a new linked list.
+
+### 
 
 
 
