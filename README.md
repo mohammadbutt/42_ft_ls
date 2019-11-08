@@ -33,10 +33,10 @@ make
 ./ft_ls -t
 ```
 
-# Program Installation gif Demo
+/# Program Installation gif Demo
 
 
-# Program Usage gif Demo
+/# Program Usage gif Demo
 
 
 # Project Summary
