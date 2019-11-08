@@ -41,6 +41,11 @@ make
 
 # Project Summary
 
+### Parsing - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_parsing.c)
+When the user runs the program and there in only argument that is `./ft_ls` then the program calls onto the function `void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)` which takes in three parameters, ls struct, info struct and the directory path shows the files of the current directory listed in a column format.
+
+
+
 #### Mandatory Flags:
 1. `-l`
    - a total sum of all the file sizes.
