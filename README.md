@@ -12,6 +12,28 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 ---
 # Table of Contents - click a section to jump to it 
 
+
+# Cloning Repository
+```
+https://github.com/mohammadbutt/42_ft_ls.git
+```
+
+# Installing ft_ls
+```
+make
+```
+
+# ft_ls usage
+```
+./ft_ls
+./ft_ls -l
+./ft_ls -R
+./ft_ls -a
+./ft_ls -r
+./ft_ls -t
+```
+
+
 #### Mandatory Flags:
 1. `-l`
    - a total sum of all the file sizes.
