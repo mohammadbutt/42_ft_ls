@@ -9,7 +9,8 @@ Justifiable C functions for bonus part: tcgetattr(3). Structs found in `man 4 tt
 
 Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2), getxattr(2), readlink(2)
 
-
+---
+# Table of Contents - click a section to jump to it 
 
 #### Mandatory Flags:
 1. `-l`
