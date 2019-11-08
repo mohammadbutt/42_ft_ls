@@ -10,7 +10,7 @@ Justifiable C functions for bonus part: tcgetattr(3). Structs found in `man 4 tt
 Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2), getxattr(2), readlink(2)
 
 ---
-# Table of Contents - click a section to jump to it 
+# Table of Contents - Click a section to jump to it 
 
 
 # Cloning Repository
@@ -23,7 +23,7 @@ https://github.com/mohammadbutt/42_ft_ls.git
 make
 ```
 
-# ft_ls usage
+# ft_ls Usage
 ```
 ./ft_ls
 ./ft_ls -l
@@ -33,6 +33,13 @@ make
 ./ft_ls -t
 ```
 
+# Program Installation gif Demo
+
+
+# Program Usage gif Demo
+
+
+# Project Summary
 
 #### Mandatory Flags:
 1. `-l`
