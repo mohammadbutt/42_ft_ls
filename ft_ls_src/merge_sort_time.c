@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 19:21:53 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/06 19:37:02 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/07 20:08:41 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_ls	*sorted_merge_time_nano_second(t_ls *a, t_ls *b)
 	result = NULL;
 	lstat(a->file_name, &meta1);
 	lstat(b->file_name, &meta2);
-	if (meta1.st_mtimespec.tv_nsec > meta2.st_mtimespec.tv_nsec)
+	if (meta1.st_mtimespec.tv_nsec >= meta2.st_mtimespec.tv_nsec)
 	{
 		result = a;
 		result->next = sorted_merge_time(a->next, b);
