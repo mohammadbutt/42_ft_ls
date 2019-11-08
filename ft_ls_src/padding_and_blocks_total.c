@@ -73,6 +73,6 @@ void	padding_and_blocks_total(t_ls *ls, int *pad_nlink, int *pad_size)
 		*pad_size = find_max(ft_numlen(meta.st_size, FT_DECIMAL), *pad_size);
 		ls = ls->next;
 	}
-	if(total > 0)
+	if (total > 0)
 		ft_printf("total %d\n", total);
 }
