@@ -49,7 +49,7 @@ If there is a dash `-` after `./ft_ls ` that's when the program starts collectin
 ### `-R` Recursively list subdirectories - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_recursive_call.c)
 If there are two arguments and the `R` flag exists in the argument then the program recursively enters through directories and subdirectories the open each directory, store the files in a linked list, sorts them, prints the files, frees the linked list, and then moves to the next directory to perform the same action until it gets to the end cant find any more directories to treverse through. Below is a table:
 
-``` bash
+```
 |___CODEOWNERS
 |___Makefile
 |___README.md
