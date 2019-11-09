@@ -47,7 +47,7 @@ When the user runs the program and there in only one argument that is `./ft_ls` 
 If there is a dash `-` after `./ft_ls ` that's when the program starts collecting flags that are `l`, `R`, `a`, `t`, `r`. If there is no dash then the program looks for either a valid or invalid file name, or a directory. If a file name is valid then the program displays the file name, if an entered file does not exist then the program displays a message, "./ft_ls: name_of_invalid_file: No such file or directory", just like the original ls. If the entered name is a directory then the program displays files of that directory.
 
 ### `-R` Recursively list subdirectories - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_recursive_call.c)
-If there are two arguments and the `R` flag exists in the argument then the program recursively enters through directories and subdirectories the open each directory, store the files in a linked list, sorts them, prints the files, frees the linked list, and then moves to the next directory to perform the same action until it gets to the end cant find any more directories to treverse through. Below is a tree structure that roughly represents how directories are accessed recusively and then printed:
+If there are two arguments and the `R` flag exists in the argument then the program recursively enters through directories and subdirectories the open each directory, store the files in a linked list, sorts them, prints the files, frees the linked list, and then moves to the next directory to perform the same action until it gets to the end cant find any more directories to treverse through. This is one of the prime reasons why a directory path and slash is appended right before each file name because. Because in order traverser through and go inside each sub directory it is important to have the path of the parent directory. Below is a rough representation of recursive tree structure:
 
 ``` bash
 |___CODEOWNERS
@@ -69,7 +69,7 @@ If there are two arguments and the `R` flag exists in the argument then the prog
 ```
 
 ### `-l` Long file listing - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/long_file_listing.c)
-If there are two arguments, some examples would be `./ft_ls -l`, `./ft_ls -la`, `./ft_ls -lar`, then the program collects the flags that are after dash, and sets them equal to true, `l` stands for long listing format. 
+If there is an `l` which stands for long listing format, then addtional informatin is printed about each file and directory. 
 
 Below is a table and format of `ls -l author` and `./ft_ls -l author`
 
