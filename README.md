@@ -25,7 +25,7 @@ make
 
 # ft_ls Usage
 
-./ft_ls [-GRalrt] [file ...]
+`./ft_ls [-GRalrt] [file ...]`
 ```
 ./ft_ls -G
 ./ft_ls -R
