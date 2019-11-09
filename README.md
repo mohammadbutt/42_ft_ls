@@ -21,7 +21,7 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
   * [`-t`, `-r` - Sort Files](#-t--r---sort-files---source-code)
   * [`-G` - Colorize Output](#-g---colorize-output---source-code)
   * [`-a` - Output Hidden Files and Directories](#-a---output-hidden-files-and-directories)
-  * [Resources and References](#resources-and-references)
+* [Resources and References](#resources-and-references)
 
 # Cloning Repository
 ```
