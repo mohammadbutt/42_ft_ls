@@ -20,7 +20,7 @@
 void	ft_exit_illegal_option(char c)
 {
 	ft_printf("ft_ls: illegal option -- %c\n", c);
-	ft_printf("usage: ft_ls [-latrRG] [file ...]\n");
+	ft_printf("usage: ft_ls [-GRalrt] [file ...]\n");
 	exit(EXIT_SUCCESS);
 }
 
