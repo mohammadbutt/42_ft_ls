@@ -23,7 +23,7 @@ https://github.com/mohammadbutt/42_ft_ls.git
 make
 ```
 
-# ft_ls Usage - ./ft_ls [-GRalrt][file ...]
+# ft_ls Usage - ./ft_ls [-GRalrt] [file ...]
 ```
 usage: ./ft_ls [-GRalrt] [file ...]
 ./ft_ls
