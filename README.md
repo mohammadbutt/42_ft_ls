@@ -47,7 +47,75 @@ When the user runs the program and there in only one argument that is `./ft_ls` 
 If there is a dash `-` after `./ft_ls ` that's when the program starts collecting flags that are `l`, `R`, `a`, `t`, `r`. If there is no dash then the program looks for either a valid or invalid file name, or a directory. If a file name is valid then the program displays the file name, if an entered file does not exist then the program displays a message, "./ft_ls: name_of_invalid_file: No such file or directory", just like the original ls. If the entered name is a directory then the program displays files of that directory.
 
 ### `-R` Recursively list subdirectories - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_recursive_call.c)
-If there are two arguments and the `R` flag exists in the argument then the program recursively enters through directories and subdirectories the open each directory, store the files in a linked list, sorts them, prints the files, frees the linked list, and then moves to the next directory to perform the same action until it gets to the end cant find any more directories to treverse through. Below is a table 
+If there are two arguments and the `R` flag exists in the argument then the program recursively enters through directories and subdirectories the open each directory, store the files in a linked list, sorts them, prints the files, frees the linked list, and then moves to the next directory to perform the same action until it gets to the end cant find any more directories to treverse through. Below is a table:
+
+``` bash
+|___CODEOWNERS
+|___Makefile
+|___README.md
+|___author
+|___documents_and_media
+|  |___doc_ft_ls.en.pdf
+|  |___norme.en.pdf
+|___empty_dir
+|___ft_ls_src
+|  |___append_slash.c
+|  |___delete_linked_list.c
+|  |___formatting.c
+|  |___ft_ls.h
+|  |___ft_printf
+|  |  |___Makefile
+|  |  |___srcs
+|  |  |  |___append_to_buffer.c
+|  |  |  |___collect_and_cancel_flags.c
+|  |  |  |___collect_width_precision_length_type.c
+|  |  |  |___ft_itoa_min_handler.c
+|  |  |  |___ft_printf.c
+|  |  |  |___ft_printf.h
+|  |  |  |___mini_libft
+|  |  |  |  |___ft_atoi.c
+|  |  |  |  |___ft_bzero.c
+|  |  |  |  |___ft_ftoa.c
+|  |  |  |  |___ft_hex.c
+|  |  |  |  |___ft_isdigit.c
+|  |  |  |  |___ft_itoa_base.c
+|  |  |  |  |___ft_putstr.c
+|  |  |  |  |___ft_strcat.c
+|  |  |  |  |___ft_strcmp.c
+|  |  |  |  |___ft_strcpy.c
+|  |  |  |  |___ft_strdup.c
+|  |  |  |  |___ft_strlen.c
+|  |  |  |  |___mini_libft.h
+|  |  |  |  |___utility.c
+|  |  |  |___parsing.c
+|  |  |  |___type_field_b.c
+|  |  |  |___type_field_c.c
+|  |  |  |___type_field_d_i.c
+|  |  |  |___type_field_f.c
+|  |  |  |___type_field_o.c
+|  |  |  |___type_field_p.c
+|  |  |  |___type_field_percent.c
+|  |  |  |___type_field_s.c
+|  |  |  |___type_field_u.c
+|  |  |  |___type_field_x.c
+|  |  |  |___type_field_x_remaining_conditions.c
+|  |___long_file_listing.c
+|  |___ls_collect_flags.c
+|  |___ls_parsing.c
+|  |___ls_recursive_call.c
+|  |___main.c
+|  |___merge_sort_alpha.c
+|  |___merge_sort_invalid_file.c
+|  |___merge_sort_time.c
+|  |___padding_and_blocks_total.c
+|  |___print_file_name.c
+|  |___process_dir_valid.c
+|  |___process_valid_and_invalid_file.c
+|  |___store_file_name.c
+|  |___store_file_name_with_index.c
+|  |___usage_and_permission_denied.c
+
+```
 
 ### `-l` Long file listing - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/long_file_listing.c)
 If there are two arguments, some examples would be `./ft_ls -l`, `./ft_ls -la`, `./ft_ls -lar`, then the program collects the flags that are after dash, and sets them equal to true, `l` stands for long listing format. 
