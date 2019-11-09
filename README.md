@@ -23,13 +23,14 @@ https://github.com/mohammadbutt/42_ft_ls.git
 make
 ```
 
-# ft_ls Usage - ./ft_ls [-GRalrt] [file ...]
+# ft_ls Usage
+
+./ft_ls [-GRalrt] [file ...]
 ```
-usage: ./ft_ls [-GRalrt] [file ...]
-./ft_ls
-./ft_ls -l
+./ft_ls -G
 ./ft_ls -R
 ./ft_ls -a
+./ft_ls -l
 ./ft_ls -r
 ./ft_ls -t
 ```
