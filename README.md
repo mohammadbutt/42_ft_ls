@@ -23,8 +23,9 @@ https://github.com/mohammadbutt/42_ft_ls.git
 make
 ```
 
-# ft_ls Usage
+# ft_ls Usage - ./ft_ls [-GRalrt][file ...]
 ```
+usage: ./ft_ls [-GRalrt] [file ...]
 ./ft_ls
 ./ft_ls -l
 ./ft_ls -R
@@ -45,6 +46,8 @@ make
 When the user runs the program and there in only one argument that is `./ft_ls` then the program calls onto the function `void	single_argument(t_ls *ls, t_info *info, char *dir_path_str)`. Single_argument calls onto opendir(3), opendir takes in the path of a directory. If a directory has permission denied, then the program will print the name of the directory and then display "permission denied". If a directory is valid, then readdir(3) is used with dirent struct to open the directory and read the contents of the directory one at a time, the contents of the directory are stored in a linked list. A slash is appended after the directory path and the file name is concatenated after it. For example, "this_is_a_directory/file_name". List is saved with the last index of the file. This slash index is used later to print just the file name instead of printing the file path and the name when only the file name is needed.
 
 If there is a dash `-` after `./ft_ls ` that's when the program starts collecting flags that are `l`, `R`, `a`, `t`, `r`. If there is no dash then the program looks for either a valid or invalid file name, or a directory. If a file name is valid then the program displays the file name, if an entered file does not exist then the program displays a message, "./ft_ls: name_of_invalid_file: No such file or directory", just like the original ls. If the entered name is a directory then the program displays files of that directory.
+
+
 
 ### `-R` Recursively list subdirectories - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_recursive_call.c)
 If there are two arguments and the `R` flag exists in the argument then the program recursively enters through directories and subdirectories the open each directory, store the files in a linked list, sorts them, prints the files, frees the linked list, and then moves to the next directory to perform the same action until it gets to the end cant find any more directories to treverse through. This is one of the prime reasons why a directory path and slash is appended right before each file name because. Because in order traverser through and go inside each sub directory it is important to have the path of the parent directory. Below is a rough representation of recursive tree structure:
@@ -79,8 +82,6 @@ Below is a table and format of `ls -l author` and `./ft_ls -l author`, what each
 |-rw-r--r--|    1   |  mbutt |   2018_october |       6      | Sep 18 15:35               |  author                     |
 
 Information for each column is accessible via stat and lstat functions, only file name is retrieved via dirent struct under the member name d_name. Long file listing format was also one of the biggest reasons that file path and a slash was appeneded before each file name because stat and lstat functions need full file path to access the meta data thats shown in the above table.
-
-### 
 
 
 
