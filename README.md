@@ -14,6 +14,8 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 * [Cloning Repository](#cloning-repository)
 * [Installing ft_ls](#installing-ft_ls)
 * [ft_ls Usage](#ft_ls-usage)
+* [Program Installation gif Demo](#program-installation-gif-demo)
+* [Program Usage gif Demo](#program-usage-gif-demo)
 * [Project Summary](#project-summary)
   * [Parsing](#parsing---source-code)
   * [`-R` - Recursively List Subdirectories](#-R---recursively-list-subdirectories---source-code)
@@ -45,10 +47,10 @@ make
 ./ft_ls -t
 ```
 
-/# Program Installation gif Demo
+# Program Installation gif Demo
 
 
-/# Program Usage gif Demo
+# Program Usage gif Demo
 
 
 # Project Summary
