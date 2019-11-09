@@ -82,9 +82,10 @@ Below is a table and format of `ls -l author` and `./ft_ls -l author`, what each
 |Permission|st_nlink|st_uid  |        st_gid  |   st_size    |st_ctimespec.tv_sec         |d_name under dirent struct   |
 |-rw-r--r--|    1   |  mbutt |   2018_october |       6      | Sep 18 15:35               |  author                     |
 
-Information for each column is accessible via stat and lstat functions, only file name is retrieved via dirent struct under the member name d_name. Long file listing format was also one of the biggest reasons that file path and a slash was appeneded before each file name because stat and lstat functions need full file path to access the meta data thats shown in the above table.
+Information for each column is accessible via stat and lstat functions, only file name is retrieved via dirent struct under the member name d_name. Long file listing format is also one of the biggest reasons that file path and a slash is appeneded before each file name because stat and lstat functions need full file path to access the meta data thats shown in the above table. For time modified column, if a file is older than 6 months, then instead of showing the hours and minutes of the file, year of the file is shown instead.
 
-
+### `-t`, `-r` Sorting files - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/merge_sort_alpha.c)
+Files are sorted one of 4 different ways, if there is no `-t` and `-r` then files are stored in alphabetical or lexical order. A custom strcmp is used to compare two strings and then merge sort is used to sort the list. If there is `-r` then files are sorted in reverse alphabetical order. If there is `-t` then files are sorted by last modified time. Sorting by time also uses merge sort to compare two times in seconds and then merge sorts them. But sorting on time has one addtional step that is if the number of seconds for both files are the same, then nanosecond of both files are also compared. If `-tr` both t and r are present then files are sorted in reverse time, showing the oldest files first at the top and then showing the newest files at the bottom.
 
 #### Mandatory Flags:
 1. `-l`
