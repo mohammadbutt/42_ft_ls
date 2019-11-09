@@ -11,12 +11,16 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 
 ---
 # Table of Contents - Click a section to jump to it 
-* [Cloning Repository](#Cloning-Repository)
-* [Installing ft_ls](#Installing-ft_ls)
-* [ft_ls Usage](#ft_ls-Usage)
-* [Project Summary](#Project-Summary)
-  * [Parsing](#Parsing---Source-Code)
-  * [`-R` - Recursively list subdirectories](#-R---recursively-list-subdirectories---source-code)
+* [Cloning Repository](#cloning-repository)
+* [Installing ft_ls](#installing-ft_ls)
+* [ft_ls Usage](#ft_ls-usage)
+* [Project Summary](#project-summary)
+  * [Parsing](#parsing---source-code)
+  * [`-R` - Recursively List Subdirectories](#-R---recursively-list-subdirectories---source-code)
+  * [`-L` - Long File Listing](#-l---long-file-listing---source-code)
+  * [`-t`, `-r` - Sorting Files](#-t--r---sorting-files---source-code)
+  * [`-G` - Colorize Output](#-g---colorize-output---source-code)
+  * [`-a` - Output Hidden Files and Directories](#-a---output-hidden-files-and-directories)
 
 # Cloning Repository
 ```
@@ -92,10 +96,10 @@ Information for each column is accessible via stat and lstat functions, only fil
 ### `-t`, `-r` - Sorting files - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/merge_sort_alpha.c)
 Files are sorted one of 4 different ways, if there is no `-t` and `-r` then files are stored in alphabetical or lexical order. A custom strcmp is used to compare two strings and then merge sort is used to sort the list. If there is `-r` then files are sorted in reverse alphabetical order. If there is `-t` then files are sorted by last modified time. Sorting by time also uses merge sort to compare two times in seconds and then merge sorts them. But sorting on time has one addtional step that is if the number of seconds for both files are the same, then nanosecond of both files are also compared. If `-tr` both t and r are present then files are sorted in reverse time, showing the oldest files first at the top and then showing the newest files at the bottom. `./ft_ls` by default just shows the file names, but combining `l` flag, `./ft_ls -lt` or `./ft_ls -ltr` would show files sorted by time with time stamp.
 
-### `-G` - Colorize output - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/print_file_name.c)
+### `-G` - Colorize Output - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/print_file_name.c)
 When -G is on then the file name is parsed through a function called `print_uppercase_g`, that takes in the file name with the file path, and stat struct with meta information about the file. If a file is a directory then it is printed in blue. If a file is an executable then it is printed in red. All other file types are printed in the regular font color.
 
-### `-a` - Printing hidden files and directories
+### `-a` - Output Hidden Files and Directories
 When -a flag is on, all the files are stored which includes hidden files and directories. Hidden files and directories begin with dot `.` or dot dot `..`. Single dot `.` means current directory. Double dot or dot dot `..` means parent directory. If a file has a chacater other than a dot after a single dot, then it's either a hidden file or a directory. Examples would be, `.gitignore` which is a hidden file, and `.git` would be a hidden directory. 
 
 # Resources and References
