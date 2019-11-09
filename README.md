@@ -71,12 +71,14 @@ If there are two arguments and the `R` flag exists in the argument then the prog
 ### `-l` Long file listing - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/long_file_listing.c)
 If there is an `l` which stands for long listing format, then addtional informatin is printed about each file and directory. 
 
-Below is a table and format of `ls -l author` and `./ft_ls -l author`
+Below is a table and format of `ls -l author` and `./ft_ls -l author`, what each column means.
 
 |Permission|Links   |owner id| group owner id |size in bytes |month, date, time modified  |file name                    |
 |----------|--------|--------|----------------|--------------|----------------------------|-----------------------------|
 |Permission|st_nlink|st_uid  |        st_gid  |   st_size    |st_ctimespec.tv_sec         |d_name under dirent struct   |
 |-rw-r--r--|    1   |  mbutt |   2018_october |       6      | Sep 18 15:35               |  author                     |
+
+Information for each column is accessible via stat and lstat functions, only file name is retrieved via dirent struct under the member name d_name. Long file listing format was also one of the biggest reasons that file path and a slash was appeneded before each file name because stat and lstat functions need full file path to access the meta data thats shown in the above table.
 
 ### 
 
