@@ -122,7 +122,7 @@ When -a flag is on, all the files are stored which includes hidden files and dir
 15. [Big O Cheatsheet - Hackerearth](https://www.hackerearth.com/practice/notes/big-o-cheatsheet-series-data-structures-and-algorithms-with-thier-complexities-1/)
 16. [Big O Cheatsheet - bigocheatsheet](https://www.bigocheatsheet.com/)
 17. [Algorithms and Data Structures - Cooervo.github.io](https://cooervo.github.io/Algorithms-DataStructures-BigONotation/index.html)
-18. [List all directories in a given directory - Works - Stackoverflow](https://stackoverflow.com/questions/1723002/how-to-list-all-subdirectories-in-a-given-directory-in-c)
+18. [List all directories in a given directory - Stackoverflow](https://stackoverflow.com/questions/1723002/how-to-list-all-subdirectories-in-a-given-directory-in-c)
 19. [A Recursive Directory Scanning program](https://johnloomis.org/ece537/notes/Files/Examples/printdir.html)
 20. [Linux print file information format](http://www.hep.by/gnu/findutils/Print-File-Information.html)
 21. [View file permissions in Linux](https://askubuntu.com/questions/528411/how-do-you-view-file-permissions)
