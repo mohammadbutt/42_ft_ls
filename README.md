@@ -47,17 +47,13 @@ When the user runs the program and there in only one argument that is `./ft_ls` 
 If there is a dash `-` after `./ft_ls ` that's when the program starts collecting flags that are `l`, `R`, `a`, `t`, `r`. If there is no dash then the program looks for either a valid or invalid file name, or a directory. If a file name is valid then the program displays the file name, if an entered file does not exist then the program displays a message, "./ft_ls: name_of_invalid_file: No such file or directory", just like the original ls. If the entered name is a directory then the program displays files of that directory.
 
 ### `-R` Recursively list subdirectories - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_recursive_call.c)
-If there are two arguments and the `R` flag exists in the argument then the program recursively enters through directories and subdirectories the open each directory, store the files in a linked list, sorts them, prints the files, frees the linked list, and then moves to the next directory to perform the same action until it gets to the end cant find any more directories to treverse through. Below is a table:
+If there are two arguments and the `R` flag exists in the argument then the program recursively enters through directories and subdirectories the open each directory, store the files in a linked list, sorts them, prints the files, frees the linked list, and then moves to the next directory to perform the same action until it gets to the end cant find any more directories to treverse through. Below is a tree structure that roughly represents how directories are accessed recusively and then printed:
 
 ``` bash
 |___CODEOWNERS
 |___Makefile
 |___README.md
 |___author
-|___documents_and_media
-|  |___doc_ft_ls.en.pdf
-|  |___norme.en.pdf
-|___empty_dir
 |___ft_ls_src
 |  |___append_slash.c
 |  |___delete_linked_list.c
@@ -69,13 +65,6 @@ If there are two arguments and the `R` flag exists in the argument then the prog
 |  |  |  |___mini_libft
 |  |  |  |  |___ft_atoi.c
 |  |  |  |  |___ft_bzero.c
-|  |  |  |  |___ft_ftoa.c
-|  |  |  |___parsing.c
-|  |  |  |___type_field_b.c
-|  |  |  |___type_field_c.c
-|  |___long_file_listing.c
-|  |___ls_collect_flags.c
-|  |___ls_parsing.c
 
 ```
 
