@@ -12,7 +12,7 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 ---
 # Table of Contents - Click a section to jump to it 
 * [Cloning Repository](#cloning-repository)
-* [Installing ft_ls](#installing-ft_ls)
+* [Installing ft_ls macOS only](#installing-ft_ls-macos-only)
 * [ft_ls Usage](#ft_ls-usage)
 * [Program Installation gif Demo](#program-installation-gif-demo)
 * [Program Usage gif Demo](#program-usage-gif-demo)
@@ -30,7 +30,7 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 https://github.com/mohammadbutt/42_ft_ls.git
 ```
 
-# Installing ft_ls
+# Installing ft_ls macOS only
 ```
 make
 ```
