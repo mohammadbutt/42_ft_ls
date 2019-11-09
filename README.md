@@ -15,8 +15,8 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 * [Installing ft_ls](#Installing-ft_ls)
 * [ft_ls Usage](#ft_ls-Usage)
 * [Project Summary](#Project-Summary)
-  * [Parsingggg](#Parsing---Source-Code)
-  * [R - Recursively list subdirectories](R---recursively-list-subdirectories---source-code)
+  * [Parsing](#Parsing---Source-Code)
+  * [R - Recursively list subdirectories](#R---recursively-list-subdirectories---source-code)
 
 # Cloning Repository
 ```
