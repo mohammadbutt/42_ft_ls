@@ -18,7 +18,7 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
   * [Parsing](#parsing---source-code)
   * [`-R` - Recursively List Subdirectories](#-R---recursively-list-subdirectories---source-code)
   * [`-L` - Long File Listing](#-l---long-file-listing---source-code)
-  * [`-t`, `-r` - Sorting Files](#-t--r---sorting-files---source-code)
+  * [`-t`, `-r` - Sort Files](#-t--r---sort-files---source-code)
   * [`-G` - Colorize Output](#-g---colorize-output---source-code)
   * [`-a` - Output Hidden Files and Directories](#-a---output-hidden-files-and-directories)
 
@@ -93,7 +93,7 @@ Below is a table and format of `ls -l author` and `./ft_ls -l author`, what each
 
 Information for each column is accessible via stat and lstat functions, only file name is retrieved via dirent struct under the member name d_name. Long file listing format is also one of the biggest reasons that file path and a slash is appeneded before each file name because stat and lstat functions need full file path to access the meta data thats shown in the above table. For time modified column, if a file is older than 6 months, then instead of showing the hours and minutes of the file, year of the file is shown instead.
 
-### `-t`, `-r` - Sorting files - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/merge_sort_alpha.c)
+### `-t`, `-r` - Sort files - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/merge_sort_alpha.c)
 Files are sorted one of 4 different ways, if there is no `-t` and `-r` then files are stored in alphabetical or lexical order. A custom strcmp is used to compare two strings and then merge sort is used to sort the list. If there is `-r` then files are sorted in reverse alphabetical order. If there is `-t` then files are sorted by last modified time. Sorting by time also uses merge sort to compare two times in seconds and then merge sorts them. But sorting on time has one addtional step that is if the number of seconds for both files are the same, then nanosecond of both files are also compared. If `-tr` both t and r are present then files are sorted in reverse time, showing the oldest files first at the top and then showing the newest files at the bottom. `./ft_ls` by default just shows the file names, but combining `l` flag, `./ft_ls -lt` or `./ft_ls -ltr` would show files sorted by time with time stamp.
 
 ### `-G` - Colorize Output - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/print_file_name.c)
