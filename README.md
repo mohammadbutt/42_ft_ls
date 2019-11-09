@@ -16,7 +16,7 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 * [ft_ls Usage](#ft_ls-Usage)
 * [Project Summary](#Project-Summary)
   * [Parsing](#Parsing---Source-Code)
-  * [R - Recursively list subdirectories](#R---recursively-list-subdirectories---source-code)
+  * [`-R` - Recursively list subdirectories](#-R---recursively-list-subdirectories---source-code)
 
 # Cloning Repository
 ```
@@ -55,7 +55,7 @@ If there is a dash `-` after `./ft_ls ` that's when the program starts collectin
 
 
 
-### `R` - Recursively list subdirectories - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_recursive_call.c)
+### `-R` - Recursively list subdirectories - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_recursive_call.c)
 If there are two arguments and the `R` flag exists in the argument then the program recursively enters through directories and subdirectories the open each directory, store the files in a linked list, sorts them, prints the files, frees the linked list, and then moves to the next directory to perform the same action until it gets to the end cant find any more directories to treverse through. This is one of the prime reasons why a directory path and slash is appended right before each file name because. Because in order traverser through and go inside each sub directory it is important to have the path of the parent directory. Below is a rough representation of recursive tree structure:
 
 ``` bash
