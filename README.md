@@ -84,7 +84,7 @@ If there are two arguments and the `R` flag exists in the argument then the prog
 
 ```
 
-### `-l` - Long file listing - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/long_file_listing.c)
+### `-l` - Long File Listing - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/long_file_listing.c)
 If there is an `l` which stands for long listing format, then addtional informatin is printed about each file and directory. 
 
 Below is a table and format of `ls -l author` and `./ft_ls -l author`, what each column means.
