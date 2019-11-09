@@ -87,49 +87,11 @@ Information for each column is accessible via stat and lstat functions, only fil
 ### `-t`, `-r` - Sorting files - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/merge_sort_alpha.c)
 Files are sorted one of 4 different ways, if there is no `-t` and `-r` then files are stored in alphabetical or lexical order. A custom strcmp is used to compare two strings and then merge sort is used to sort the list. If there is `-r` then files are sorted in reverse alphabetical order. If there is `-t` then files are sorted by last modified time. Sorting by time also uses merge sort to compare two times in seconds and then merge sorts them. But sorting on time has one addtional step that is if the number of seconds for both files are the same, then nanosecond of both files are also compared. If `-tr` both t and r are present then files are sorted in reverse time, showing the oldest files first at the top and then showing the newest files at the bottom. `./ft_ls` by default just shows the file names, but combining `l` flag, `./ft_ls -lt` or `./ft_ls -ltr` would show files sorted by time with time stamp.
 
-### `-G` - Printing in colors - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/print_file_name.c)
+### `-G` - Colorize output - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/print_file_name.c)
 When -G is on then the file name is parsed through a function called `print_uppercase_g`, that takes in the file name with the file path, and stat struct with meta information about the file. If a file is a directory then it is printed in blue. If a file is an executable then it is printed in red. All other file types are printed in the regular font color.
 
 ### `-a` - Printing hidden files and directories
 When -a flag is on, all the files are stored which includes hidden files and directories. Hidden files and directories begin with dot `.` or dot dot `..`. Single dot `.` means current directory. Double dot or dot dot `..` means parent directory. If a file has a chacater other than a dot after a single dot, then it's either a hidden file or a directory. Examples would be, `.gitignore` which is a hidden file, and `.git` would be a hidden directory. 
-
-
-#### Mandatory Flags:
-1. `-l`
-   - a total sum of all the file sizes.
-2. `-R`
-   - Recursively lists subdirectories.
-3. `-a`
-   - Include directories that begin with a dot '.'.
-4. `-r`
-   - Reverse the order of the sot to get reverse lexical order or the oldest entries.
-5. `-t`
-   - Sort by time modified (most recently modified first).
-
-#### `-l` flag
--l flag has several elements to it. It's generally called long format and it gives several pieces of information about a file or directory. It displays Unix file type, permissions, number of hardlinks, owner, group, size in bytes, last-modified date and time , and file name.
-
-First line of the output `ls -l` gives a total. This total is file system blocks. Running `ls -s` shows the size of each file and folder, their sum will equal to the sum of total for `ls -l`. File system block can be acessed in stat(2).
-
-Below is a table and format of `ls -l author` and `./ft_ls -l author`
-
-
-|Permission|st_nlink|owner id| group owner id |size in bytes |month, date, time modified  |file name                    |
-|----------|--------|--------|----------------|--------------|----------------------------|-----------------------------|
-|Permission|st_nlink|st_uid  |        st_gid  |   st_size    |st_ctimespec.tv_sec         |d_name under dirent struct   |
-|    ✔     |   ✔    |   ✔    |         ✔      |     ✔        |       ✔                    |      ✔                      |
-|-rw-r--r--|    1   |  mbutt |   2018_october |       6      | Sep 18 15:35               |  author                     |
-
-
-#### Optional/Bonus Flags:
-1. `-u`
-   - Use time of last access (not modified, or printed).
-2. `-f`
-   - Output is not sorted. Turns on `-a` option/flag.
-3. `-d`
-   - Directories are listed as plain files.
-4. `-G`
-   - Colorizes output.
 
 # Resources and References
 1. [ls - Wikipedia](https://en.wikipedia.org/wiki/Ls)
