@@ -50,7 +50,7 @@ If there is a dash `-` after `./ft_ls ` that's when the program starts collectin
 
 
 
-### `-R` Recursively list subdirectories - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_recursive_call.c)
+### `-R` - Recursively list subdirectories - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_recursive_call.c)
 If there are two arguments and the `R` flag exists in the argument then the program recursively enters through directories and subdirectories the open each directory, store the files in a linked list, sorts them, prints the files, frees the linked list, and then moves to the next directory to perform the same action until it gets to the end cant find any more directories to treverse through. This is one of the prime reasons why a directory path and slash is appended right before each file name because. Because in order traverser through and go inside each sub directory it is important to have the path of the parent directory. Below is a rough representation of recursive tree structure:
 
 ``` bash
@@ -72,7 +72,7 @@ If there are two arguments and the `R` flag exists in the argument then the prog
 
 ```
 
-### `-l` Long file listing - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/long_file_listing.c)
+### `-l` - Long file listing - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/long_file_listing.c)
 If there is an `l` which stands for long listing format, then addtional informatin is printed about each file and directory. 
 
 Below is a table and format of `ls -l author` and `./ft_ls -l author`, what each column means.
@@ -84,9 +84,14 @@ Below is a table and format of `ls -l author` and `./ft_ls -l author`, what each
 
 Information for each column is accessible via stat and lstat functions, only file name is retrieved via dirent struct under the member name d_name. Long file listing format is also one of the biggest reasons that file path and a slash is appeneded before each file name because stat and lstat functions need full file path to access the meta data thats shown in the above table. For time modified column, if a file is older than 6 months, then instead of showing the hours and minutes of the file, year of the file is shown instead.
 
-### `-t`, `-r` Sorting files - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/merge_sort_alpha.c)
+### `-t`, `-r` - Sorting files - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/merge_sort_alpha.c)
 Files are sorted one of 4 different ways, if there is no `-t` and `-r` then files are stored in alphabetical or lexical order. A custom strcmp is used to compare two strings and then merge sort is used to sort the list. If there is `-r` then files are sorted in reverse alphabetical order. If there is `-t` then files are sorted by last modified time. Sorting by time also uses merge sort to compare two times in seconds and then merge sorts them. But sorting on time has one addtional step that is if the number of seconds for both files are the same, then nanosecond of both files are also compared. If `-tr` both t and r are present then files are sorted in reverse time, showing the oldest files first at the top and then showing the newest files at the bottom. `./ft_ls` by default just shows the file names, but combining `l` flag, `./ft_ls -lt` or `./ft_ls -ltr` would show files sorted by time with time stamp.
 
+### `-G` - Printing in colors - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/print_file_name.c)
+When -G is on then the file name is parsed through a function called `print_uppercase_g`, that takes in the file name with the file path, and stat struct with meta information about the file. If a file is a directory then it is printed in blue. If a file is an executable then it is printed in red. All other file types are printed in the regular font color.
+
+### `-a` - Printing hidden files and directories
+When -a flag is on, all the files are stored which includes hidden files and directories. Hidden files and directories begin with dot `.` or dot dot `..`. Single dot `.` means current directory. Double dot or dot dot `..` means parent directory. If a file has a chacater other than a dot after a single dot, then it's either a hidden file or a directory. Examples would be, `.gitignore` which is a hidden file, and `.git` would be a hidden directory. 
 
 
 #### Mandatory Flags:
