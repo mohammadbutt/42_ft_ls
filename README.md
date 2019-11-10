@@ -52,7 +52,8 @@ make
 Yup! This is all you need to do to install the program! Scroll down for usage.
 
 # Program Usage gif Demo
-
+### Basic usage
+![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage1_1080p_24fps.gif)
 
 # Project Summary
 
