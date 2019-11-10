@@ -48,7 +48,8 @@ make
 ```
 
 # Program Installation gif Demo
-
+![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/installation_720p_24fps.gif)
+Yup! This is all you need to do to install the program! Scroll down for usage.
 
 # Program Usage gif Demo
 
