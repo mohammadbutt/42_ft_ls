@@ -53,7 +53,7 @@ Yup! This is all you need to do to install the program! Scroll down for usage.
 
 # Program Usage gif Demo
 ### Basic usage
-basic usage with -a flag                              |  usage with -G flag to colorize directories and executables
+basic usage                                           |  usage with `-G` to colorize directories and executables
 :-----------------------------------------------------| -----------------------------------------------------------:
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_basic_1080p_24fps.gif)  | ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_colorize_1080p_24fps.gif)
 
