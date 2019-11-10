@@ -57,7 +57,7 @@ Yup! This is all you need to do to install the program! Scroll down for usage.
 
 ### Long List Format
 sorted by alphabetical and reverse alphabetical order | sorted by latest and earliest time order
-:-----------------------------------------------------|----------------------------------------:
+:-----------------------------------------------------|-----------------------------------------------------:
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_sort_lexical_1080p_24fps.gif)| ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_sort_time_1080p_24fps.gif)
 
 # Project Summary
