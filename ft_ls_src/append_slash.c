@@ -63,6 +63,10 @@ t_ls	*get_new_ls(t_ls *new_ls, t_ls *temp_ls, char *full_path, int slash_i)
 	return (new_ls);
 }
 
+/*
+** _POSIX_PATH_MAX = 256
+*/
+
 t_ls	*append_slash(t_ls *new_ls, t_ls *temp_ls, char *path)
 {
 	char	*full_path;
