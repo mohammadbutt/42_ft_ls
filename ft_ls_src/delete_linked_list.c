@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-/*
+
 void	delete_list_file_name(t_ls **head_ref)
 {
 	t_ls *current_node;
@@ -29,7 +29,8 @@ void	delete_list_file_name(t_ls **head_ref)
 	}
 	*head_ref = NULL;
 }
-*/
+
+/*
 void	delete_list_file_name(t_ls **head_ref)
 {
 	t_ls *current_node;
@@ -49,3 +50,4 @@ void	delete_list_file_name(t_ls **head_ref)
 	free(*head_ref);
 	*head_ref = NULL;
 }
+*/
