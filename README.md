@@ -14,8 +14,8 @@ Allowed  System Calls:  write(2), stat(2)(struct), lstat(2)(struct), listxattr(2
 * [Cloning Repository](#cloning-repository)
 * [Installing ft_ls macOS only](#installing-ft_ls-macos-only)
 * [ft_ls Usage](#ft_ls-usage)
-* [Program Installation gif Demo](#program-installation-gif-demo)
-* [Program Usage gif Demo](#program-usage-gif-demo)
+* [Program Installation Demo](#program-installation-demo)
+* [Program Usage Demo](#demo)
 * [Project Summary](#project-summary)
   * [Parsing](#parsing---source-code)
   * [`-R` - Recursively List Subdirectories](#-R---recursively-list-subdirectories---source-code)
@@ -47,11 +47,11 @@ make
 ./ft_ls -t
 ```
 
-# Program Installation gif Demo
+# Program Installation Demo
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/installation_720p_24fps.gif)
 Yup! This is all you need to do to install the program! Scroll down for usage.
 
-# Program Usage gif Demo
+# Demo
 ### Basic usage
 basic usage                                           |  `-G` to colorize directories and executables
 :-----------------------------------------------------| -----------------------------------------------------------:
