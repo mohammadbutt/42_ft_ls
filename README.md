@@ -52,19 +52,19 @@ make
 Yup! This is all you need to do to install the program! Scroll down for usage.
 
 # Demo
-### Basic usage
+## Basic usage
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_basic_1080p_24fps.gif)
 
 ---
-### Colorize directories and executables
+## Colorize directories and executables
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_colorize_1080p_24fps.gif)
 
 ---
-### Sort by alphabetical and reverse alphabetical order 
+## Sort by alphabetical and reverse alphabetical order 
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_sort_lexical_1080p_24fps.gif)
 
 ---
-### Sort by latest and earliest time file modified
+## Sort by latest and earliest time file modified
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_sort_time_1080p_24fps.gif)
 
 ---
