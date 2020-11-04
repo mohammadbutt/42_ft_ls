@@ -53,33 +53,21 @@ Yup! This is all you need to do to install the program! Scroll down for usage.
 
 # Demo
 ### Basic usage
-basic usage                                           |  `-G` to colorize directories and executables
-:-----------------------------------------------------| -----------------------------------------------------------:
-![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_basic_1080p_24fps.gif)  | ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_colorize_1080p_24fps.gif)
-
-### Long List Format
-sorted by alphabetical and reverse alphabetical order | sorted by latest and earliest time file modified order
-:-----------------------------------------------------|-----------------------------------------------------:
-![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_sort_lexical_1080p_24fps.gif)| ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_sort_time_1080p_24fps.gif)
-
-
-# Demo
-### Basic usage
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_basic_1080p_24fps.gif)
 
+---
 ### Colorize directories and executables
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_colorize_1080p_24fps.gif)
 
+---
 ### Sort by alphabetical and reverse alphabetical order 
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_sort_lexical_1080p_24fps.gif)
 
-
+---
 ### Sort by latest and earliest time file modified
 ![](https://github.com/mohammadbutt/42_ft_ls/blob/master/documents_and_media/Media/usage_sort_time_1080p_24fps.gif)
 
-
-
-
+---
 # Project Summary
 
 ### Parsing - [Source Code](https://github.com/mohammadbutt/42_ft_ls/blob/master/ft_ls_src/ls_parsing.c)
